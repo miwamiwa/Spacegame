@@ -1,0 +1,9 @@
+#drop_zone{
+  background-color:tomato;
+  width:80vw;
+  height:80vw;
+}
+
+#drop_zone:hover{
+  background-color:grey;
+}
