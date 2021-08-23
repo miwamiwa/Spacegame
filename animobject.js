@@ -10,6 +10,7 @@ class AnimObject {
     this.counter =0;
     this.fcount =0;
     this.animRate = 5;
+    this.bypassCamConstraint = false;
   }
 
   setFrames(anim){
@@ -27,7 +28,7 @@ class AnimObject {
     let pos = camera.position(this);
 
     // check if on screen
-    if(camera.isOnScreen(pos,this.halfsize)){
+    if(this.bypassCamConstraint||camera.isOnScreen(pos,this.halfsize)){
 
         // draw sprite
       this.drawMe(pos.x,pos.y,children);
@@ -49,6 +50,7 @@ class AnimObject {
       for(let i=0; i<children.length; i++){
         children[i].drawMe();
         children[i].updateAnimation();
+        children[i].counter++;
       }
     }
     mCtx.drawImage(this.img.img, -this.halfsize,-this.halfsize , this.size, this.size);

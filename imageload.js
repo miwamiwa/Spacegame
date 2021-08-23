@@ -5,43 +5,41 @@ const VesselAnimation = [vessel_png,vessel2_png];
 const FlameAnimation = [fire1_png,fire2_png];
 const CrashAnimation = [crash1_png,crash2_png,crash3_png];
 const StarAnimation = [star1_png,star2_png];
+const PlayerAnimation = [player1_png,player2_png];
+const PlayerWalkLeft = [walk_left_1_png,walk_left_2_png];
+const PlayerWalkRight = [walk_right_1_png,walk_right_2_png];
+const PlayerWalkUp = [walk_up_1_png,walk_up_2_png];
+const PlayerWalkDown = [walk_down_1_png,walk_down_2_png];
 
 function loadImages(){
-  loadImage(vessel_png);
-  loadImage(vessel2_png);
-  loadImage(fire1_png);
-  loadImage(fire2_png);
-  loadImage(crash1_png);
-  loadImage(crash2_png);
-  loadImage(crash3_png);
-  loadImage(star1_png);
-  loadImage(star2_png);
+  all_images.forEach(el=>loadImage(el));
 }
 
 function loadImage(input){
 
-    loadCanvas = document.createElement("canvas");
+  loadCanvas = document.createElement("canvas");
 
+  // convert string to rgba values
   let pixels = [];
   for(let i=0; i<input.t.length; i+=2){
     let i1 = input.t.charCodeAt(i) -c1; // color
     let i2 = input.t.charCodeAt(i+1) -c1 + 1; // buffer count
-    //console.log(i2)
     while(i2>0){
       pixels.push(HexToRgba(all_colors[input.c[parseInt(i1)]]))
       i2--;
     }
   }
 
+  // update load canvas size to match image
   loadCanvas.width = input.w;
   loadCanvas.height = Math.ceil(pixels.length / input.w);
 
+  // create a pixel data object
   loadCtx = loadCanvas.getContext("2d");
-
   let loadpix = loadCtx.getImageData(0,0,loadCanvas.width,loadCanvas.height);
   let pixcounter =0;
 
-
+  // assign rgba values to each pixel
   for(let i=0; i<loadpix.data.length; i+=4){
     let p = pixels[pixcounter];
 
@@ -52,14 +50,11 @@ function loadImage(input){
       loadpix.data[i+3] = p[3];
       pixcounter++;
     }
-
   }
-
   loadCtx.putImageData(loadpix, 0, 0);
-  //console.log(pixels)
 
-  input.t = ""; // can delete original text
-  input.img = loadCanvas;
+  input.t = ""; // delete text to free some memory
+  input.img = loadCanvas; // save this canvas
 
 }
 

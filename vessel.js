@@ -55,7 +55,7 @@ class Vessel extends AnimObject {
       this.lastvx = this.vx;
       this.lastvy = this.vy;
 
-      // display object
+      // display object, and its children
       this.display(this.children);
     }
 
@@ -71,7 +71,7 @@ class Vessel extends AnimObject {
 
     if(this.nearestPlanet!=-1){
 
-      let p = planets[this.nearestPlanet];
+      let p = this.nearestPlanet;
       let d = dist(this,p);
       if(d >= p.gravity.range){
         this.nearestPlanet =-1;
@@ -96,20 +96,20 @@ class Vessel extends AnimObject {
 
   findNearestPlanet(){
     if(this.counter % 2 ==0 && this.nearestPlanet==-1){
-      for(let i=0; i<planets.length; i++){
-        let d = dist(this,planets[i]);
-        if(d < planets[i].gravity.range){
-          this.nearestPlanet =i;
-          console.log("nearest planet: "+i)
-        }
+      planets.forEach(p=>{
+        let d = dist(this,p);
+
+        if(d < p.gravity.range)
+          this.nearestPlanet = p;
+
 
         if(this.radar){
           this.onradar = [];
-          if(d>planets[i].radius + this.radarMinRange&&d<planets[i].radius + this.radarMaxRange){
-            this.onradar.push(planets[i]);
+          if(d>p.radius + this.radarMinRange&&d<p.radius + this.radarMaxRange){
+            this.onradar.push(p);
           }
         }
-      }
+      });
     }
   }
 
@@ -117,15 +117,15 @@ class Vessel extends AnimObject {
     if(this.radar){
       let radarArrowDist = 200;
       mCtx.fillStyle = "white";
-      for(let i=0; i<this.onradar.length; i++){
-        let p = this.onradar[i];
+
+      this.onradar.forEach(p=>{
         let dir = directionFromObjectToObject(this,p);
         mCtx.save();
         mCtx.translate(middle.x,middle.y);
         mCtx.translate(radarArrowDist * dir.x, radarArrowDist * dir.y);
         mCtx.fillText("planet",0,0);
         mCtx.restore();
-      }
+      });
     }
   }
 

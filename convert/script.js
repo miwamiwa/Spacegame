@@ -2,6 +2,7 @@ const c1 = 48;
 let filesdropped =0;
 let resulttxt = "";
 let colors = [];
+let names = [];
 // dropHandler()
 //
 // runs when file is dropped.
@@ -76,6 +77,8 @@ function ProcessFile(file){
 //
 // convert image to a lightweight string
 function ConvertImage(input, filename){
+  filename = filename.replace(".","_");
+  names.push(filename);
   let img = new Image();
   img.src = input;
 
@@ -136,7 +139,7 @@ function ConvertImage(input, filename){
 
     colortxt_temp += "]";
     resulttxt += `
-let ${filename.replace(".","_")} = {
+let ${filename} = {
   w:${w},
   t:"${result}",
   c:${colortxt_temp}
@@ -151,10 +154,18 @@ let ${filename.replace(".","_")} = {
         if(i>0) colortxt += ",";
         colortxt += `"#${colors[i]}"`;
       }
-      colortxt += "]";
+      colortxt += "];";
+
+      let ntxt = "[";
+      for(let i=0; i<names.length; i++){
+        if(i>0) ntxt += ",";
+        ntxt += `${names[i]}`;
+      }
+      ntxt += "];";
 
       let finaltxt = `let all_colors = ${colortxt}
       ${resulttxt}
+let all_images = ${ntxt}
       `;
 
       console.log(finaltxt);
@@ -170,7 +181,10 @@ let ${filename.replace(".","_")} = {
 }
 
 function copyToClipboard(text) {
-  window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
+  //window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
+  let div = document.getElementById("output");
+  div.value = text;
+  div.select();
 }
 
 
