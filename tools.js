@@ -73,3 +73,8 @@ function directionFromObjectToObject(o1, o2){
   let t = dx + dy;
   return {x: dx/t, y:dy/t};
 }
+
+
+function RandomFromArray(array){
+  return array[flo(rand(array.length))]
+}

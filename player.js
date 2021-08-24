@@ -6,8 +6,19 @@ const PlayerStartY = 50;
 const PlayerSize = 100;
 const PlayerWalkVelocity = 3;
 
+const TextBox = {
+  x:100,
+  y:100
+}
+
+// ui stuff
+const TopText = {x: 4, y: 10};
+const FailTextList = ["Ouch!","Don't drink and drive.","Careful with my car."];
+
 let playerDirX =0;
 let playerDirY =0;
+let availableText;
+let textCounter=0;
 
 let inputs = {
   w:false,
@@ -22,9 +33,15 @@ function setupPlayer(){
   player.radar = true;
   player.radarMinRange = 200;
   player.radarMaxRange = 20000;
-  player.dude = new AnimObject(0,0,40,PlayerAnimation);
+  player.dude = new AnimObject(50,50,40,PlayerAnimation);
   player.children.push(player.dude);
-  player.boarded = true;
+  player.reading = false;
+
+  // start player on planet
+  player.boarded = false;
+  player.dude.visible = true;
+
+
   player.walkVel = PlayerWalkVelocity;
   player.bypassCamConstraint = true;
   player.animRate = 10;
@@ -40,6 +57,7 @@ function resetPlayerOnCrash(){
       player.crashed = false;
       player.landed = false;
       player.boarded = true;
+      player.dude.visible = false;
     }
   }
 }
@@ -50,7 +68,28 @@ function keyDown(e){
     case 65: inputs.a = true; break; //a
     case 83: inputs.s = true; break; //s
     case 68: inputs.d = true; break; //d
-    case 66: inputs.b = true; break; // b
+
+    // press b to interact with obejcts
+    case 66: inputs.b = true;
+    if(availableText!=undefined){
+      // show window
+      if(!player.reading){
+        player.reading = true;
+        textCounter =0;
+      }
+      // show next phrase
+      else {
+        textCounter++;
+        // quit
+        if(textCounter==availableText.text.length){
+          player.reading = false;
+          if(availableText.firstReadAction!=undefined)
+            availableText.firstReadAction();
+        }
+
+      }
+    }
+    break; // b
   }
 }
 
@@ -83,12 +122,16 @@ function HandlePlayerInputs(){
       // hop off the vessel
       if(inputs.s&&!player.crashed){
         player.boarded = false;
+        player.dude.visible = true;
         camera.targetIsDude();
         player.dude.y += HopDistance;
       }
     }
   }
+
+  // WHILE NOT BOARDED (ON PLANET)
   else {
+
     let lastx =player.dude.x;
     let lasty =player.dude.y;
 
@@ -110,23 +153,18 @@ function HandlePlayerInputs(){
       }
     }
 
-
-    if(dist({x:0,y:HopDistance},player.dude)<40){
-
-      // display some text to prompt boarding?
-
-      if(inputs.b){
-        // board back onto ship
+    // hop ON vessel when in range
+    if(dist({x:0,y:0},player.dude)<HopDistance){
+      if(canBoard){
         player.dude.x =0;
         player.dude.y =0;
         camera.targetIsVessel();
         player.boarded = true;
+        player.dude.visible = false;
       }
     }
 
   }
-
-
 
 }
 
@@ -137,10 +175,16 @@ function movePlayerOnPlanetX(delta){
   else player.running = "left";
 
   let newval = player.dude.x + player.walkVel * delta;
-  let x = player.x + player.halfsize + newval;
-  let y = player.y+ player.halfsize+player.dude.y;
 
-  if(dist({x:x,y:y}, player.nearestPlanet) < player.nearestPlanet.radius)
+  let p = {
+    x: player.x + player.dude.halfsize + newval,
+    y: player.y+ player.dude.halfsize+player.dude.y
+  };
+
+  if(CheckCollisionsOnPlanet(p)) return;
+
+
+  if(dist(p, player.nearestPlanet) < player.nearestPlanet.radius)
     player.dude.x = newval;
 }
 
@@ -150,24 +194,97 @@ function movePlayerOnPlanetY(delta){
   else player.running="up";
 
   let newval = player.dude.y + player.walkVel * delta;
-  let x = player.x + player.halfsize + player.dude.x;
-  let y = player.y + player.halfsize + newval;
 
-  if(dist({x:x,y:y}, player.nearestPlanet) < player.nearestPlanet.radius)
+  let p = {
+    x: player.x + player.dude.halfsize + player.dude.x,
+    y: player.y + player.dude.halfsize + newval
+  };
+
+  if(CheckCollisionsOnPlanet(p)) return;
+
+
+  if(dist(p, player.nearestPlanet) < player.nearestPlanet.radius)
     player.dude.y = newval;
 
 }
 
+function CheckCollisionsOnPlanet(p){
+  let r = false;
+  let lastAvailTxt = availableText;
+  availableText = undefined;
+
+  player.nearestPlanet.features.forEach(f=>{
+    if(f.collider){
+      let p2 = {
+        x: f.x + player.nearestPlanet.x,
+        y: f.y + player.nearestPlanet.y
+      }
+      let d = dist(p,p2);
+
+      if(d<f.talkrange)
+        availableText = f;
+
+      if(d<f.collidersize)
+         r= true;
+
+    }
+  });
+  if(lastAvailTxt!=availableText)
+    textCounter =0;
+
+
+  return r;
+}
+
+
 
 function updatePlayerUi(){
   mCtx.fillStyle = "white";
-  mCtx.fillText(`Player:
+
+  // if we crashed
+  if(player.crashed)
+  mCtx.fillText(RandomFailText(),TopText.x,TopText.y);
+
+  // if we're aboard the space chips
+  else if(player.boarded)
+  mCtx.fillText(`You're aboard the greenmobile:
     vX : ${flo(player.lastvx)}
     vY : ${flo(player.lastvy)}
     throttle: ${flo(10*player.throttle)/10}
-    bearing: ${flo(radians_to_degrees(player.bearing))}`, 0, 10);
+    bearing: ${flo(radians_to_degrees(player.bearing))}`, TopText.x, TopText.y);
+
+  // if we're on a planet
+  else
+    mCtx.fillText(`Planet ${player.nearestPlanet.name}.`,TopText.x,TopText.y);
 
   //
   playerDirX = player.vx / Math.abs(player.vx);
   playerDirY = player.vy / Math.abs(player.vy);
+
+
+  if(availableText!=undefined){
+
+    mCtx.fillStyle = "white";
+    mCtx.fillText("press b to interact", middle.x, middle.y);
+
+    if(player.reading){
+      mCtx.fillStyle = "black";
+      mCtx.fillRect(TextBox.x,TextBox.y, 300, 40);
+      mCtx.fillStyle = "white";
+
+      let i=0;
+      availableText.text[textCounter].split("\n").forEach(line=>{
+        mCtx.fillText(line, TextBox.x + 10, TextBox.y+17 + i);
+        i+= 10;
+      });
+
+    }
+
+  }
+}
+
+
+
+function RandomFailText(){
+  return RandomFromArray(FailTextList.length);
 }

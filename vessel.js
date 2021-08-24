@@ -123,7 +123,7 @@ class Vessel extends AnimObject {
         mCtx.save();
         mCtx.translate(middle.x,middle.y);
         mCtx.translate(radarArrowDist * dir.x, radarArrowDist * dir.y);
-        mCtx.fillText("planet",0,0);
+        mCtx.fillText("planet: "+p.name,0,0);
         mCtx.restore();
       });
     }

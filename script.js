@@ -1,7 +1,7 @@
 window.onload = start;
 const PI = Math.PI;
 const TWO_PI = 2*Math.PI;
-const Planet1Distance = 500;
+const Planet1Distance = 1;
 
 let player;
 let gameloop;
@@ -16,10 +16,9 @@ function start(){
   setupPlayer();
   setupStars();
   camera = new Camera(player);
+  camera.targetIsDude();
 
-  // place a planet below player
-  planets.push(new Planet(player.x,player.y));
-  planets[0].y += planets[0].radius + Planet1Distance;
+  setupPlanets();
 
   gameloop = setInterval(run,40);
 }
@@ -31,7 +30,7 @@ function run(){
   mCtx.fillStyle = "#2a1f42";
   mCtx.fillRect(0,0,mainCanvas.width,mainCanvas.height);
 
-  camera.rotateCam();
+  //camera.rotateCam();
 
   updateStars();
 
@@ -40,6 +39,7 @@ function run(){
 
   // update player
   HandlePlayerInputs();
+  player.dude.preRot = -player.bearing;
   player.update();
   resetPlayerOnCrash();
   camera.update();

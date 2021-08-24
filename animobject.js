@@ -11,6 +11,8 @@ class AnimObject {
     this.fcount =0;
     this.animRate = 5;
     this.bypassCamConstraint = false;
+    this.preRot =0; // used for player.dude
+    this.visible = true;
   }
 
   setFrames(anim){
@@ -24,6 +26,10 @@ class AnimObject {
     this.halfsize = input/2;
   }
   display(children){
+
+
+
+
     // get on screen position
     let pos = camera.position(this);
 
@@ -41,9 +47,13 @@ class AnimObject {
   }
 
   drawMe(x,y,children){
+    if(!this.visible) return;
+    
     if(x==undefined) x = this.x;
     if(y==undefined) y = this.y;
     mCtx.save();
+    if(this.preRot!=0)
+      mCtx.rotate(this.preRot)
     mCtx.translate(x + this.halfsize,y + this.halfsize);
     mCtx.rotate(this.bearing)
     if(children!=undefined){

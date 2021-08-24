@@ -5,10 +5,10 @@ class Camera {
     this.target = target;
     this.panVel = 1;
     this.middle = {x:0,y:0};
-    this.rotation =0;
+    //this.rotation =0;
     this.targetRotation =0;
     this.targetisdude = false;
-    this.rotateRate =0.06;
+    //this.rotateRate =0.06;
   }
 
   update(){
@@ -27,6 +27,7 @@ class Camera {
     this.middle.x = this.x - middle.x;
     this.middle.y = this.y - middle.y;
 
+/*
     if(player.landed){
       this.targetRotation = - player.bearing;
     }
@@ -41,6 +42,7 @@ class Camera {
       this.rotating = true;
       this.rotation -= this.rotateRate;
     }
+    */
   }
 
   rotateCam(){
