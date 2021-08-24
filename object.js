@@ -16,7 +16,7 @@ class SimpleObject {
   display(){
     if(this.edible) this.interact();
     //console.log(this.img)
-    if(this.active)
+    if(this.active&&this.img!=undefined)
       mCtx.drawImage(this.img.img, this.x-this.halfsize, this.y-this.halfsize, this.size, this.size);
   }
 

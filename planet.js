@@ -1,33 +1,7 @@
-//https://www.fantasynamegenerators.com/planet_names.php
-const PlanetNames = [
-  "Nuchearus",
-"Binvethea",
-"Eccurn",
-"Hinomia",
-"Haotov",
-"Peiyama",
-"Strutacarro",
-"Llenigawa",
-"Garvis 5",
-"Lloria ER2"
-];
-
-
-let usedPlanetNames = [];
-
-function RandomPlanetName(){
-  name = RandomFromArray(PlanetNames);
-  while(usedPlanetNames.includes(name))
-    name += flo(rand(10));
-  usedPlanetNames.push(name);
-  return name;
-}
-
 class Planet {
   constructor(x,y,randomscenery,name){
-
-    this.radius = rand(200,400);
-    this.mass = this.radius * rand(3,12);
+    // mass and radius
+    this.setRadMas(rand(150,320),rand(400,3000));
     this.gravitationalConstant = 0.1;
     this.halfsize =0; // ellipses start from center point
     this.x = x;
@@ -37,14 +11,16 @@ class Planet {
     if(name==undefined) name = RandomPlanetName();
     this.name = name;
 
-    this.gravity = {
-      range: this.mass * 1.0
-    }
-
     this.addBasicFeatures();
 
     if(randomscenery)
       this.setupScenery();
+  }
+
+  setRadMas(rad,mas){
+    this.radius = rad;
+    this.mass = mas;
+    this.gravity = {range:mas};
   }
 
   addBasicFeatures(){
@@ -121,12 +97,20 @@ class Planet {
   }
 
   getGravityFor(input,d){
+    // d is the distance from the input object to the center of this planet
     if(d==undefined) d = dist(this,input);
 
-    if(dist(this,{x:input.x + input.lastvx, y:input.y + input.lastvy})<this.radius){
+    // nextd is the distance to center in the next frame
+    let nextd = dist(this,{x:input.x + input.lastvx, y:input.y + input.lastvy});
+    ///console.log(nextd);
+
+    // if this is true, we are touching the surface
+    if(nextd<this.radius){
 
       input.landed = true;
       let vel = dist({x:0,y:0},{x:input.lastvx,y:input.lastvy});
+
+      //console.log(vel)
 
       // check for threshold velocity at which crash occurs.
       // this is affected by the vehicle's mass (1 by default)
@@ -141,6 +125,8 @@ class Planet {
 
 
     if(!input.landed && d>this.radius){
+      //console.log("this happened")
+      //console.log(this.gravitationalConstant, this.mass, input.mass, d)
       return this.gravitationalConstant * (this.mass * input.mass) / d;
     }
     else return 0;

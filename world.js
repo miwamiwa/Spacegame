@@ -1,8 +1,3 @@
-let mainCanvas;
-let mCtx;
-let middle = {};
-let canBoard = false;
-let rightPlanetsEnabled = false;
 const HomePlanetText = [
   "This is my home... \nI've lived here for the past 30 years.",
   "Pretty neat."
@@ -22,7 +17,16 @@ const CouchText1 = ["This couch..."];
 const CouchText2 = ["This is Todd's couch.\nBest couch ever!",
                     "This couch, in this place, it's the best view ever.\nTrust me we tried all the couches.",
                     "Oh dang, a note",
-                    "\"scurred off to one of the planets to the right ight. \nprolly gonna hit up all of em\""]
+                    "\"scurred off to one of the planets to the right.\nprolly gonna hit up all of em\""]
+
+const InvestigationText = ["yo! these cheese crakers....."];
+
+
+let mainCanvas;
+let mCtx;
+let middle = {};
+let canBoard = false;
+let rightPlanetsEnabled = false;
 
 function setupCanvas(){
   mainCanvas = document.getElementById("canvas");
@@ -44,9 +48,8 @@ function setupPlanets(){
   // place a planet below player
   let p = new Planet(player.x,player.y, false, "Home, sweet home");
   planets.push(p);
-  p.radius = 150;
-  p.mass = 1500;
-  p.gravity.range = p.mass;
+  p.setRadMas(150,1500);
+
   p.y += p.radius + Planet1Distance;
   p.groundColor = "#a37765ff";
   p.groundColor2 = "#9e857b88";
@@ -55,9 +58,7 @@ function setupPlanets(){
 
   let p2 = new Planet(p.x + 200, p.y-8000, false, "Todd's place");
   planets.push(p2);
-  p2.radius = 210;
-  p2.mass = 1200;
-  p2.gravity.range = p2.mass;
+  p2.setRadMas(210,1200);
 
   p2.features.push(new SimpleObject(80,0,home_png, 100, ToddsHomeText, triggerTommysHouseFound));
   p2.features.push(new SimpleObject(-90,40,couch_png, 100, CouchText1))
@@ -94,12 +95,57 @@ function triggerGoToPlanetsOnRight(){
       planets.push(p);
     }
 
-
     rightPlanetsEnabled = true;
   }
 }
 
-
+let planetsIFoundCrackersOn = [];
 function playerFoundCracker(){
-  console.log("found cracker")
+  console.log("found cracker");
+  if(!planetsIFoundCrackersOn.includes(player.nearestPlanet)){
+    planetsIFoundCrackersOn.push(player.nearestPlanet);
+  }
+}
+
+// triggered in player.js:HandlePlayerInputs()
+// when crackers have been found on 2 planets
+let investigationTriggered = false;
+function triggerCrackerInvestigation(){
+  if(!investigationTriggered){
+    let so = new SimpleObject(0,0,undefined,10,InvestigationText,continueInvestigation);
+    player.children.push(so);
+    so.collider = false;
+    investigationTriggered = true;
+  }
+}
+
+
+function continueInvestigation(){
+  player.children.pop();
+
+  // new planet
+  let pos = {
+    x:player.x + rand(14000,16000),
+    y:player.y-rand(-1000,1000)
+  }
+  let p = new Planet(pos.x, pos.y, true);
+  p.addCheese();
+  planets.push(p);
+
+  // this should be a dude not a couch lol
+  p.features.push(new SimpleObject(-90,40,couch_png, 100, CouchText1));
+
+  // wouldbe nice if the dude sends you on a stupid / mundane quest
+  // that makes him seem more annoying than anything else
+
+  // perhaps he's the dude who offended todd?
+  // could there be a (subtle?) link there?
+
+  // once the quest is done, the dude points you to 2-3 more planets
+  // theres wierd stuff on the planets
+
+  // todd appears on a moon just off the last planet
+  // conversation with todd
+
+  // the end, pan out?
 }

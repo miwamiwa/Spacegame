@@ -13,6 +13,9 @@ class AnimObject {
     this.bypassCamConstraint = false;
     this.preRot =0; // used for player.dude
     this.visible = true;
+
+    //console.log(this)
+    //console.log(this.x,this.y);
   }
 
   setFrames(anim){
@@ -48,7 +51,7 @@ class AnimObject {
 
   drawMe(x,y,children){
     if(!this.visible) return;
-    
+
     if(x==undefined) x = this.x;
     if(y==undefined) y = this.y;
     mCtx.save();
@@ -58,9 +61,14 @@ class AnimObject {
     mCtx.rotate(this.bearing)
     if(children!=undefined){
       for(let i=0; i<children.length; i++){
-        children[i].drawMe();
-        children[i].updateAnimation();
-        children[i].counter++;
+        let c = children[i];
+        if(c.drawMe!=undefined){
+          c.drawMe();
+          c.updateAnimation();
+        }
+        else c.display();
+
+        c.counter++;
       }
     }
     mCtx.drawImage(this.img.img, -this.halfsize,-this.halfsize , this.size, this.size);

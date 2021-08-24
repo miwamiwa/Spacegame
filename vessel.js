@@ -3,22 +3,29 @@ const CrashThreshold = 10; // see planet.js
 
 class Vessel extends AnimObject {
   constructor(x,y,size,frames){
+
+    console.log(x,y,size,frames)
     super(x,y,size,frames);
 
     this.vel = 1;
     this.throttle =0;
     this.mass = 1;
-    this.vx =0;
-    this.vy =0;
-    this.lastvx =0;
-    this.lastvy =0;
 
+    console.log(this.lastvx,this.lastvy)
     this.nearestPlanet =-1;
     this.flame = new AnimObject(-20,40,50,FlameAnimation);
     this.children = [this.flame];
     this.gravity = true;
     this.radar = false;
     this.crashed = false;
+
+    this.vx =0;
+    this.vy =0;
+    this.lastvx =0;
+    this.lastvy =0;
+
+    //console.log(this)
+    //console.log(this.x,this.y,this.vx,this.vy,this.lastvx,this.lastvy)
   }
 
 
@@ -30,13 +37,20 @@ class Vessel extends AnimObject {
     //this.vy =0;
 
     if(!this.crashed){
+
       // update radar and check for nearby
       // planet exerting gravity on this vessel
       this.findNearestPlanet();
 
+
+
+
       // if affected by gravity, update velocity
       if(this.gravity)
         this.applyGravity();
+
+        //console.log(player);
+        //return;
 
       // if accelerating, update velocity
       if(this.throttle > 0){
@@ -73,11 +87,14 @@ class Vessel extends AnimObject {
 
       let p = this.nearestPlanet;
       let d = dist(this,p);
+      //console.log(d)
       if(d >= p.gravity.range){
         this.nearestPlanet =-1;
       }
       else {
         let g = p.getGravityFor(this,d);
+
+        //console.log(g)
 
         if(this.landed){
           this.vx =0;
@@ -85,12 +102,15 @@ class Vessel extends AnimObject {
         }
         else {
           let dir = directionFromObjectToObject(this,p);
+
           this.vx +=  g * dir.x;
           this.vy += - g * dir.y;
         }
 
       }
     }
+
+
   }
 
 

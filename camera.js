@@ -13,7 +13,7 @@ class Camera {
 
   update(){
 
-    this.panVel = Math.abs(player.throttle);
+    //this.panVel = Math.abs(player.throttle);
 
     if(!this.targetisdude){
       this.x = this.target.x;
@@ -24,6 +24,11 @@ class Camera {
       this.y = player.y + player.dude.y;
     }
 
+    //console.log(this.middle)
+    //console.log(this.x);
+    //console.log(player);
+    //console.log(player.dude)
+    //console.log(middle)
     this.middle.x = this.x - middle.x;
     this.middle.y = this.y - middle.y;
 

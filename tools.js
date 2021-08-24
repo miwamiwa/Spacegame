@@ -78,3 +78,29 @@ function directionFromObjectToObject(o1, o2){
 function RandomFromArray(array){
   return array[flo(rand(array.length))]
 }
+
+
+//https://www.fantasynamegenerators.com/planet_names.php
+const PlanetNames = [
+  "Nuchearus",
+"Binvethea",
+"Eccurn",
+"Hinomia",
+"Haotov",
+"Peiyama",
+"Strutacarro",
+"Llenigawa",
+"Garvis 5",
+"Lloria ER2"
+];
+
+
+let usedPlanetNames = [];
+
+function RandomPlanetName(){
+  name = RandomFromArray(PlanetNames);
+  while(usedPlanetNames.includes(name))
+    name += flo(rand(10));
+  usedPlanetNames.push(name);
+  return name;
+}

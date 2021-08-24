@@ -30,6 +30,9 @@ let inputs = {
 
 function setupPlayer(){
   player = new Vessel(PlayerStartX,PlayerStartY,PlayerSize,VesselAnimation);
+
+
+
   player.radar = true;
   player.radarMinRange = 200;
   player.radarMaxRange = 20000;
@@ -46,6 +49,10 @@ function setupPlayer(){
   player.bypassCamConstraint = true;
   player.animRate = 10;
   player.running = false;
+
+  console.log(player)
+
+
 }
 
 
@@ -117,6 +124,9 @@ function HandlePlayerInputs(){
 
     if(inputs.a) player.rotate(PlayerRotateRate);
     if(inputs.d) player.rotate(-PlayerRotateRate);
+
+    if(rightPlanetsEnabled && planetsIFoundCrackersOn.length>1)
+      triggerCrackerInvestigation();
 
     if(player.landed){
       // hop off the vessel

@@ -24,7 +24,7 @@ function loadImage(input){
   for(let i=0; i<input.t.length; i+=2){
     let i1 = input.t.charCodeAt(i) -c1; // color
     let i2 = input.t.charCodeAt(i+1) -c1 + 1; // buffer count
-    while(i2>0){
+    while(i2!=undefined&&i2>0){
       pixels.push(HexToRgba(all_colors[input.c[parseInt(i1)]]))
       i2--;
     }
