@@ -2,7 +2,7 @@ class Planet {
   constructor(x,y,randomscenery,name){
     // mass and radius
     this.setRadMas(rand(150,320),rand(400,3000));
-    this.gravitationalConstant = 0.1;
+    this.gravitationalConstant = 30;
     this.halfsize =0; // ellipses start from center point
     this.x = x;
     this.y = y;
@@ -127,7 +127,7 @@ class Planet {
     if(!input.landed && d>this.radius){
       //console.log("this happened")
       //console.log(this.gravitationalConstant, this.mass, input.mass, d)
-      return this.gravitationalConstant * (this.mass * input.mass) / d;
+      return this.gravitationalConstant * (this.mass * input.mass) / Math.pow(d,2);
     }
     else return 0;
   }

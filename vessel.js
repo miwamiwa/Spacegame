@@ -12,7 +12,7 @@ class Vessel extends AnimObject {
     this.mass = 1;
 
     console.log(this.lastvx,this.lastvy)
-    this.nearestPlanet =-1;
+    this.nearestPlanet =undefined;
     this.flame = new AnimObject(-20,40,50,FlameAnimation);
     this.children = [this.flame];
     this.gravity = true;
@@ -41,7 +41,7 @@ class Vessel extends AnimObject {
       // update radar and check for nearby
       // planet exerting gravity on this vessel
       this.findNearestPlanet();
-
+      //console.log(this.nearestPlanet.name)
 
 
 
@@ -83,15 +83,19 @@ class Vessel extends AnimObject {
 
   applyGravity(){
 
-    if(this.nearestPlanet!=-1){
+    //console.log(this.nearestPlanet)
+    if(this.nearestPlanet!=undefined){
 
       let p = this.nearestPlanet;
       let d = dist(this,p);
       //console.log(d)
+      //console.log(this)
+      //console.log(p.name)
       if(d >= p.gravity.range){
-        this.nearestPlanet =-1;
+        this.nearestPlanet =undefined;
       }
       else {
+        //console.log(p.name,d)
         let g = p.getGravityFor(this,d);
 
         //console.log(g)
@@ -101,10 +105,11 @@ class Vessel extends AnimObject {
           this.vy =0;
         }
         else {
-          let dir = directionFromObjectToObject(this,p);
-
+          //console.log(p,this)
+          let dir = directionFromObjectToObject(p,this);
+          //console.log(dir)
           this.vx +=  g * dir.x;
-          this.vy += - g * dir.y;
+          this.vy +=  g * dir.y;
         }
 
       }
@@ -115,7 +120,7 @@ class Vessel extends AnimObject {
 
 
   findNearestPlanet(){
-    if(this.counter % 2 ==0 && this.nearestPlanet==-1){
+    if(this.counter % 2 ==0 && this.nearestPlanet==undefined){
       planets.forEach(p=>{
         let d = dist(this,p);
 
@@ -139,6 +144,7 @@ class Vessel extends AnimObject {
       mCtx.fillStyle = "white";
 
       this.onradar.forEach(p=>{
+        console.log("radar")
         let dir = directionFromObjectToObject(this,p);
         mCtx.save();
         mCtx.translate(middle.x,middle.y);

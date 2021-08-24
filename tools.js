@@ -68,10 +68,16 @@ function radians_to_degrees(radians){
 //
 // distance between objects on x and y axis, normalized (dx+dy=1)
 function directionFromObjectToObject(o1, o2){
+  //console.log(o2.name)
+//  console.log(o1.name,o2.name)
   let dx = o1.x - o2.x;
   let dy = o1.y - o2.y;
-  let t = dx + dy;
-  return {x: dx/t, y:dy/t};
+  let t = abs(dx) + abs(dy);
+  return {x:  dx/t, y:- dy/t};
+}
+
+function abs(i){
+  return Math.abs(i);
 }
 
 

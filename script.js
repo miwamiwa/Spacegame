@@ -60,7 +60,7 @@ function run(){
   mCtx.restore();
 
   updatePlayerUi();
-  player.displayRadar();
+  //player.displayRadar();
 
 
 }

@@ -134,7 +134,10 @@ function HandlePlayerInputs(){
         player.boarded = false;
         player.dude.visible = true;
         camera.targetIsDude();
-        player.dude.y += HopDistance;
+
+        let dir = directionFromObjectToObject(player.nearestPlanet,player);
+        player.dude.y += dir.y* HopDistance;
+        player.dude.x += dir.x* HopDistance;
       }
     }
   }
@@ -268,8 +271,8 @@ function updatePlayerUi(){
     mCtx.fillText(`Planet ${player.nearestPlanet.name}.`,TopText.x,TopText.y);
 
   //
-  playerDirX = player.vx / Math.abs(player.vx);
-  playerDirY = player.vy / Math.abs(player.vy);
+  playerDirX = player.vx / abs(player.vx);
+  playerDirY = player.vy / abs(player.vy);
 
 
   if(availableText!=undefined){
