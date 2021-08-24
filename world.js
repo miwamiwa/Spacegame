@@ -88,7 +88,7 @@ function triggerGoToPlanetsOnRight(){
 
     for(let i=0; i<2; i++){
       // add planets 2,3
-      pos.x += rand(4000,6000);
+      pos.x += rand(6000,8000);
       pos.y += rand(-1000,1000);
       p = new Planet(pos.x, pos.y, true);
       p.addCheese();
@@ -114,7 +114,7 @@ function triggerCrackerInvestigation(){
   if(!investigationTriggered){
     let so = new SimpleObject(0,0,undefined,10,InvestigationText,continueInvestigation);
     player.children.push(so);
-    so.collider = false;
+
     investigationTriggered = true;
   }
 }
@@ -134,7 +134,7 @@ function continueInvestigation(){
 
   // this should be a dude not a couch lol
   p.features.push(new SimpleObject(-90,40,couch_png, 100, CouchText1));
-
+  p.features[p.features.length-1].collider = false;
   // wouldbe nice if the dude sends you on a stupid / mundane quest
   // that makes him seem more annoying than anything else
 

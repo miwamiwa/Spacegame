@@ -120,37 +120,67 @@ class Vessel extends AnimObject {
 
 
   findNearestPlanet(){
-    if(this.counter % 2 ==0 && this.nearestPlanet==undefined){
+    if(this.counter % 2 ==0){
+
+      this.onradar = [];
       planets.forEach(p=>{
         let d = dist(this,p);
 
         if(d < p.gravity.range)
           this.nearestPlanet = p;
 
-
+        p.d2p = abs(flo(d));
         if(this.radar){
-          this.onradar = [];
-          if(d>p.radius + this.radarMinRange&&d<p.radius + this.radarMaxRange){
+
+          if(d>p.radius + this.radarMinRange&&d<p.radius + this.radarMaxRange)
             this.onradar.push(p);
-          }
+
+          else if(p.visited)
+            this.onradar.push(p);
         }
       });
     }
   }
 
   displayRadar(){
-    if(this.radar){
-      let radarArrowDist = 200;
-      mCtx.fillStyle = "white";
+    if(this.radar && this.boarded){
+      let radarArrowDist = 150;
+
 
       this.onradar.forEach(p=>{
-        console.log("radar")
-        let dir = directionFromObjectToObject(this,p);
-        mCtx.save();
-        mCtx.translate(middle.x,middle.y);
-        mCtx.translate(radarArrowDist * dir.x, radarArrowDist * dir.y);
-        mCtx.fillText("planet: "+p.name,0,0);
-        mCtx.restore();
+
+        if(p.d2p >= p.radius + 200){
+          //console.log("radar")
+          let dir = directionFromObjectToObject(this,p);
+          mCtx.save();
+          mCtx.translate(middle.x,middle.y);
+          mCtx.translate(radarArrowDist * -dir.x, radarArrowDist * dir.y);
+          let from = {
+            x:-dir.x*20,
+            y:dir.y*20
+          }
+          let to = {
+            x:-dir.x*50,
+            y:dir.y*50
+          }
+          mCtx.beginPath();
+          mCtx.strokeStyle = "white";
+          mCtx.moveTo(from.x,from.y);
+          mCtx.lineTo(to.x,to.y);
+          mCtx.stroke();
+
+          let visit = "";
+
+          if(p.visited){
+            visit = " (visited)";
+            mCtx.fillStyle = "green";
+          }
+          else mCtx.fillStyle = "white";
+
+          mCtx.fillText("planet: "+p.name+visit+". distance: "+p.d2p,-35,0);
+          mCtx.restore();
+        }
+
       });
     }
   }

@@ -7,6 +7,7 @@ class Planet {
     this.x = x;
     this.y = y;
     this.features = [];
+    this.d2p =-1;
 
     if(name==undefined) name = RandomPlanetName();
     this.name = name;
@@ -53,6 +54,7 @@ class Planet {
       let pos = {x:this.rPos(),y:this.rPos()};
       let cracker = new SimpleObject(pos.x,pos.y,cracker_png,10);
       cracker.edible = true;
+      cracker.collider = false;
       this.features.push(cracker);
     }
   }
@@ -108,6 +110,7 @@ class Planet {
     if(nextd<this.radius){
 
       input.landed = true;
+      this.visited = true;
       let vel = dist({x:0,y:0},{x:input.lastvx,y:input.lastvy});
 
       //console.log(vel)

@@ -11,6 +11,7 @@ let planets = [];
 
 function start(){
 
+  startSound();
   loadImages();
   setupCanvas();
   setupPlayer();
@@ -36,6 +37,8 @@ function run(){
 
   updateStars();
 
+  player.displayRadar();
+
   // update planets
   updateAll(planets);
 
@@ -60,7 +63,7 @@ function run(){
   mCtx.restore();
 
   updatePlayerUi();
-  //player.displayRadar();
+
 
 
 }

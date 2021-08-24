@@ -21,10 +21,18 @@ class SimpleObject {
   }
 
   interact(){
-    if(this.active){
-      let d = dist(this,player);
+    //console.log("ey!")
+    if(this.active && player.landed){
+      let p = player.nearestPlanet;
+      if(p==undefined) return;
+
+      let trupos = {x:this.x+p.x,y:this.y+p.y};
+      let pTrupos = {x:player.x+player.dude.x,y:player.y+player.dude.y};
+
+      let d = dist(trupos,pTrupos);
+    //  console.log(d)
       if(d<20){
-        moveTowards(this,player,2);
+        moveTowards(trupos,pTrupos,6);
 
         if(d<4){
           this.active = false;

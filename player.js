@@ -76,6 +76,11 @@ function keyDown(e){
     case 83: inputs.s = true; break; //s
     case 68: inputs.d = true; break; //d
 
+    case 90: soundCheck(); break;
+    case 88: soundCheck2(); break;
+    case 67: soundCheck3(); break;
+    case 86: soundCheck4(); break;
+
     // press b to interact with obejcts
     case 66: inputs.b = true;
     if(availableText!=undefined){
@@ -87,12 +92,15 @@ function keyDown(e){
       // show next phrase
       else {
         textCounter++;
+
+        if(textCounter==availableText.text.length-1
+          &&availableText.firstReadAction!=undefined)
+          availableText.firstReadAction();
         // quit
-        if(textCounter==availableText.text.length){
+        if(textCounter==availableText.text.length)
           player.reading = false;
-          if(availableText.firstReadAction!=undefined)
-            availableText.firstReadAction();
-        }
+
+
 
       }
     }
@@ -136,8 +144,8 @@ function HandlePlayerInputs(){
         camera.targetIsDude();
 
         let dir = directionFromObjectToObject(player.nearestPlanet,player);
-        player.dude.y += dir.y* HopDistance;
-        player.dude.x += dir.x* HopDistance;
+        player.dude.y -= dir.y *2* HopDistance;
+        player.dude.x = dir.x * 2* HopDistance;
       }
     }
   }

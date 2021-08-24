@@ -18,6 +18,7 @@ function moveTowards(moveme, target, vel){
   let reachedX = false;
   let reachedY = false;
 
+  console.log(moveme,target)
   if(moveme.x + vel < target.x) moveme.x += vel;
   else if(moveme.x - vel > target.x) moveme.x -= vel;
   else reachedX = true;
@@ -110,3 +111,5 @@ function RandomPlanetName(){
   usedPlanetNames.push(name);
   return name;
 }
+
+let constrain=(input,min,max)=> Math.min(Math.max(input, min), max);
