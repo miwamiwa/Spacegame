@@ -32,7 +32,7 @@ class SimpleObject {
       let d = dist(trupos,pTrupos);
     //  console.log(d)
       if(d<50){
-        moveTowards(this,player,6);
+        //moveTowards(player,this,6);
 
         if(d<34){
           this.active = false;
