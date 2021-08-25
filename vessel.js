@@ -55,11 +55,13 @@ class Vessel extends AnimObject {
       // if accelerating, update velocity
       if(this.throttle > 0){
 
+        let ax = this.throttle * Math.sin(this.bearing);
+        let ay = this.throttle * Math.cos(this.bearing);
         if(!(
-          dist({x:0,y:0},{x:this.vx+this.throttle,y:this.vy+this.throttle})
+          dist({x:0,y:0},{x:this.vx+ax,y:this.vy+ay})
           >SpeedLimit)){
-            this.vx += this.throttle * Math.sin(this.bearing);
-            this.vy += this.throttle * Math.cos(this.bearing);
+            this.vx += ax;
+            this.vy += ay;
         }
 
 
