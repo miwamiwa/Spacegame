@@ -1,9 +1,11 @@
 const GravityConstant = 40;
+const PlanetMassMin = 800;
+const PlanetMassMax = 2000;
 
 class Planet {
   constructor(x,y,randomscenery,name){
     // mass and radius
-    this.setRadMas(rand(150,320),rand(400,3000));
+    this.setRadMas(rand(150,320),rand(PlanetMassMin,PlanetMassMax));
     this.gravitationalConstant = GravityConstant;
     this.halfsize =0; // ellipses start from center point
     this.x = x;
@@ -119,7 +121,7 @@ class Planet {
 
       // check for threshold velocity at which crash occurs.
       // this is affected by the vehicle's mass (1 by default)
-      if(vel>CrashThreshold * input.mass && !input.crashed){
+      if(vel>CrashThreshold / input.mass && !input.crashed){
         input.crashed = true;
         crashtext = RandomFailText();
         input.crashFrame = input.counter;

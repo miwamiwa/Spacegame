@@ -1,5 +1,6 @@
 const CrashAnimLength = 120;
 const CrashThreshold = 18; // see planet.js
+const VesselMass = 0.8;
 
 class Vessel extends AnimObject {
   constructor(x,y,size,frames){
@@ -9,7 +10,7 @@ class Vessel extends AnimObject {
 
     this.vel = 1;
     this.throttle =0;
-    this.mass = 1;
+    this.mass = VesselMass;
 
     console.log(this.lastvx,this.lastvy)
     this.nearestPlanet =undefined;

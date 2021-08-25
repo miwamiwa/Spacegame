@@ -283,25 +283,13 @@ let soundCheck=()=>{
   playSnare()
 }
 
-let soundCheck2=()=>{
-  playHats()
-}
-
-let soundCheck3=()=>{
-  playHat2()
-}
-
-let soundCheck4=()=>{
-  playSnare2()
-}
-
 
 let snarerelease=0.3;
 
 let playSnare=()=>
   play( 10, 0.02,0.01,0.4,snarerelease , 4,noisey2,5,'highpass',1200,4);
 
-
+/*
 let cash2timeout;
 let playCash=()=>{
 
@@ -311,17 +299,12 @@ let playCash=()=>{
     play(2400, 0.01,0.02,0.3,0.6, 2,constSine2,4,'lowpass',1800,2);
 }, 260);
 }
-
+*/
 
 let playHats=()=>
   play(40,0.01,0.01,0.5,0.8,40,noisey,14,'highpass',3400,6);
 
 
-  let playHat2=()=>
-    play(40,0.01,0.01,0.5,0.8,40,noisey,14,'highpass',6400,6);
-
-    let playSnare2=()=>
-      play( 10, 0.02,0.01,0.4,snarerelease , 4,noisey2,5,'highpass',600,4);
 
 
 let constSineZ=(i,dividor)=>
@@ -344,7 +327,7 @@ let playWobbleBass=(freq)=>
 
 let playNoiseySynth=(freq)=>{
   //console.log(freq)
-  play( freq,0.01,0.51,0.3,1.45, 50,constSine4,4.5,'lowpass',35,8);
+  play( freq,0.01,0.51,0.3,1.45, 50,constSine4,4.5,'lowpass',350,8);
   //sine4counter++;
   //if(sine4counter%12==0) sine4fact = 1 - sine4fact;
 }

@@ -87,10 +87,10 @@ function keyDown(e){
     case 83: inputs.s = true; break; //s
     case 68: inputs.d = true; break; //d
 
-    case 90: soundCheck(); break;
-    case 88: soundCheck2(); break;
-    case 67: soundCheck3(); break;
-    case 86: soundCheck4(); break;
+    //case 90: soundCheck(); break;
+    //case 88: soundCheck2(); break;
+  //  case 67: soundCheck3(); break;
+  //  case 86: soundCheck4(); break;
 
     // press b to interact with obejcts
     case 66: inputs.b = true;
