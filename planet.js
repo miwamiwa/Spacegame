@@ -59,6 +59,7 @@ class Planet {
       let cracker = new SimpleObject(pos.x,pos.y,cracker_png,10);
       cracker.edible = true;
       cracker.collider = false;
+      cracker.id="cheese";
       this.features.push(cracker);
     }
   }

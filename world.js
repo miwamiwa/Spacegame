@@ -101,11 +101,34 @@ function triggerGoToPlanetsOnRight(){
   }
 }
 
+const CrackerText = ["These must be Todd's crackers. They're littered all over the place!"];
+const CrackerText2 = ["More crackers. But where is Todd"];
+const CrackerText3 = ["... he's gone!"];
+
+
+function nextCrackerText (){
+  textCounter =0;
+  if(planetsIFoundCrackersOn.length==0)
+    availableText2 = CrackerText;
+    else  if(planetsIFoundCrackersOn.length==1)
+  availableText2 = CrackerText2;
+
+else availableText2 = CrackerText3;
+}
+
+function closeTextBox(){
+  availableText2 = undefined;
+}
+
+
+
 let planetsIFoundCrackersOn = [];
 function playerFoundCracker(){
+  nextCrackerText();
   console.log("found cracker");
   if(!planetsIFoundCrackersOn.includes(player.nearestPlanet)){
     planetsIFoundCrackersOn.push(player.nearestPlanet);
+
   }
 }
 
@@ -116,7 +139,7 @@ function triggerCrackerInvestigation(){
   if(!investigationTriggered){
     let so = new SimpleObject(0,0,undefined,10,InvestigationText,continueInvestigation);
     player.children.push(so);
-
+    console.log("investigation started")
     investigationTriggered = true;
   }
 }

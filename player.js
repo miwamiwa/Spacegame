@@ -29,6 +29,7 @@ const FailTextList = ["Ouch!","Don't scratch the car. -Mom.","Oof."];
 let playerDirX =0;
 let playerDirY =0;
 let availableText;
+let availableText2;
 let textCounter=0;
 
 let inputs = {
@@ -104,6 +105,12 @@ function keyDown(e){
         player.dude.visible = false;
       }
     }
+    else if (availableText2!=undefined){
+
+      textCounter++;
+      if(textCounter==availableText2.length)
+        closeTextBox();
+    }
     else if(availableText!=undefined){
       // show window
       if(!player.reading){
@@ -139,7 +146,7 @@ function keyUp(e){
   }
 }
 
-const HopDistance = 40;  // dist travelled when hopping off ship
+const HopDistance = 60;  // dist travelled when hopping off ship
 function HandlePlayerInputs(){
 
   canExit = false;
@@ -168,9 +175,21 @@ function HandlePlayerInputs(){
         player.dude.visible = true;
         camera.targetIsDude();
 
+        let p = player.nearestPlanet;
+        let x = p.rPos();
+        let y = p.rPos();
+        let pos = {x:p.x+p.rPos(),y:p.y+p.rPos()};
+
+        console.log(p.x,p.y,player.x,player.y)
+        while (dist(pos,player)>25){
+          x = p.rPos();
+          y = p.rPos();
+          pos = {x:p.x+x,y:p.y+y};
+        }
+
         let dir = directionFromObjectToObject(player.nearestPlanet,player);
-        player.dude.y -= dir.y *0.5* HopDistance;
-        player.dude.x = dir.x * 0.5* HopDistance;
+        player.dude.x =  (p.x-player.x)+x;
+        player.dude.y =  (p.y-player.y)+y;
       }
     }
   }
@@ -322,6 +341,25 @@ function updatePlayerUi(){
       });
 
     }
+
+  }
+
+  if(availableText2!=undefined && !player.boarded){
+
+    mCtx.fillStyle = "white";
+    mCtx.fillText("press b", middle.x, middle.y);
+
+      mCtx.fillStyle = "black";
+      mCtx.fillRect(TextBox.x,TextBox.y, 300, 40);
+      mCtx.fillStyle = "white";
+
+      let i=0;
+      availableText2[textCounter].split("\n").forEach(line=>{
+        mCtx.fillText(line, TextBox.x + 10, TextBox.y+17 + i);
+        i+= 10;
+      });
+
+
 
   }
 

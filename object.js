@@ -11,6 +11,7 @@ class SimpleObject {
     this.text = text;
     this.edible = false;
     this.active = true;
+    this.id="";
     this.firstReadAction = firstReadAction;
   }
   display(){
@@ -36,7 +37,8 @@ class SimpleObject {
 
         if(d<34){
           this.active = false;
-          playerFoundCracker();
+          if(this.id=="cheese")
+            playerFoundCracker();
         }
       }
     }
