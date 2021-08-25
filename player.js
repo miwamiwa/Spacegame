@@ -5,6 +5,8 @@ const PlayerStartX = 50;
 const PlayerStartY = 50;
 const PlayerSize = 100;
 const PlayerWalkVelocity = 3;
+let canExit = false; // trigger exit vehicle prompt
+let canEnter = false;
 
 const TextBox = {
   x:100,
@@ -83,7 +85,17 @@ function keyDown(e){
 
     // press b to interact with obejcts
     case 66: inputs.b = true;
-    if(availableText!=undefined){
+
+    if(canEnter){
+      if(canBoard){
+        player.dude.x =0;
+        player.dude.y =0;
+        camera.targetIsVessel();
+        player.boarded = true;
+        player.dude.visible = false;
+      }
+    }
+    else if(availableText!=undefined){
       // show window
       if(!player.reading){
         player.reading = true;
@@ -121,6 +133,8 @@ function keyUp(e){
 const HopDistance = 40;  // dist travelled when hopping off ship
 function HandlePlayerInputs(){
 
+  canExit = false;
+  canEnter = false;
   // w or s?
   //if(inputs.w) player.plusThrottle(PlayerAcceleration);
   //if(inputs.s) player.minusThrottle(PlayerAcceleration);
@@ -137,6 +151,8 @@ function HandlePlayerInputs(){
       triggerCrackerInvestigation();
 
     if(player.landed){
+
+      canExit = true;
       // hop off the vessel
       if(inputs.s&&!player.crashed){
         player.boarded = false;
@@ -144,8 +160,8 @@ function HandlePlayerInputs(){
         camera.targetIsDude();
 
         let dir = directionFromObjectToObject(player.nearestPlanet,player);
-        player.dude.y -= dir.y *2* HopDistance;
-        player.dude.x = dir.x * 2* HopDistance;
+        player.dude.y -= dir.y *0.5* HopDistance;
+        player.dude.x = dir.x * 0.5* HopDistance;
       }
     }
   }
@@ -164,6 +180,8 @@ function HandlePlayerInputs(){
     if(inputs.w) movePlayerOnPlanetY(-1);
     if(inputs.s) movePlayerOnPlanetY(1);
 
+
+
     if(running!=player.running){
       switch(player.running){
         case false: player.dude.setFrames(PlayerAnimation); break;
@@ -176,13 +194,8 @@ function HandlePlayerInputs(){
 
     // hop ON vessel when in range
     if(dist({x:0,y:0},player.dude)<HopDistance){
-      if(canBoard){
-        player.dude.x =0;
-        player.dude.y =0;
-        camera.targetIsVessel();
-        player.boarded = true;
-        player.dude.visible = false;
-      }
+      canEnter = true;
+
     }
 
   }
@@ -301,6 +314,26 @@ function updatePlayerUi(){
 
     }
 
+  }
+
+  if(canExit){
+    let t = "press s to exit. hold w to launch."
+    mCtx.fillStyle = "white";
+    mCtx.fillText(t, middle.x + 50, middle.y);
+
+
+  }
+
+  if(canEnter&&canBoard){
+
+    mCtx.fillStyle = "white";
+    mCtx.fillText("press b to board", middle.x, middle.y);
+
+  }
+
+  if(!HelpOff&&player.boarded&&!player.landed){
+    mCtx.fillStyle = "white";
+    mCtx.fillText("w to throttle. a,d to steer.", middle.x + 50, middle.y);
   }
 }
 

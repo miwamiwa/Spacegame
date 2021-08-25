@@ -68,7 +68,9 @@ function triggerStoryStart(){
   canBoard = true;
 }
 
+let HelpOff = false;
 function triggerTommysHouseFound(){
+  HelpOff = true;
   player.nearestPlanet.features[1].text = CouchText2;
   player.nearestPlanet.features[1].firstReadAction = triggerGoToPlanetsOnRight;
 }
