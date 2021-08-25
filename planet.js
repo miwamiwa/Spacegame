@@ -1,8 +1,10 @@
+const GravityConstant = 40;
+
 class Planet {
   constructor(x,y,randomscenery,name){
     // mass and radius
     this.setRadMas(rand(150,320),rand(400,3000));
-    this.gravitationalConstant = 30;
+    this.gravitationalConstant = GravityConstant;
     this.halfsize =0; // ellipses start from center point
     this.x = x;
     this.y = y;
@@ -119,6 +121,7 @@ class Planet {
       // this is affected by the vehicle's mass (1 by default)
       if(vel>CrashThreshold * input.mass && !input.crashed){
         input.crashed = true;
+        crashtext = RandomFailText();
         input.crashFrame = input.counter;
         input.setFrames(CrashAnimation);
         console.log("crash! landed too fast.");

@@ -1,5 +1,5 @@
 const CrashAnimLength = 120;
-const CrashThreshold = 10; // see planet.js
+const CrashThreshold = 18; // see planet.js
 
 class Vessel extends AnimObject {
   constructor(x,y,size,frames){
@@ -54,8 +54,15 @@ class Vessel extends AnimObject {
 
       // if accelerating, update velocity
       if(this.throttle > 0){
-        this.vx += this.throttle * Math.sin(this.bearing);
-        this.vy += this.throttle * Math.cos(this.bearing);
+
+        if(!(
+          dist({x:0,y:0},{x:this.vx+this.throttle,y:this.vy+this.throttle})
+          >SpeedLimit)){
+            this.vx += this.throttle * Math.sin(this.bearing);
+            this.vy += this.throttle * Math.cos(this.bearing);
+        }
+
+
       }
 
       // update flame position according to throttle power
@@ -186,7 +193,7 @@ class Vessel extends AnimObject {
   }
 
   plusThrottle(amount){
-    this.throttle = Math.min(this.throttle + amount, SpeedLimit);
+    this.throttle = Math.min(this.throttle + amount, AccelerationLimit);
   }
 
   minusThrottle(amount){

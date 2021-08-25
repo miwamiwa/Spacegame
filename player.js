@@ -1,10 +1,19 @@
 const PlayerAcceleration = 0.05;
+const PlayerDeceleration = 0.2; // rate at which player.throttle recedes to 0.
 const PlayerRotateRate = 0.1;
-const SpeedLimit = 200;
+const AccelerationLimit = 3;
+const SpeedLimit = 80;
+const PlayerWalkVelocity = 3;
+
 const PlayerStartX = 50;
 const PlayerStartY = 50;
 const PlayerSize = 100;
-const PlayerWalkVelocity = 3;
+const DudeSize = 50;
+
+const RadarMin = 200;
+const RadarMax = 20000;
+
+
 let canExit = false; // trigger exit vehicle prompt
 let canEnter = false;
 
@@ -31,14 +40,14 @@ let inputs = {
 }
 
 function setupPlayer(){
-  player = new Vessel(PlayerStartX,PlayerStartY,PlayerSize,VesselAnimation);
+  player = new Vessel(0,0,PlayerSize,VesselAnimation);
 
 
 
   player.radar = true;
-  player.radarMinRange = 200;
-  player.radarMaxRange = 20000;
-  player.dude = new AnimObject(50,50,40,PlayerAnimation);
+  player.radarMinRange = RadarMin;
+  player.radarMaxRange = RadarMax;
+  player.dude = new AnimObject(PlayerStartX,PlayerStartY,DudeSize,PlayerAnimation);
   player.children.push(player.dude);
   player.reading = false;
 
@@ -142,7 +151,7 @@ function HandlePlayerInputs(){
   // press w to toggle throttle
   if(player.boarded){
     if(inputs.w) player.plusThrottle(PlayerAcceleration);
-    else player.minusThrottle(PlayerAcceleration);
+    else player.minusThrottle(PlayerDeceleration);
 
     if(inputs.a) player.rotate(PlayerRotateRate);
     if(inputs.d) player.rotate(-PlayerRotateRate);
@@ -270,14 +279,14 @@ function CheckCollisionsOnPlanet(p){
   return r;
 }
 
-
+let crashtext;
 
 function updatePlayerUi(){
   mCtx.fillStyle = "white";
 
   // if we crashed
   if(player.crashed)
-  mCtx.fillText(RandomFailText(),TopText.x,TopText.y);
+  mCtx.fillText(crashtext,TopText.x,TopText.y);
 
   // if we're aboard the space chips
   else if(player.boarded)

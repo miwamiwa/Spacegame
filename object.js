@@ -31,10 +31,10 @@ class SimpleObject {
 
       let d = dist(trupos,pTrupos);
     //  console.log(d)
-      if(d<30){
-        moveTowards(trupos,pTrupos,6);
+      if(d<50){
+        moveTowards(this,player,6);
 
-        if(d<20){
+        if(d<34){
           this.active = false;
           playerFoundCracker();
         }
