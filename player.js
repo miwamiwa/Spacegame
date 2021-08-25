@@ -15,7 +15,7 @@ const TextBox = {
 
 // ui stuff
 const TopText = {x: 4, y: 10};
-const FailTextList = ["Ouch!","Don't drink and drive.","Careful with my car."];
+const FailTextList = ["Ouch!","Don't scratch the car. -Mom.","Oof."];
 
 let playerDirX =0;
 let playerDirY =0;
@@ -340,5 +340,5 @@ function updatePlayerUi(){
 
 
 function RandomFailText(){
-  return RandomFromArray(FailTextList.length);
+  return RandomFromArray(FailTextList);
 }
