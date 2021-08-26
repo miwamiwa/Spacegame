@@ -3,23 +3,53 @@ const PlanetMassMin = 800;
 const PlanetMassMax = 2000;
 
 class Planet {
-  constructor(x,y,randomscenery,name){
-    // mass and radius
-    this.setRadMas(rand(150,320),rand(PlanetMassMin,PlanetMassMax));
+  constructor(x,y,randomscenery,name, rad, mas){
+    // mass and radius\
+    if(rad==undefined)
+      this.setRadMas(rand(150,320),rand(PlanetMassMin,PlanetMassMax));
+    else this.setRadMas(rad,mas);
+
     this.gravitationalConstant = GravityConstant;
     this.halfsize =0; // ellipses start from center point
     this.x = x;
     this.y = y;
     this.features = [];
     this.d2p =-1;
+    this.hue =flo(rand(360));
 
     if(name==undefined) name = RandomPlanetName();
     this.name = name;
 
     this.addBasicFeatures();
 
+    this.scenery = randomscenery;
     if(randomscenery)
       this.setupScenery();
+
+    // order features by y
+    //this.sortFeatures();
+  }
+
+  sortFeatures(){
+    let sorted = [this.features[0]];
+    for(let i=1; i<this.features.length; i++){
+      let found = false;
+      let d = 30;
+      if(this.features[i].id=="rock"){
+        d =30;
+        console.log("euh")
+      }
+      for(let j=0; j<sorted.length; j++){
+        if(!found&&this.features[i].y+d<sorted[j].y){
+          sorted.splice(j,0,this.features[i]);
+          found = true;
+        }
+      }
+
+      if(!found) sorted.push(this.features[i]);
+    }
+
+    this.features = sorted;
   }
 
   setRadMas(rad,mas){
@@ -30,8 +60,9 @@ class Planet {
 
   addBasicFeatures(){
     let r = flo(rand(80,120));
-    let g = flo(rand(80,120));
+    let g = 255-r;
     let b = flo(rand(80,120));
+
     let rad = flo(rand(40, 140));
 
     this.groundColor = `rgba(${r},${g},${b}, 1)`;
@@ -48,8 +79,52 @@ class Planet {
     return rand(-this.radius,this.radius);
   }
 
+  // make some trees
   setupScenery(){
+    this.treeFamily = createNewTreeType();
+    let treeCount = flo(rand(2,6));
+    let treesAdded = [];
 
+    console.log("radius: "+this.radius)
+    for(let i=0; i<treeCount; i++){
+
+      let pick = RandomFromArray(this.treeFamily);
+
+      let pos = this.randomSurfacePosition();
+      let found = true;
+      while(!found){
+        pos = this.randomSurfacePosition();
+        let clear = true;
+        for(let j=0; j<treesAdded.length; j++){
+          if(dist(pos,treesAdded[j])<40) clear  = false;
+        }
+        found = clear;
+      }
+
+      if(rand()<0.3){
+        let rock = new SimpleObject(pos.x,pos.y,rock_png,30);
+        //rock.hue = flo(rand(360));
+        rock.collider = false;
+        rock.id="rock";
+        this.features.push(rock);
+        treesAdded.push(rock);
+      }
+      else {
+        let tree = new SimpleObject(pos.x,pos.y- 90,{img:pick},200);
+        tree.collider = false;
+        tree.id="tree";
+        this.features.push(tree);
+        treesAdded.push(tree);
+      }
+
+
+    //  console.log(pos)
+
+    }
+  }
+
+  randomSurfacePosition(){
+    return {x:this.rPos() * 0.5,y:this.rPos() * 0.5 };
   }
 
   addCheese(){
@@ -69,7 +144,8 @@ class Planet {
     let pos = camera.position(this);
     if(camera.isOnScreen(pos,this.gravity.range)){
       mCtx.save();
-
+      if(this.hue!=0)
+        mCtx.filter = `hue-rotate(${this.hue}deg)`;
         // draw a circle to show range of gravity
         mCtx.fillStyle = "#5594";
         mCtx.beginPath();
@@ -79,6 +155,7 @@ class Planet {
         // draw planet
         mCtx.fillStyle = this.groundColor;
 
+        // clipping path
         mCtx.beginPath();
         mCtx.arc(pos.x,pos.y, this.radius, 0, TWO_PI, true);
         mCtx.clip();
@@ -95,10 +172,13 @@ class Planet {
           mCtx.fill();
         });
 
-        mCtx.translate(pos.x,pos.y);
-        this.features.forEach(f=>f.display());
+      mCtx.restore();
 
-
+      mCtx.save();
+      if(this.hue!=0)
+        mCtx.filter = `hue-rotate(${this.hue}deg)`;
+      mCtx.translate(pos.x,pos.y);
+      this.features.forEach(f=>f.display());
       mCtx.restore();
     }
   }

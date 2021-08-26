@@ -14,6 +14,8 @@ class AnimObject {
     this.preRot =0; // used for player.dude
     this.visible = true;
 
+    this.hue = 0;
+
     //console.log(this)
     //console.log(this.x,this.y);
   }
@@ -30,18 +32,13 @@ class AnimObject {
   }
   display(children){
 
-
-
-
     // get on screen position
     let pos = camera.position(this);
 
     // check if on screen
     if(this.bypassCamConstraint||camera.isOnScreen(pos,this.halfsize)){
-
         // draw sprite
       this.drawMe(pos.x,pos.y,children);
-
       this.updateAnimation();
     }
 
@@ -54,11 +51,12 @@ class AnimObject {
 
     if(x==undefined) x = this.x;
     if(y==undefined) y = this.y;
+
     mCtx.save();
     if(this.preRot!=0)
       mCtx.rotate(this.preRot)
     mCtx.translate(x ,y );
-    mCtx.rotate(this.bearing)
+    mCtx.rotate(this.bearing);
     if(children!=undefined){
       for(let i=0; i<children.length; i++){
         let c = children[i];
@@ -71,6 +69,9 @@ class AnimObject {
         c.counter++;
       }
     }
+
+    if(this.hue!=0)
+      mCtx.filter = `hue-rotate(${this.hue}deg)`;
     mCtx.drawImage(this.img.img, -this.halfsize,-this.halfsize , this.size, this.size);
     mCtx.restore();
   }

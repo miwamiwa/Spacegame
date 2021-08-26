@@ -46,22 +46,23 @@ function setupCanvas(){
 
 function setupPlanets(){
   // place a planet below player
-  let p = new Planet(player.x,player.y, false, "Home, sweet home");
+  let p = new Planet(player.x,player.y, true, "Home, sweet home", 150, 1500);
   planets.push(p);
-  p.setRadMas(150,1500);
+  //p.setRadMas(150,1500);
 
   p.y += p.radius + Planet1Distance;
   p.groundColor = "#a37765ff";
   p.groundColor2 = "#9e857b88";
   p.features.push(new SimpleObject(0,0,home_png, 100, HomePlanetText, triggerStoryStart));
-
+  p.sortFeatures();
 
   let p2 = new Planet(p.x + 200, p.y-8000, false, "Todd's place");
   planets.push(p2);
   p2.setRadMas(210,1200);
 
   p2.features.push(new SimpleObject(80,0,home_png, 100, ToddsHomeText, triggerTommysHouseFound));
-  p2.features.push(new SimpleObject(-90,40,couch_png, 100, CouchText1))
+  p2.features.push(new SimpleObject(-90,40,couch_png, 100, CouchText1));
+  p2.sortFeatures();
 }
 
 function triggerStoryStart(){

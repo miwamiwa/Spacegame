@@ -11,8 +11,11 @@ let planets = [];
 
 function start(){
 
-  startSound();
+  //startSound();
+
   loadImages();
+
+  createNewTreeType()
   setupCanvas();
   setupPlayer();
   console.log(player)

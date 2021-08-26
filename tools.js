@@ -3,6 +3,7 @@
 // so as to avoid cluttering script.js
 
 
+
 // updateall()
 //
 // update all elements in a list
@@ -10,6 +11,7 @@ function updateAll(input){
   input.forEach(el=>el.update());
 }
 
+/*
 // movetowards()
 //
 // move "moveme" towards target a a given velocity
@@ -29,6 +31,7 @@ function moveTowards(moveme, target, vel){
 
   return reachedX && reachedY;
 }
+*/
 
 // rand()
 //

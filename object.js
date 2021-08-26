@@ -1,3 +1,5 @@
+const ItemPickupRange = 34;
+
 class SimpleObject {
   constructor(x,y,img,size,text,firstReadAction){
     this.x = x;
@@ -12,13 +14,26 @@ class SimpleObject {
     this.edible = false;
     this.active = true;
     this.id="";
+    this.hue =0;
     this.firstReadAction = firstReadAction;
   }
+
+
+
   display(){
+    //pickup item
     if(this.edible) this.interact();
-    //console.log(this.img)
-    if(this.active&&this.img!=undefined)
+
+    if(this.active&&this.img!=undefined){
+      mCtx.save();
+      if(this.hue!=0)
+        mCtx.filter = `hue-rotate(${this.hue}deg)`;
+      //let dy =0;
+      //if(this.type=="tree") dy -= this.halfsize;
+
       mCtx.drawImage(this.img.img, this.x-this.halfsize, this.y-this.halfsize, this.size, this.size);
+      mCtx.restore();
+    }
   }
 
   interact(){
@@ -30,16 +45,12 @@ class SimpleObject {
       let trupos = {x:this.x+p.x,y:this.y+p.y};
       let pTrupos = {x:player.x+player.dude.x,y:player.y+player.dude.y};
 
-      let d = dist(trupos,pTrupos);
-
-        if(d<34){
-          this.active = false;
-          if(this.id=="cheese")
-            playerFoundCracker();
-        }
-
+      if(dist(trupos,pTrupos)<ItemPickupRange){
+        this.active = false;
+        if(this.id=="cheese")
+        playerFoundCracker();
+      }
     }
-
   }
 
 }

@@ -362,6 +362,7 @@ function updatePlayerUi(){
         mCtx.fillText(line, TextBox.x + 10, TextBox.y+17 + i);
         i+= 10;
       });
+      else console.log(textCounter)
 
 
 
