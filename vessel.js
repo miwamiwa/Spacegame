@@ -14,7 +14,7 @@ class Vessel extends AnimObject {
 
     console.log(this.lastvx,this.lastvy)
     this.nearestPlanet =undefined;
-    this.flame = new AnimObject(-20,40,50,FlameAnimation);
+    this.flame = new AnimObject(0,55,50,FlameAnimation);
     this.children = [this.flame];
     this.gravity = true;
     this.radar = false;
@@ -69,7 +69,7 @@ class Vessel extends AnimObject {
       }
 
       // update flame position according to throttle power
-      this.flame.y = Math.min(this.throttle * 20, 40);
+      this.flame.y = 20+Math.min(this.throttle * 20, 40);
 
       // apply velocity
       this.x += this.vx;

@@ -23,7 +23,7 @@ class SimpleObject {
 
   interact(){
     //console.log("ey!")
-    if(this.active && player.landed){
+    if(this.active && player.landed && !player.boarded){
       let p = player.nearestPlanet;
       if(p==undefined) return;
 
@@ -31,16 +31,13 @@ class SimpleObject {
       let pTrupos = {x:player.x+player.dude.x,y:player.y+player.dude.y};
 
       let d = dist(trupos,pTrupos);
-    //  console.log(d)
-      if(d<50){
-        //moveTowards(player,this,6);
 
         if(d<34){
           this.active = false;
           if(this.id=="cheese")
             playerFoundCracker();
         }
-      }
+
     }
 
   }

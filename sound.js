@@ -28,6 +28,12 @@ let startBeatMachine = ()=>{
 
 let bars =0;
 
+// improv
+let currentNote=58
+let currentPattern;
+let currentOctave = 5;
+let note0 =0;
+let octave0 =5;
 
 
 const Edorian = [4,6,7,9,11,13,14];
@@ -44,7 +50,8 @@ const ALydian = [9,11,13,15,16,18,20];
 const G6 = [7,9,11,13,14,16,18];
 const AMixo = [9,11,13,15,16,18,19];
 
-const scales = [Edorian,FshPhrygi,Edorian,FshPhrygi,
+const scales = [
+                Edorian,FshPhrygi,Edorian,FshPhrygi,
                 CLydian,CLydian,CLydian,CLydian,
                 ADorian,DMixo,GLydian,CLydian,
               GLydian,CLydian,Fmin7flat5,BMixo,
@@ -70,11 +77,22 @@ const melodyG = [false, 7, 7, 7, false, -1, 4, false, false]
 const melodyH = [false, false, 4, 4, 6, 4, 6, 4, 6, 7, 9, 7, 9, false, 7, 11, 12, 11, 12, false, false, false, false, false];
 const melodyI = [11, false, false, 7, false, false];
 
+const patterns = [
+                  [0,1,2,3],
+                  [0,1,0],
+                  [0,4,3,0,1],
+                  [0,4,3],
+                  [1,2,0]
+                ]
+
 let fullmel = [];
 
 let phrase1=[];
-
+let patcount =0;
 let melcount =0;
+let lastscale = [];
+const defoctave = 6;
+let lastScaleDegree =-1;
 
 let setupMel = () =>{
   // phrase 1
@@ -88,32 +106,147 @@ let setupMel = () =>{
       .concat(melodyH).concat(melodyI);
 }
 
+let mutemel = true;
+let head =0;
+
+let bassOctave = 3; // 2 and 3 both nice
+
 let playbar = () =>{
 
   let scale = scales[bars];
-  startBeat([600,400,200],playHats,0.9,1);
-  startBeat([400,200,600],playSnare,0.0,0.15);
-  startNotes([600,400,200],[0,flo(rand(2,4)),6],4,constSine5,scale);
+  startBeat([600,400,200],playHats,0.99,1);
+  startBeat([400,200,600],playSnare,0.0,0.25);
+  // fluttery fx
+  startBeat([100,100,100],playCash,.1,.3)
+  // bass
+  startNotes([800,200,200],[0,flo(rand(2,4)),6],bassOctave,constSine5,scale);
+  // melody
   let melPattern = [400,400,400];
   if(bars%4==3) melPattern = [200,600,400]
   startMelNotes(melPattern,5,noisey2);
+  // improv keys
+  startImprovNotes([200,400,400,200], noisey2, scale, rand((bars%4)/4+0.3));
+  // chord
+  //freq,a,d,s,r,cycles,func,vol,ftype,ffreq,fq,slide
+
+  setTimeout(()=>{
+    let chord8ve = 5;
+    let chordfilt = "lowpass";
+    let chordvol = 0.15
+    let sustainTime = 1.1
+    play(noteToFreq(flo(rand(4,6))*12+scale[0]), 0.1, sustainTime, 0.3, 0.3, 4, constSine, chordvol, chordfilt, 4400, 1)
+    play(noteToFreq(flo(rand(4,6))*12+scale[2]), 0.1, sustainTime, 0.3, 0.3, 4, constSine, chordvol, chordfilt, 4400, 1)
+    play(noteToFreq(flo(rand(4,6))*12+scale[6]), 0.1, sustainTime, 0.3, 0.3, 4, constSine, chordvol, chordfilt, 4400, 1)
+  }, flo(rand(1.5))*200)
+
+
   bars++;
+//  console.log(bars)
   if(bars==scales.length){
     bars=0;
     melcount =0;
+    head++;
+    if(head%3==1) mutemel = false;
+    if(head%3==2) mutemel = true;
+
+    // chance to add some detune to melody synth
+    glideval = 0.000005 * (head+1) * rand(0.1,0.3);
   }
+}
+
+let startImprovNotes=(beat,sound,scale,temperament)=>{
+  let counter =0;
+
+  if(scale!=lastscale){
+    let data = findClosestNoteInScale(scale);
+    note0 = data.note;
+    currentNote = data.octave*12+data.note;
+    if(currentNote<40) currentNote +=12
+    //console.log(currentNote)
+    currentOctave = data.octave;
+  }
+  let intervals = [];
+  for(let i=0; i<beat.length; i++){
+    if(rand()<temperament) intervals.push(counter);
+    counter += beat[i];
+  }
+  lastscale = scale;
+  for(let i=0; i<intervals.length; i++){
+    setTimeout(()=>{
+
+        // define pattern
+        if(currentPattern==undefined){
+          currentPattern = Array.from(RandomFromArray(patterns));
+
+          // reverse pattern randomly but not if current note
+          // is kinda low. higher chance to reverse the higher up we are.
+          // at a certain point, reverse is certain.
+          if((!currentNote<68) &&
+            (currentNote>86||rand()< Math.min(0.7,currentNote / 64 - 0.2)))
+            currentPattern = currentPattern.reverse();
+          patcount=0;
+        }
+        let scaledegree = (note0+currentPattern[patcount])%scale.length;
+
+        //if(lastScaleDegree==3) scaledegree = 2;
+      //  if(lastScaleDegree==6) scaledegree = 0;
+        currentNote = currentOctave*12 + scale[scaledegree]
+
+        lastScaleDegree = scaledegree;
+        //console.log(currentNote)
+        if(!isNaN(currentNote))
+          playNoiseySynth(noteToFreq(currentNote), intervals[i])
+        patcount++;
+        // remove pattern if end reached
+        if(patcount==currentPattern.length-1) currentPattern = undefined;
+
+    },intervals[i]);
+
+  }
+}
+
+let findClosestNoteInScale=(scale)=>{
+  let octave = 0;
+  let note = currentNote;
+  let found =999;
+  let res = 99;
+  while(res>3){
+    for(let i=0; i<scale.length; i++){
+      let note2 = scale[i] + octave * 12;
+      res = abs(note2-note);
+      if(res<abs(found-note)) found = note2;
+
+      if(res<=2){
+        return {note:i,octave:octave}
+      }
+    }
+    octave++;
+    // lol lets not go too high
+    if(octave==8) return {note:0,octave:defoctave}
+  }
+
+  return {note:0,octave:defoctave}
+
 }
 
 let startMelNotes=(beat,octave,sound)=>{
   let counter =0;
   for(let i=0; i<3; i++){
     if(melcount<fullmel.length){
-      if(fullmel[melcount]!=false)
-        setTimeout(playNoiseySynth,counter,noteToFreq(octave*12+fullmel[melcount]))
 
+        setTimeout(()=>{
+
+          if(fullmel[melcount]!=false){
+
+            let n = octave*12+fullmel[melcount];
+            if(!mutemel){
+              playNoiseySynthog(noteToFreq(n));
+            }
+
+          }
+          melcount++;
+        },counter);
     }
-
-    melcount++;
     counter += beat[i]
   }
 }
@@ -206,14 +339,16 @@ let playSound=(arr,vol,filterT,filterF,filterG)=>{
   let source = aContext.createBufferSource();
   source.buffer = buffer;
   let filter = aContext.createBiquadFilter();
+  filter.type = filterT;
+  filter.frequency.value=filterF;
+  filter.gain.value = filterG;
+
   source.connect(filter);
 
   filter.connect(aContext.destination);
   source.start(0);
 
-  filter.type = filterT;
-  filter.frequency.value=filterF;
-  filter.gain.value = filterG;
+
 }
 
 class Envelope{
@@ -287,22 +422,25 @@ let soundCheck=()=>{
 let snarerelease=0.3;
 
 let playSnare=()=>
-  play( 10, 0.02,0.01,0.4,snarerelease , 4,noisey2,5,'highpass',1200,4);
+  play( 10, 0.02,0.01,0.4,snarerelease , 4,noisey2,6,'highpass',1200,4);
 
-/*
+
 let cash2timeout;
 let playCash=()=>{
 
-  play(1600, 0.01,0.02,0.3,0.6, 2,constSine2,4,'lowpass',1200,2);
-  clearTimeout(cash2timeout);
-  cash2timeout=setTimeout(function(){
-    play(2400, 0.01,0.02,0.3,0.6, 2,constSine2,4,'lowpass',1800,2);
-}, 260);
+  play(noteToFreq(36+scales[bars-1][0]), 0.01,0.2,0.3,0.1, 5,constSineZ,2.1,'highpass',500,3);
+  if(rand()>.5){
+    clearTimeout(cash2timeout);
+    cash2timeout=setTimeout(function(){
+      play(noteToFreq(36+scales[bars-1][0]), 0.01,0.32,0.3,0.2, 20,constSineZ,2.1,'highpass',1500,2);
+    }, 260);
+  }
+
 }
-*/
+
 
 let playHats=()=>
-  play(40,0.01,0.01,0.5,0.8,40,noisey,14,'highpass',3400,6);
+  play(40,0.01,0.01,0.35,0.6,40,noisey,24,'highpass',7400,2);
 
 
 
@@ -320,14 +458,21 @@ let playHop2=()=>
   play( 200,0.01,0.11,0.3,0.31,200,constSineZ,9,'highshelf',1500,2);
 
 
-let wubfactor=250;
+let wubfactor=1250;
 let playWobbleBass=(freq)=>
-  play(freq,.05,0.51,0.8,1.41, 4,constSine,0.6,'lowpass',300,20); // adjust filter freq value 200-1000 to get nice dub fx
+  play(freq,.05,0.11,0.1,1.11, 4,constSine4,8.6,'lowpass',1600,20); // adjust filter freq value 200-1000 to get nice dub fx
 
 
-let playNoiseySynth=(freq)=>{
+let playNoiseySynth=(freq, l)=>{
   //console.log(freq)
-  play( freq,0.01,0.51,0.3,1.45, 50,constSine4,4.5,'lowpass',350,8);
+  play( freq,0.04,0.4,0.3,Math.max(l*0.006,0.3), 5,constSine4,1.5,'highpass',450,2);
+  //sine4counter++;
+  //if(sine4counter%12==0) sine4fact = 1 - sine4fact;
+}
+let glideval = 0.00001;
+let playNoiseySynthog=(freq)=>{
+  //console.log(freq)
+  play( freq,0.04,0.31,0.2,1.2, 1,constSine4,2.8,'highpass',650,14,+glideval);
   //sine4counter++;
   //if(sine4counter%12==0) sine4fact = 1 - sine4fact;
 }

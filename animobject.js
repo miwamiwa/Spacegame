@@ -57,7 +57,7 @@ class AnimObject {
     mCtx.save();
     if(this.preRot!=0)
       mCtx.rotate(this.preRot)
-    mCtx.translate(x + this.halfsize,y + this.halfsize);
+    mCtx.translate(x ,y );
     mCtx.rotate(this.bearing)
     if(children!=undefined){
       for(let i=0; i<children.length; i++){

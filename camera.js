@@ -61,8 +61,8 @@ class Camera {
   //
   // position input relative to camera target
   position(input){
-    return {x: input.x - this.middle.x - input.halfsize,
-    y: input.y - this.middle.y - input.halfsize};
+    return {x: input.x - this.middle.x ,
+    y: input.y - this.middle.y };
   }
 
   isOnScreen(pos,halfsize){

@@ -163,8 +163,11 @@ function HandlePlayerInputs(){
     if(inputs.a) player.rotate(PlayerRotateRate);
     if(inputs.d) player.rotate(-PlayerRotateRate);
 
-    if(rightPlanetsEnabled && planetsIFoundCrackersOn.length>1)
+    if(rightPlanetsEnabled && planetsIFoundCrackersOn.length>1){
+      //console.log("ca continue")
       triggerCrackerInvestigation();
+    }
+
 
     if(player.landed){
 
@@ -239,8 +242,8 @@ function movePlayerOnPlanetX(delta){
   let newval = player.dude.x + player.walkVel * delta;
 
   let p = {
-    x: player.x + player.dude.halfsize + newval,
-    y: player.y+ player.dude.halfsize+player.dude.y
+    x: player.x + newval,
+    y: player.y + player.dude.y
   };
 
   if(CheckCollisionsOnPlanet(p)) return;
@@ -258,8 +261,8 @@ function movePlayerOnPlanetY(delta){
   let newval = player.dude.y + player.walkVel * delta;
 
   let p = {
-    x: player.x + player.dude.halfsize + player.dude.x,
-    y: player.y + player.dude.halfsize + newval
+    x: player.x +  player.dude.x,
+    y: player.y + newval
   };
 
   if(CheckCollisionsOnPlanet(p)) return;
@@ -344,7 +347,7 @@ function updatePlayerUi(){
 
   }
 
-  if(availableText2!=undefined && !player.boarded){
+  if(availableText2!=undefined){
 
     mCtx.fillStyle = "white";
     mCtx.fillText("press b", middle.x, middle.y);
@@ -354,6 +357,7 @@ function updatePlayerUi(){
       mCtx.fillStyle = "white";
 
       let i=0;
+      if(availableText2[textCounter]!=undefined)
       availableText2[textCounter].split("\n").forEach(line=>{
         mCtx.fillText(line, TextBox.x + 10, TextBox.y+17 + i);
         i+= 10;
@@ -363,7 +367,7 @@ function updatePlayerUi(){
 
   }
 
-  if(canExit){
+  if(canExit&&!player.crashed){
     let t = "press s to exit. hold w to launch."
     mCtx.fillStyle = "white";
     mCtx.fillText(t, middle.x + 50, middle.y);

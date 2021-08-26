@@ -15,9 +15,9 @@ const ToddsHomeText = [
 
 const CouchText1 = ["This couch..."];
 const CouchText2 = ["This is Todd's couch.\nBest couch ever!",
-                    "This couch, in this place, it's the best view ever.\nTrust me we tried all the couches.",
-                    "Oh dang, a note",
-                    "\"scurred off to one of the planets to the right.\nprolly gonna hit up all of em\""]
+"This couch, in this place, it's the best view ever.\nTrust me we tried all the couches.",
+"Oh dang, a note",
+"\"scurred off to one of the planets to the right.\nprolly gonna hit up all of em\""]
 
 const InvestigationText = ["yo! these cheese crakers....."];
 
@@ -101,32 +101,49 @@ function triggerGoToPlanetsOnRight(){
   }
 }
 
+// text which appears during the part with crackers on 3 planets
 const CrackerText = ["These must be Todd's crackers. They're littered all over the place!"];
 const CrackerText2 = ["More crackers. But where is Todd"];
 const CrackerText3 = ["... he's gone!"];
 
+// this is to count how many planets we explored
+// during cracker on 3 planets part
+let planetsIFoundCrackersOn = [];
 
+// the investigation follows the crackers on 3 planets part
+let investigationTriggered = false;
+
+
+// nextCrackerText()
+//
+// set which text appears during the part with crackers on 3 planets
 function nextCrackerText (){
+
   textCounter =0;
   if(planetsIFoundCrackersOn.length==0)
     availableText2 = CrackerText;
-    else  if(planetsIFoundCrackersOn.length==1)
-  availableText2 = CrackerText2;
-
-else availableText2 = CrackerText3;
+  else if(planetsIFoundCrackersOn.length==1)
+    availableText2 = CrackerText2;
+  else availableText2 = CrackerText3;
 }
 
+// closeTextBox()
+//
+// close text popup
 function closeTextBox(){
   availableText2 = undefined;
 }
 
 
-
-let planetsIFoundCrackersOn = [];
+// playerFoundCracker()
+//
+// in class SimpleObject (object.js)
+// what to do when player finds crackers
 function playerFoundCracker(){
-  nextCrackerText();
-  console.log("found cracker");
+
   if(!planetsIFoundCrackersOn.includes(player.nearestPlanet)){
+    // display text
+    nextCrackerText();
     planetsIFoundCrackersOn.push(player.nearestPlanet);
 
   }
@@ -134,11 +151,10 @@ function playerFoundCracker(){
 
 // triggered in player.js:HandlePlayerInputs()
 // when crackers have been found on 2 planets
-let investigationTriggered = false;
 function triggerCrackerInvestigation(){
   if(!investigationTriggered){
-    let so = new SimpleObject(0,0,undefined,10,InvestigationText,continueInvestigation);
-    player.children.push(so);
+    availableText2 = InvestigationText;
+    continueInvestigation();
     console.log("investigation started")
     investigationTriggered = true;
   }
@@ -146,7 +162,6 @@ function triggerCrackerInvestigation(){
 
 
 function continueInvestigation(){
-  player.children.pop();
 
   // new planet
   let pos = {
