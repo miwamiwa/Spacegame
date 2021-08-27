@@ -142,7 +142,7 @@ class Vessel extends AnimObject {
         p.d2p = abs(flo(d));
         if(this.radar){
 
-          if(d>p.radius + this.radarMinRange&&d<p.radius + this.radarMaxRange)
+          if(d>p.radius + RadarMin&&d<p.radius + RadarMax)
             this.onradar.push(p);
 
           else if(p.visited)

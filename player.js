@@ -3,7 +3,7 @@ const PlayerDeceleration = 0.2; // rate at which player.throttle recedes to 0.
 const PlayerRotateRate = 0.1;
 const AccelerationLimit = 3;
 const SpeedLimit = 80;
-const PlayerWalkVelocity = 3;
+const PlayerWalkVelocity = 4;
 
 const PlayerStartX = 50;
 const PlayerStartY = 50;
@@ -14,9 +14,7 @@ const RadarMin = 200;
 const RadarMax = 20000;
 
 
-let canExit = false; // trigger exit vehicle prompt
-let canEnter = false;
-
+// text box default size
 const TextBox = {
   x:100,
   y:100
@@ -26,28 +24,28 @@ const TextBox = {
 const TopText = {x: 4, y: 10};
 const FailTextList = ["Ouch!","Don't scratch the car. -Mom.","Oof."];
 
+
+const HopDistance = 60;  // dist travelled when hopping off ship
+
+
+let canExit = false; // trigger exit vehicle prompt
+let canEnter = false;
+
 let playerDirX =0;
 let playerDirY =0;
 let availableText;
 let availableText2;
 let textCounter=0;
 
-let inputs = {
-  w:false,
-  a:false,
-  s:false,
-  d:false,
-  b:false // 66
-}
+// text displayed on crash
+let crashtext;
+
+
 
 function setupPlayer(){
+
   player = new Vessel(0,0,PlayerSize,VesselAnimation);
-
-
-
   player.radar = true;
-  player.radarMinRange = RadarMin;
-  player.radarMaxRange = RadarMax;
   player.dude = new AnimObject(PlayerStartX,PlayerStartY,DudeSize,PlayerAnimation);
   player.children.push(player.dude);
   player.reading = false;
@@ -55,16 +53,9 @@ function setupPlayer(){
   // start player on planet
   player.boarded = false;
   player.dude.visible = true;
-
-
-  player.walkVel = PlayerWalkVelocity;
   player.bypassCamConstraint = true;
   player.animRate = 10;
   player.running = false;
-
-  console.log(player)
-
-
 }
 
 
@@ -81,23 +72,51 @@ function resetPlayerOnCrash(){
   }
 }
 
+
+let inputs = {
+  w:false,
+  a:false,
+  s:false,
+  d:false,
+  b:false, // 66
+  space:false, //32
+  e:false
+}
+
+function keyUp(e){
+  switch(e.keyCode){
+    case 87: inputs.w = false; break; // w
+    case 65: inputs.a = false; break; //a
+    case 83: inputs.s = false; break; //s
+    case 68: inputs.d = false; break; //d
+    case 66: inputs.b = false; break; // b
+    case 32: inputs.space = false; break;
+    case 69: inputs.e = false; break;
+  }
+}
+
 function keyDown(e){
   switch(e.keyCode){
     case 87: inputs.w = true; break; // w
     case 65: inputs.a = true; break; //a
     case 83: inputs.s = true; break; //s
     case 68: inputs.d = true; break; //d
+    case 32: inputs.space =true;
 
-    //case 90: soundCheck(); break;
-    //case 88: soundCheck2(); break;
-  //  case 67: soundCheck3(); break;
-  //  case 86: soundCheck4(); break;
+    if(gamestate=="focused"){
+      intro++;
+      if(intro==IntroText.length) gamestate="game";
+    }
+    break;
+    case 69: inputs.e = true; break;
 
     // press b to interact with obejcts
     case 66: inputs.b = true;
 
+    // BOARD VESSEL HOP ON
     if(canEnter){
       if(canBoard){
+        availableText2 = undefined;
         player.dude.x =0;
         player.dude.y =0;
         camera.targetIsVessel();
@@ -119,8 +138,10 @@ function keyDown(e){
       }
       // show next phrase
       else {
-        textCounter++;
 
+        textCounter++;
+        // do action if last frame is reached and there is
+        // a follow-up action
         if(textCounter==availableText.text.length-1
           &&availableText.firstReadAction!=undefined)
           availableText.firstReadAction();
@@ -128,150 +149,142 @@ function keyDown(e){
         if(textCounter==availableText.text.length)
           player.reading = false;
 
-
-
       }
     }
     break; // b
   }
 }
 
-function keyUp(e){
-  switch(e.keyCode){
-    case 87: inputs.w = false; break; // w
-    case 65: inputs.a = false; break; //a
-    case 83: inputs.s = false; break; //s
-    case 68: inputs.d = false; break; //d
-    case 66: inputs.b = false; break; // b
+
+
+
+function HandlePlayerInputs(){
+
+  if(gamestate=="game"){
+
+    canExit = false;
+    canEnter = false;
+
+    if(player.boarded)
+      inputsForPlayerInVessel();
+
+    // WHILE NOT BOARDED (ON PLANET)
+    else
+      inputsForPlayerOnPlanet();
+
+  }
+
+
+
+}
+
+
+function inputsForPlayerInVessel(){
+
+  // press w to toggle throttle
+  if(inputs.w) player.plusThrottle(PlayerAcceleration);
+  else player.minusThrottle(PlayerDeceleration);
+
+  if(inputs.a) player.rotate(PlayerRotateRate);
+  if(inputs.d) player.rotate(-PlayerRotateRate);
+
+  if(rightPlanetsEnabled && planetsIFoundCrackersOn.length>1){
+    //console.log("ca continue")
+    triggerCrackerInvestigation();
+  }
+
+
+  if(player.landed){
+
+    canExit = true;
+
+    // press e to hop off the vessel
+    if(inputs.e&&!player.crashed){
+      player.boarded = false;
+      player.dude.visible = true;
+      camera.targetIsDude();
+
+      let p = player.nearestPlanet;
+      let pos = p.randomSurfacePosition(1,true);
+
+      while (dist(pos,player)>25)
+        pos = p.randomSurfacePosition(1,true);
+
+      // position relative to player instead of the planet
+      player.dude.x =  (p.x-player.x)+x;
+      player.dude.y =  (p.y-player.y)+y;
+    }
   }
 }
 
-const HopDistance = 60;  // dist travelled when hopping off ship
-function HandlePlayerInputs(){
 
-  canExit = false;
-  canEnter = false;
-  // w or s?
-  //if(inputs.w) player.plusThrottle(PlayerAcceleration);
-  //if(inputs.s) player.minusThrottle(PlayerAcceleration);
+function inputsForPlayerOnPlanet(){
 
-  // press w to toggle throttle
-  if(player.boarded){
-    if(inputs.w) player.plusThrottle(PlayerAcceleration);
-    else player.minusThrottle(PlayerDeceleration);
+  // look out for animation changes
+  let running = player.running;
+  player.running = false;
 
-    if(inputs.a) player.rotate(PlayerRotateRate);
-    if(inputs.d) player.rotate(-PlayerRotateRate);
+  // walking inputs
+  if(inputs.d) movePlayerOnPlanetX(1);
+  if(inputs.a) movePlayerOnPlanetX(-1);
+  if(inputs.w) movePlayerOnPlanetY(-1);
+  if(inputs.s) movePlayerOnPlanetY(1);
 
-    if(rightPlanetsEnabled && planetsIFoundCrackersOn.length>1){
-      //console.log("ca continue")
-      triggerCrackerInvestigation();
-    }
-
-
-    if(player.landed){
-
-      canExit = true;
-      // hop off the vessel
-      if(inputs.s&&!player.crashed){
-        player.boarded = false;
-        player.dude.visible = true;
-        camera.targetIsDude();
-
-        let p = player.nearestPlanet;
-        let x = p.rPos();
-        let y = p.rPos();
-        let pos = {x:p.x+p.rPos(),y:p.y+p.rPos()};
-
-        console.log(p.x,p.y,player.x,player.y)
-        while (dist(pos,player)>25){
-          x = p.rPos();
-          y = p.rPos();
-          pos = {x:p.x+x,y:p.y+y};
-        }
-
-        let dir = directionFromObjectToObject(player.nearestPlanet,player);
-        player.dude.x =  (p.x-player.x)+x;
-        player.dude.y =  (p.y-player.y)+y;
-      }
+  // update animation
+  if(running!=player.running){
+    switch(player.running){
+      case false: player.dude.setFrames(PlayerAnimation); break;
+      case "left": player.dude.setFrames(PlayerWalkLeft); break;
+      case "right": player.dude.setFrames(PlayerWalkRight); break;
+      case "down": player.dude.setFrames(PlayerWalkDown); break;
+      case "up": player.dude.setFrames(PlayerWalkUp); break;
     }
   }
 
-  // WHILE NOT BOARDED (ON PLANET)
-  else {
-
-    let lastx =player.dude.x;
-    let lasty =player.dude.y;
-
-    let running = player.running;
-    player.running = false;
-
-    if(inputs.d) movePlayerOnPlanetX(1);
-    if(inputs.a) movePlayerOnPlanetX(-1);
-    if(inputs.w) movePlayerOnPlanetY(-1);
-    if(inputs.s) movePlayerOnPlanetY(1);
-
-
-
-    if(running!=player.running){
-      switch(player.running){
-        case false: player.dude.setFrames(PlayerAnimation); break;
-        case "left": player.dude.setFrames(PlayerWalkLeft); break;
-        case "right": player.dude.setFrames(PlayerWalkRight); break;
-        case "down": player.dude.setFrames(PlayerWalkDown); break;
-        case "up": player.dude.setFrames(PlayerWalkUp); break;
-      }
-    }
-
-    // hop ON vessel when in range
-    if(dist({x:0,y:0},player.dude)<HopDistance){
-      canEnter = true;
-
-    }
-
-  }
-
+  // enable hopping ON vessel when in range
+  // (actually happens in keyDown)
+  if(dist({x:0,y:0},player.dude)<HopDistance)
+    canEnter = true;
 }
 
 
 function movePlayerOnPlanetX(delta){
 
+  // set animation
   if(delta==1) player.running = "right";
   else player.running = "left";
 
-  let newval = player.dude.x + player.walkVel * delta;
-
-  let p = {
-    x: player.x + newval,
-    y: player.y + player.dude.y
-  };
-
-  if(CheckCollisionsOnPlanet(p)) return;
-
-
-  if(dist(p, player.nearestPlanet) < player.nearestPlanet.radius)
-    player.dude.x = newval;
+  moveIt( PlayerWalkVelocity * delta, 0);
 }
 
 function movePlayerOnPlanetY(delta){
 
+  // set animation
   if(delta==1) player.running="down";
   else player.running="up";
 
-  let newval = player.dude.y + player.walkVel * delta;
+  moveIt(0,PlayerWalkVelocity * delta);
+}
 
+
+
+function moveIt (deltaX,deltaY){
+  if(gamestate=="focused") return;
   let p = {
-    x: player.x +  player.dude.x,
-    y: player.y + newval
+    x: player.x + player.dude.x + deltaX,
+    y: player.y + player.dude.y + deltaY
   };
-
   if(CheckCollisionsOnPlanet(p)) return;
 
-
-  if(dist(p, player.nearestPlanet) < player.nearestPlanet.radius)
-    player.dude.y = newval;
-
+  if(dist(p, player.nearestPlanet) < player.nearestPlanet.radius){
+    if(deltaX!=0)
+    player.dude.x += deltaX;
+    else
+    player.dude.y += deltaY;
+  }
 }
+
+
 
 function CheckCollisionsOnPlanet(p){
   let r = false;
@@ -280,11 +293,10 @@ function CheckCollisionsOnPlanet(p){
 
   player.nearestPlanet.features.forEach(f=>{
     if(f.collider){
-      let p2 = {
+      let d = dist(p,{
         x: f.x + player.nearestPlanet.x,
         y: f.y + player.nearestPlanet.y
-      }
-      let d = dist(p,p2);
+      } );
 
       if(d<f.talkrange)
         availableText = f;
@@ -297,22 +309,20 @@ function CheckCollisionsOnPlanet(p){
   if(lastAvailTxt!=availableText)
     textCounter =0;
 
-
   return r;
 }
 
-let crashtext;
+
 
 function updatePlayerUi(){
-  mCtx.fillStyle = "white";
 
   // if we crashed
   if(player.crashed)
-  mCtx.fillText(crashtext,TopText.x,TopText.y);
+  drawText(crashtext,TopText.x,TopText.y);
 
   // if we're aboard the space chips
   else if(player.boarded)
-  mCtx.fillText(`You're aboard the greenmobile:
+  drawText(`You're aboard the greenmobile:
     vX : ${flo(player.lastvx)}
     vY : ${flo(player.lastvy)}
     throttle: ${flo(10*player.throttle)/10}
@@ -320,7 +330,7 @@ function updatePlayerUi(){
 
   // if we're on a planet
   else
-    mCtx.fillText(`Planet ${player.nearestPlanet.name}.`,TopText.x,TopText.y);
+    drawText(`Planet ${player.nearestPlanet.name}.`,TopText.x,TopText.y);
 
   //
   playerDirX = player.vx / abs(player.vx);
@@ -328,65 +338,53 @@ function updatePlayerUi(){
 
 
   if(availableText!=undefined){
+    drawText("press b to interact");
 
-    mCtx.fillStyle = "white";
-    mCtx.fillText("press b to interact", middle.x, middle.y);
-
-    if(player.reading){
-      mCtx.fillStyle = "black";
-      mCtx.fillRect(TextBox.x,TextBox.y, 300, 40);
-      mCtx.fillStyle = "white";
-
-      let i=0;
-      availableText.text[textCounter].split("\n").forEach(line=>{
-        mCtx.fillText(line, TextBox.x + 10, TextBox.y+17 + i);
-        i+= 10;
-      });
-
-    }
-
+    if(player.reading)
+      showTextArray(availableText.text);
   }
 
   if(availableText2!=undefined){
 
-    mCtx.fillStyle = "white";
-    mCtx.fillText("press b", middle.x, middle.y);
-
-      mCtx.fillStyle = "black";
-      mCtx.fillRect(TextBox.x,TextBox.y, 300, 40);
-      mCtx.fillStyle = "white";
-
-      let i=0;
-      if(availableText2[textCounter]!=undefined)
-      availableText2[textCounter].split("\n").forEach(line=>{
-        mCtx.fillText(line, TextBox.x + 10, TextBox.y+17 + i);
-        i+= 10;
-      });
-      else console.log(textCounter)
-
-
+    drawText("press b");
+    showTextArray(availableText2);
 
   }
 
-  if(canExit&&!player.crashed){
-    let t = "press s to exit. hold w to launch."
-    mCtx.fillStyle = "white";
-    mCtx.fillText(t, middle.x + 50, middle.y);
+  if(canExit&&!player.crashed)
+  drawText("press e to exit. hold w to launch.", middle.x + 100, middle.y + 50);
 
 
+  if(canEnter&&canBoard)
+  drawText("press b to board");
+
+
+  if(!HelpOff&&player.boarded&&!player.landed)
+  drawText("w to throttle. a,d to steer.", middle.x + 100, middle.y + 50)
+
+}
+
+
+function showTextArray(txtarr){
+  mCtx.fillStyle = "black";
+  mCtx.fillRect(TextBox.x,TextBox.y, 300, 40);
+
+  let i=0;
+  if(txtarr!=undefined)
+  txtarr[textCounter].split("\n").forEach(line=>{
+    drawText(line, TextBox.x + 10, TextBox.y+17 + i);
+    i+= 10;
+  });
+}
+
+function drawText(txt,x,y,color){
+  if(color==undefined) color = "white";
+  if(x==undefined){
+    x=middle.x;
+    y=middle.y;
   }
-
-  if(canEnter&&canBoard){
-
-    mCtx.fillStyle = "white";
-    mCtx.fillText("press b to board", middle.x, middle.y);
-
-  }
-
-  if(!HelpOff&&player.boarded&&!player.landed){
-    mCtx.fillStyle = "white";
-    mCtx.fillText("w to throttle. a,d to steer.", middle.x + 50, middle.y);
-  }
+  mCtx.fillStyle=color;
+  mCtx.fillText(txt,x,y)
 }
 
 

@@ -1,4 +1,4 @@
-const GravityConstant = 40;
+const GravityConstant = 50;
 const PlanetMassMin = 800;
 const PlanetMassMax = 2000;
 
@@ -34,9 +34,14 @@ class Planet {
     let sorted = [this.features[0]];
     for(let i=1; i<this.features.length; i++){
       let found = false;
-      let d = 30;
+      let d = 0;
       if(this.features[i].id=="rock"){
-        d =30;
+        d =-30;
+        console.log("euh")
+      }
+
+      if(this.features[i].id=="tree"){
+        d =-50;
         console.log("euh")
       }
       for(let j=0; j<sorted.length; j++){
@@ -68,7 +73,7 @@ class Planet {
     this.groundColor = `rgba(${r},${g},${b}, 1)`;
     this.groundColor2 = `rgba(${r+20},${g+20},${b+20}, 0.3)`;
     this.spots = [];
-    let spots = flo(rand(0,9));
+    let spots = flo(rand(4,12));
     for(let i=0; i<spots; i++){
       this.spots.push({x:this.rPos(), y:this.rPos(), r:rad+rand(-10,10)});
     }
@@ -79,42 +84,47 @@ class Planet {
     return rand(-this.radius,this.radius);
   }
 
+  findAvailableSpot(){
+    let pos = this.randomSurfacePosition(0.5);
+    let found = true;
+    while(!found){
+      pos = this.randomSurfacePosition(0.5);
+      let clear = true;
+      for(let j=0; j<this.features.length; j++){
+        if(dist(pos,this.features[j])<200) clear  = false;
+      }
+      found = clear;
+    }
+    return pos;
+  }
+
   // make some trees
   setupScenery(){
     this.treeFamily = createNewTreeType();
-    let treeCount = flo(rand(2,6));
-    let treesAdded = [];
+    let treeCount = flo(rand(3,12));
+    //let treesAdded = [];
 
     console.log("radius: "+this.radius)
     for(let i=0; i<treeCount; i++){
 
       let pick = RandomFromArray(this.treeFamily);
 
-      let pos = this.randomSurfacePosition();
-      let found = true;
-      while(!found){
-        pos = this.randomSurfacePosition();
-        let clear = true;
-        for(let j=0; j<treesAdded.length; j++){
-          if(dist(pos,treesAdded[j])<40) clear  = false;
-        }
-        found = clear;
-      }
+      let pos = this.findAvailableSpot();
 
-      if(rand()<0.3){
+      if(rand()<0.0){
         let rock = new SimpleObject(pos.x,pos.y,rock_png,30);
         //rock.hue = flo(rand(360));
         rock.collider = false;
         rock.id="rock";
         this.features.push(rock);
-        treesAdded.push(rock);
+        //treesAdded.push(rock);
       }
       else {
-        let tree = new SimpleObject(pos.x,pos.y- 90,{img:pick},200);
+        let tree = new SimpleObject(pos.x,pos.y -90,{img:pick},200);
         tree.collider = false;
         tree.id="tree";
         this.features.push(tree);
-        treesAdded.push(tree);
+        //treesAdded.push(tree);
       }
 
 
@@ -123,8 +133,11 @@ class Planet {
     }
   }
 
-  randomSurfacePosition(){
-    return {x:this.rPos() * 0.5,y:this.rPos() * 0.5 };
+  randomSurfacePosition(range,worldspace){
+    let x = this.rPos() * range;
+    let y = this.rPos() * range;
+    if(worldspace!=undefined) return {x:this.x+x,y:this.y+y};
+    return {x:x,y:y};
   }
 
   addCheese(){
@@ -195,7 +208,7 @@ class Planet {
     if(nextd<this.radius){
 
       input.landed = true;
-      this.visited = true;
+
       let vel = dist({x:0,y:0},{x:input.lastvx,y:input.lastvy});
 
       //console.log(vel)
@@ -209,6 +222,10 @@ class Planet {
         input.setFrames(CrashAnimation);
         console.log("crash! landed too fast.");
       }
+
+
+      if(!input.crashed)
+        this.visited = true;
     }
     else input.landed = false;
 

@@ -2,6 +2,7 @@ const HomePlanetText = [
   "This is my home... \nI've lived here for the past 30 years.",
   "Pretty neat."
 ];
+
 const ToddsHomeText = [
   "This is Todd's home.\nThe jam space is in the basement.",
   "Ring! ring!!",
@@ -19,89 +20,6 @@ const CouchText2 = ["This is Todd's couch.\nBest couch ever!",
 "Oh dang, a note",
 "\"scurred off to one of the planets to the right.\nprolly gonna hit up all of em\""]
 
-const InvestigationText = ["yo! these cheese crakers....."];
-
-
-let mainCanvas;
-let mCtx;
-let middle = {};
-let canBoard = false;
-let rightPlanetsEnabled = false;
-
-function setupCanvas(){
-  mainCanvas = document.getElementById("canvas");
-  mainCanvas.width = 600;
-  mainCanvas.height = 600;
-
-
-  middle.x = 300;
-  middle.y = 200;
-  mCtx = mainCanvas.getContext("2d");
-  mCtx.imageSmoothingEnabled= false;
-  document.body.appendChild(mainCanvas);
-  document.body.onkeydown = keyDown;
-  document.body.onkeyup = keyUp;
-}
-
-
-function setupPlanets(){
-  // place a planet below player
-  let p = new Planet(player.x,player.y, true, "Home, sweet home", 150, 1500);
-  planets.push(p);
-  //p.setRadMas(150,1500);
-
-  p.y += p.radius + Planet1Distance;
-  p.groundColor = "#a37765ff";
-  p.groundColor2 = "#9e857b88";
-  p.features.push(new SimpleObject(0,0,home_png, 100, HomePlanetText, triggerStoryStart));
-  p.sortFeatures();
-
-  let p2 = new Planet(p.x + 200, p.y-8000, false, "Todd's place");
-  planets.push(p2);
-  p2.setRadMas(210,1200);
-
-  p2.features.push(new SimpleObject(80,0,home_png, 100, ToddsHomeText, triggerTommysHouseFound));
-  p2.features.push(new SimpleObject(-90,40,couch_png, 100, CouchText1));
-  p2.sortFeatures();
-}
-
-function triggerStoryStart(){
-  canBoard = true;
-}
-
-let HelpOff = false;
-function triggerTommysHouseFound(){
-  HelpOff = true;
-  player.nearestPlanet.features[1].text = CouchText2;
-  player.nearestPlanet.features[1].firstReadAction = triggerGoToPlanetsOnRight;
-}
-
-function triggerGoToPlanetsOnRight(){
-  if(!rightPlanetsEnabled){
-
-    // add planet 1
-    let p0 = planets[1];
-    let pos = {
-      x:p0.x + rand(14000,16000),
-      y:p0.y-rand(-1000,1000)
-    }
-    let p = new Planet(pos.x, pos.y, true);
-    p.addCheese();
-    planets.push(p);
-
-    for(let i=0; i<2; i++){
-      // add planets 2,3
-      pos.x += rand(6000,8000);
-      pos.y += rand(-1000,1000);
-      p = new Planet(pos.x, pos.y, true);
-      p.addCheese();
-      planets.push(p);
-    }
-
-    rightPlanetsEnabled = true;
-  }
-}
-
 // text which appears during the part with crackers on 3 planets
 const CrackerText = ["These must be Todd's crackers. They're littered all over the place!"];
 const CrackerText2 = ["More crackers. But where is Todd"];
@@ -114,18 +32,138 @@ let planetsIFoundCrackersOn = [];
 // the investigation follows the crackers on 3 planets part
 let investigationTriggered = false;
 
+const InvestigationText = ["yo! these cheese crakers.....\nhmmm","what"];
+
+const HomePlanetRadius = 250;
+const DistanceToTodd = 12000;
+
+let HomePlanet;
+let ToddsPlanet;
+let ToddsCouch;
+
+
+let HelpOff = false; // display flight instructions
+
+let mainCanvas;
+let mCtx;
+let middle = {};
+let canBoard = false;
+let rightPlanetsEnabled = false;
+
+
+// setupcanvas()
+//
+// called on start. setup the canvas area,
+// and the key inputs as well
+
+function setupCanvas(){
+
+  // create canvas
+  mainCanvas = document.getElementById("canvas");
+  mainCanvas.width = 600;
+  mainCanvas.height = 600;
+  mCtx = mainCanvas.getContext("2d");
+  mCtx.imageSmoothingEnabled= false;
+  document.body.appendChild(mainCanvas);
+  // middle of the canvas
+  middle.x = 300;
+  middle.y = 260;
+  // key controls
+  document.body.onkeydown = keyDown;
+  document.body.onkeyup = keyUp;
+}
+
+
+// setupPlanets()
+//
+// create home planet and todd's planet
+
+function setupPlanets(){
+
+  // create home planet
+  HomePlanet = new Planet(player.x,player.y + HomePlanetRadius + Planet1Distance, true, "Home, sweet home", HomePlanetRadius, 1500);
+  planets.push(HomePlanet);
+
+  // place home
+  let pos = HomePlanet.findAvailableSpot();
+  HomePlanet.features.push(new SimpleObject(pos.x,pos.y,home_png, 100, HomePlanetText, triggerStoryStart));
+  // sort planet sub-elements by y coordinate
+  HomePlanet.sortFeatures();
+
+  // create todd's planet
+  ToddsPlanet = new Planet(HomePlanet.x + 200, HomePlanet.y-DistanceToTodd, true, "Todd's place",310,1200);
+  planets.push(ToddsPlanet);
+
+  // create todd's home
+  ToddsPlanet.features.push(new SimpleObject(80,0,home_png, 100, ToddsHomeText, triggerTommysHouseFound));
+  // create couch
+  ToddsCouch = new SimpleObject(-90,40,couch_png, 100, CouchText1);
+  ToddsPlanet.features.push(ToddsCouch);
+  // sort planet sub-elements
+  ToddsPlanet.sortFeatures();
+}
+
+
+// triggerstorystart()
+//
+// first trigger in the game. interact with the home before you can
+// enter the rocket.
+
+function triggerStoryStart(){
+  canBoard = true;
+}
+
+// triggerTommysHouseFound
+//
+// LOL it's todd now. second trigger in the game:
+// go interact with todd's house. it enables the couch text,
+// where you find todd's note
+
+function triggerTommysHouseFound(){
+  // disable flight instructions since we succesfully landed somewhere.
+  HelpOff = true;
+  // update couch text
+  ToddsCouch.text = CouchText2;
+  // assign next trigger to couch
+  ToddsCouch.firstReadAction = triggerGoToPlanetsOnRight;
+}
+
+// triggergotoplanetsonright()
+//
+// todd's note sends you to planets on the right.
+// create those (3) planets and litter them with cheese.
+
+function triggerGoToPlanetsOnRight(){
+  if(!rightPlanetsEnabled){
+
+    let p = ToddsPlanet;
+    for(let i=0; i<3; i++){
+
+      p = new Planet(p.x+rand(8000,11000), p.y+rand(-1000,1000), true);
+      p.addCheese();
+      planets.push(p);
+
+    }
+
+    rightPlanetsEnabled = true;
+  }
+}
+
+
+
 
 // nextCrackerText()
 //
 // set which text appears during the part with crackers on 3 planets
 function nextCrackerText (){
-
+  let l = planetsIFoundCrackersOn.length;
   textCounter =0;
-  if(planetsIFoundCrackersOn.length==0)
+  if(l==0)
     availableText2 = CrackerText;
-  else if(planetsIFoundCrackersOn.length==1)
+  else if(l==1)
     availableText2 = CrackerText2;
-  else availableText2 = CrackerText3;
+  else if(l==2) availableText2 = CrackerText3;
+  else availableText2=undefined;
 }
 
 // closeTextBox()
@@ -153,11 +191,12 @@ function playerFoundCracker(){
 // triggered in player.js:HandlePlayerInputs()
 // when crackers have been found on 2 planets
 function triggerCrackerInvestigation(){
-  if(!investigationTriggered){
+  if(!investigationTriggered&&player.nearestPlanet==undefined){
     availableText2 = InvestigationText;
     continueInvestigation();
     console.log("investigation started")
     investigationTriggered = true;
+    textCounter =0;
   }
 }
 
