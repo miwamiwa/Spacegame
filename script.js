@@ -30,8 +30,7 @@ function start(){
 function run(){
   mCtx.save();
   // background
-  mCtx.fillStyle = "#2a1f42";
-  mCtx.fillRect(0,0,mainCanvas.width,mainCanvas.height);
+  drawBg();
 
   // start screen
   if(gamestate=="startscreen")
@@ -45,6 +44,11 @@ function run(){
     focusedMode();
 
   mCtx.restore();
+}
+
+function drawBg(){
+  mCtx.fillStyle = "#2a1f42";
+  mCtx.fillRect(0,0,mainCanvas.width,mainCanvas.height);
 }
 
 

@@ -105,7 +105,54 @@ function keyDown(e){
 
     if(gamestate=="focused"){
       intro++;
-      if(intro==IntroText.length) gamestate="game";
+      // GAME START
+      if(intro==IntroText.length){
+
+
+        mutebass = false;
+        gamestate="game";
+      }
+    }
+    else if(gamestate=="game"){
+      // BOARD VESSEL HOP ON
+      if(canEnter){
+        if(canBoard){
+
+          availableText2 = undefined;
+          player.dude.x =0;
+          player.dude.y =0;
+          camera.targetIsVessel();
+          player.boarded = true;
+          player.dude.visible = false;
+        }
+      }
+      else if (availableText2!=undefined){
+
+        textCounter++;
+        if(textCounter==availableText2.length)
+          closeTextBox();
+      }
+      else if(availableText!=undefined){
+        // show window
+        if(!player.reading){
+          player.reading = true;
+          textCounter =0;
+        }
+        // show next phrase
+        else {
+
+          textCounter++;
+          // do action if last frame is reached and there is
+          // a follow-up action
+          if(textCounter==availableText.text.length-1
+            &&availableText.firstReadAction!=undefined)
+            availableText.firstReadAction();
+          // quit
+          if(textCounter==availableText.text.length)
+            player.reading = false;
+
+        }
+      }
     }
     break;
     case 69: inputs.e = true; break;
@@ -113,44 +160,7 @@ function keyDown(e){
     // press b to interact with obejcts
     case 66: inputs.b = true;
 
-    // BOARD VESSEL HOP ON
-    if(canEnter){
-      if(canBoard){
-        availableText2 = undefined;
-        player.dude.x =0;
-        player.dude.y =0;
-        camera.targetIsVessel();
-        player.boarded = true;
-        player.dude.visible = false;
-      }
-    }
-    else if (availableText2!=undefined){
 
-      textCounter++;
-      if(textCounter==availableText2.length)
-        closeTextBox();
-    }
-    else if(availableText!=undefined){
-      // show window
-      if(!player.reading){
-        player.reading = true;
-        textCounter =0;
-      }
-      // show next phrase
-      else {
-
-        textCounter++;
-        // do action if last frame is reached and there is
-        // a follow-up action
-        if(textCounter==availableText.text.length-1
-          &&availableText.firstReadAction!=undefined)
-          availableText.firstReadAction();
-        // quit
-        if(textCounter==availableText.text.length)
-          player.reading = false;
-
-      }
-    }
     break; // b
   }
 }
@@ -316,6 +326,9 @@ function CheckCollisionsOnPlanet(p){
 
 function updatePlayerUi(){
 
+  if(crackersFound>0)
+  drawText(`crackers found: `+crackersFound,middle.x - 50, mainCanvas.height - 16)
+
   // if we crashed
   if(player.crashed)
   drawText(crashtext,TopText.x,TopText.y);
@@ -338,7 +351,7 @@ function updatePlayerUi(){
 
 
   if(availableText!=undefined){
-    drawText("press b to interact");
+    drawText("press space to interact");
 
     if(player.reading)
       showTextArray(availableText.text);
@@ -346,7 +359,12 @@ function updatePlayerUi(){
 
   if(availableText2!=undefined){
 
-    drawText("press b");
+    if(availableText2[textCounter]==InvestigationText[6]
+    ||availableText2[textCounter]==InvestigationText[8])
+      drawBg();
+
+
+    drawText("press space");
     showTextArray(availableText2);
 
   }
@@ -356,7 +374,7 @@ function updatePlayerUi(){
 
 
   if(canEnter&&canBoard)
-  drawText("press b to board");
+  drawText("press space to board");
 
 
   if(!HelpOff&&player.boarded&&!player.landed)

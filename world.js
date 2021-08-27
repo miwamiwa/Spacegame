@@ -21,9 +21,9 @@ const CouchText2 = ["This is Todd's couch.\nBest couch ever!",
 "\"scurred off to one of the planets to the right.\nprolly gonna hit up all of em\""]
 
 // text which appears during the part with crackers on 3 planets
-const CrackerText = ["These must be Todd's crackers. They're littered all over the place!"];
-const CrackerText2 = ["More crackers. But where is Todd"];
-const CrackerText3 = ["... he's gone!"];
+const CrackerText = ["a cracker","munch... munch...","Most definitely Todd's cracker"];
+const CrackerText2 = ["More crackers.","But where is Todd?"];
+const CrackerText3 = ["These crackers are literally \neverywhere!"];
 
 // this is to count how many planets we explored
 // during cracker on 3 planets part
@@ -32,7 +32,7 @@ let planetsIFoundCrackersOn = [];
 // the investigation follows the crackers on 3 planets part
 let investigationTriggered = false;
 
-const InvestigationText = ["yo! these cheese crakers.....\nhmmm","what"];
+let InvestigationText = [];
 
 const HomePlanetRadius = 250;
 const DistanceToTodd = 12000;
@@ -40,6 +40,7 @@ const DistanceToTodd = 12000;
 let HomePlanet;
 let ToddsPlanet;
 let ToddsCouch;
+let MysteryPlanet;
 
 
 let HelpOff = false; // display flight instructions
@@ -49,6 +50,8 @@ let mCtx;
 let middle = {};
 let canBoard = false;
 let rightPlanetsEnabled = false;
+
+let crackersFound =0;
 
 
 // setupcanvas()
@@ -111,6 +114,7 @@ function setupPlanets(){
 
 function triggerStoryStart(){
   canBoard = true;
+
 }
 
 // triggerTommysHouseFound
@@ -120,12 +124,15 @@ function triggerStoryStart(){
 // where you find todd's note
 
 function triggerTommysHouseFound(){
+
+  mutechords = false;
   // disable flight instructions since we succesfully landed somewhere.
   HelpOff = true;
   // update couch text
   ToddsCouch.text = CouchText2;
   // assign next trigger to couch
   ToddsCouch.firstReadAction = triggerGoToPlanetsOnRight;
+
 }
 
 // triggergotoplanetsonright()
@@ -146,6 +153,9 @@ function triggerGoToPlanetsOnRight(){
     }
 
     rightPlanetsEnabled = true;
+
+    // add improv line to BGM
+    muteimprov = false;
   }
 }
 
@@ -184,16 +194,26 @@ function playerFoundCracker(){
     // display text
     nextCrackerText();
     planetsIFoundCrackersOn.push(player.nearestPlanet);
-
   }
+
+  // keep a score for funsies
+  crackersFound++;
 }
 
 // triggered in player.js:HandlePlayerInputs()
 // when crackers have been found on 2 planets
 function triggerCrackerInvestigation(){
   if(!investigationTriggered&&player.nearestPlanet==undefined){
-    availableText2 = InvestigationText;
+
     continueInvestigation();
+
+
+    InvestigationText = ["I don't get it","I found nothing but a bunch \nof cheese crackers"
+      ,"What does it all mean?","Is Todd ok?",
+      "I need a clue! \nHEY CRACKER!","TAKE ME TO YOUR LEADER!","\"fine.\"","what?",`"head to the planet called ${MysteryPlanet.name}"`,
+      "I'm not eating any more of these crackers!"];
+    availableText2 = InvestigationText;
+
     console.log("investigation started")
     investigationTriggered = true;
     textCounter =0;
@@ -208,13 +228,13 @@ function continueInvestigation(){
     x:player.x + rand(14000,16000),
     y:player.y-rand(-1000,1000)
   }
-  let p = new Planet(pos.x, pos.y, true);
-  p.addCheese();
-  planets.push(p);
+  MysteryPlanet = new Planet(pos.x, pos.y, true);
+  MysteryPlanet.addCheese();
+  planets.push(MysteryPlanet);
 
   // this should be a dude not a couch lol
-  p.features.push(new SimpleObject(-90,40,couch_png, 100, CouchText1));
-  p.features[p.features.length-1].collider = false;
+  MysteryPlanet.features.push(new SimpleObject(-90,40,couch_png, 100, CouchText1));
+  MysteryPlanet.features[MysteryPlanet.features.length-1].collider = false;
   // wouldbe nice if the dude sends you on a stupid / mundane quest
   // that makes him seem more annoying than anything else
 

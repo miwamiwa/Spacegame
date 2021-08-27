@@ -107,6 +107,9 @@ let setupMel = () =>{
 }
 
 let mutemel = true;
+let muteimprov = true;
+let mutechords = true;
+let mutebass = true;
 let head =0;
 
 let bassOctave = 3; // 2 and 3 both nice
@@ -119,16 +122,18 @@ let playbar = () =>{
   // fluttery fx
   startBeat([100,100,100],playCash,.1,.3)
   // bass
+  if(!mutebass)
   startNotes([800,200,200],[0,flo(rand(2,4)),6],bassOctave,constSine5,scale);
   // melody
   let melPattern = [400,400,400];
   if(bars%4==3) melPattern = [200,600,400]
   startMelNotes(melPattern,5,noisey2);
   // improv keys
+  if(!muteimprov)
   startImprovNotes([200,400,400,200], noisey2, scale, rand((bars%4)/4+0.3));
   // chord
   //freq,a,d,s,r,cycles,func,vol,ftype,ffreq,fq,slide
-
+  if(!mutechords)
   setTimeout(()=>{
     let chord8ve = 5;
     let chordfilt = "lowpass";
