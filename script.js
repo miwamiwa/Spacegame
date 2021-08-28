@@ -1,10 +1,4 @@
-window.onload = start;
-const PI = Math.PI;
-const TWO_PI = 2*Math.PI;
-const Planet1Distance = 1;
-const IntroText = ["Welcome","To space game","woop woop"];
-const grey = "#eee8";
-const white = "#fffc";
+
 
 let player;
 let gameloop;
@@ -14,45 +8,51 @@ let gamestate = "startscreen";
 let intro = -1;
 
 
-
-function start(){
-
+// start gameon page load
+window.onload = ()=>{
   loadImages();
   setupCanvas();
-
   gameloop = setInterval(run,40);
 }
 
 
-
-
-
-function run(){
+// run()
+//
+// main game loop
+let run=()=>{
   mCtx.save();
   // background
-  drawBg();
+  bg();
 
-  // start screen
+  // run start screen
   if(gamestate=="startscreen")
     runStartScreen();
 
-  // if game is running
+  // run game
   else if(gamestate=="game")
     runGame();
 
+  // run "focused mode"
   else if(gamestate=="focused")
     focusedMode();
 
   mCtx.restore();
 }
 
-function drawBg(){
+// bg ()
+//
+// draw background
+
+let bg=()=>{
   mCtx.fillStyle = "#2a1f42";
   mCtx.fillRect(0,0,mainCanvas.width,mainCanvas.height);
 }
 
+// focusedMode()
+//
+// draw only an empty background, some text and the player.
 
-function focusedMode(){
+let focusedMode=()=>{
 
   player.update();
   camera.update();
@@ -63,16 +63,13 @@ function focusedMode(){
   y += 12;
   drawText("press space to continue",x,y,grey);
 
-  inputsForPlayerOnPlanet()
-
-  // (key input in player.js:keyDown)
 }
 
 
 // runStartScreen()
 //
 //
-function runStartScreen (){
+let runStartScreen=()=>{
 
 
   let x = 200;
@@ -91,7 +88,7 @@ function runStartScreen (){
 // startGame()
 //
 //
-function startGame(){
+let startGame=()=>{
   gamestate = "focused"
   startSound();
   intro =0;
@@ -100,6 +97,8 @@ function startGame(){
   camera = new Camera(player);
   camera.targetIsDude();
   setupPlanets();
+  player.nearestPlanet = HomePlanet;
+  playerLanded()
 }
 
 
@@ -107,18 +106,20 @@ function startGame(){
 // runGame()
 //
 //
-function runGame(){
+let runGame=()=>{
 
+  trackQuests();
   updateStars();
 
   player.displayRadar();
   updateAll(planets);
 
   HandlePlayerInputs();
-  player.dude.preRot = -player.bearing;
+
   player.update();
   resetPlayerOnCrash();
 
   camera.update();
   updatePlayerUi();
+
 }

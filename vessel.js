@@ -101,7 +101,7 @@ class Vessel extends AnimObject {
       //console.log(d)
       //console.log(this)
       //console.log(p.name)
-      if(d >= p.gravity.range){
+      if(d >= p.mass){
         this.nearestPlanet =undefined;
       }
       else {
@@ -128,6 +128,13 @@ class Vessel extends AnimObject {
 
   }
 
+  crash(){
+    this.crashed = true;
+    crashtext = RandomFromArray(FailTextList);
+    this.crashFrame = this.counter;
+    this.setFrames(CrashAnimation);
+  }
+
 
   findNearestPlanet(){
     if(this.counter % 2 ==0){
@@ -136,7 +143,7 @@ class Vessel extends AnimObject {
       planets.forEach(p=>{
         let d = dist(this,p);
 
-        if(d < p.gravity.range)
+        if(d < p.mass)
           this.nearestPlanet = p;
 
         p.d2p = abs(flo(d));

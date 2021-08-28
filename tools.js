@@ -3,7 +3,61 @@
 // so as to avoid cluttering script.js
 
 
+// convert Hex color to an array of rgba values
+function HexToRgba (hexinput){
 
+  let result = [];
+  let hex = hexinput.replace("#","");
+
+  return [
+    parseInt(hex.substring(0, 2), 16),
+    parseInt(hex.substring(2, 4), 16),
+    parseInt(hex.substring(4, 6), 16),
+    parseInt(hex.substring(6, 8), 16)
+  ];
+}
+
+
+function gradient(x1,y1,r1,x2,y2,r2,c2,c1){
+  let g = mCtx.createRadialGradient(x1,y1,r1,x2,y2,r2);
+  if(c1!=undefined)
+    g.addColorStop(0, c1);
+
+  g.addColorStop(1, c2);
+  return g;
+}
+
+
+function drawCircle(x,y,r,fill){
+  mCtx.fillStyle = fill;
+  mCtx.beginPath();
+  mCtx.ellipse(x,y,r,r, 0,0, TWO_PI);
+  mCtx.fill();
+}
+
+
+// rgba()
+// convert array to rgba() string
+function rgba(r,g,b,a){
+  return `rgba(${r},${g},${b},${a})`;
+}
+// canv()
+//
+// make a canvas
+function canv(){
+  return document.createElement("canvas");
+}
+
+
+// update ctx hue-rotate
+function hue(h){
+  if(h!=0)
+    mCtx.filter = `hue-rotate(${h}deg)`;
+}
+
+function image(img,x,y,h,s){
+  mCtx.drawImage(img.img, x-h,y-h , s, s);
+}
 // updateall()
 //
 // update all elements in a list
@@ -11,6 +65,18 @@ function updateAll(input){
   input.forEach(el=>el.update());
 }
 
+function displayShadow(obj){
+
+  if(obj.active&&obj.img!=undefined){
+    if(obj==Dude) console.log("yo dude")
+  mCtx.save();
+  mCtx.translate(obj.x,obj.y+obj.half);
+  mCtx.transform(1,0.15,1.2,1,-5,-5);
+  mCtx.filter = "brightness(0) opacity(0.2)"
+  mCtx.drawImage(obj.img.img, -obj.half, -obj.size, obj.size, obj.size);
+  mCtx.restore();
+}
+}
 /*
 // movetowards()
 //

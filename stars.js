@@ -16,7 +16,7 @@ function updateStars(){
     let pos = camera.position(s);
 
     // reposition if far off screen
-    if(!camera.isOnScreen(pos,400)){
+    if(!player.landed&&!camera.isOnScreen(pos,400)){
       // place somewhere off screen but not too far
       while(! (camera.isOnScreen(pos,400) && !camera.isOnScreen(pos,10)) ){
         s.x = rand(player.x - 1000, player.x + 1000);

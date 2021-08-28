@@ -54,6 +54,11 @@ let rightPlanetsEnabled = false;
 let crackersFound =0;
 
 
+function trackQuests(){
+  if(player.boarded && rightPlanetsEnabled && planetsIFoundCrackersOn.length>1){
+    triggerCrackerInvestigation();
+  }
+}
 // setupcanvas()
 //
 // called on start. setup the canvas area,
@@ -89,7 +94,7 @@ function setupPlanets(){
 
   // place home
   let pos = HomePlanet.findAvailableSpot();
-  HomePlanet.features.push(new SimpleObject(pos.x,pos.y,home_png, 100, HomePlanetText, triggerStoryStart));
+  HomePlanet.features.push(new StaticObject(pos.x,pos.y,home_png, 100, HomePlanetText, triggerStoryStart));
   // sort planet sub-elements by y coordinate
   HomePlanet.sortFeatures();
 
@@ -98,9 +103,9 @@ function setupPlanets(){
   planets.push(ToddsPlanet);
 
   // create todd's home
-  ToddsPlanet.features.push(new SimpleObject(80,0,home_png, 100, ToddsHomeText, triggerTommysHouseFound));
+  ToddsPlanet.features.push(new StaticObject(80,0,home_png, 100, ToddsHomeText, triggerTommysHouseFound));
   // create couch
-  ToddsCouch = new SimpleObject(-90,40,couch_png, 100, CouchText1);
+  ToddsCouch = new StaticObject(-90,40,couch_png, 100, CouchText1);
   ToddsPlanet.features.push(ToddsCouch);
   // sort planet sub-elements
   ToddsPlanet.sortFeatures();
@@ -186,7 +191,7 @@ function closeTextBox(){
 
 // playerFoundCracker()
 //
-// in class SimpleObject (object.js)
+// in class StaticObject (object.js)
 // what to do when player finds crackers
 function playerFoundCracker(){
 
@@ -233,7 +238,7 @@ function continueInvestigation(){
   planets.push(MysteryPlanet);
 
   // this should be a dude not a couch lol
-  MysteryPlanet.features.push(new SimpleObject(-90,40,couch_png, 100, CouchText1));
+  MysteryPlanet.features.push(new StaticObject(-90,40,couch_png, 100, CouchText1));
   MysteryPlanet.features[MysteryPlanet.features.length-1].collider = false;
   // wouldbe nice if the dude sends you on a stupid / mundane quest
   // that makes him seem more annoying than anything else

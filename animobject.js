@@ -1,85 +1,96 @@
-class AnimObject {
+class AnimObject extends BasicObject {
   constructor(x,y,size,frames){
-    this.x = x;
-    this.y = y;
-
-    this.setFrames(frames);
-
+    // position,rotation,scale
+    super(x,y,size);
     this.bearing =0;
-    this.setSize(size);
-    this.counter =0;
+    // animation
     this.fcount =0;
     this.animRate = 5;
-    this.bypassCamConstraint = false;
-    this.preRot =0; // used for player.dude
-    this.visible = true;
-
-    this.hue = 0;
-
-    //console.log(this)
-    //console.log(this.x,this.y);
+    this.setFrames(frames);
+    // states
+    this.counter =0;
+    this.boarded = true;
   }
 
+  // setup animation frames
   setFrames(anim){
     this.frames = anim;
     this.img = anim[0];
   }
 
-  setSize(input){
-
-    this.size = input;
-    this.halfsize = input/2;
-  }
+  // display current sprite & any children
   display(children){
 
     // get on screen position
     let pos = camera.position(this);
 
-    // check if on screen
-    if(this.bypassCamConstraint||camera.isOnScreen(pos,this.halfsize)){
-        // draw sprite
+    // if on planet (this is for Dude)
+    if(this.planetMode!=undefined){
+      // update "z-index"
+      if(this.nearestPlanet!=undefined)
+        this.nearestPlanet.sortFeatures();
+      // draw & update sprite
+      this.drawMe(this.x,this.y);
+      this.updateAnimation();
+      // update our inner clock
+      this.counter++;
+      return;
+    }
+
+    // if not on a planet,
+    // check if on screen first
+    if(camera.isOnScreen(pos,this.half)){
+        // draw & update sprite and any children
       this.drawMe(pos.x,pos.y,children);
       this.updateAnimation();
+      // update our inner clock
+      this.counter++;
     }
-
-    // update our inner clock
-    this.counter++;
   }
 
+  // drawMe()
+  //
+  // display sprite
   drawMe(x,y,children){
-    if(!this.visible) return;
+    if(!this.active) return;
 
-    if(x==undefined) x = this.x;
-    if(y==undefined) y = this.y;
-
+    // update transform
     mCtx.save();
-    if(this.preRot!=0)
-      mCtx.rotate(this.preRot)
     mCtx.translate(x ,y );
     mCtx.rotate(this.bearing);
-    if(children!=undefined){
-      for(let i=0; i<children.length; i++){
-        let c = children[i];
-        if(c.drawMe!=undefined){
-          c.drawMe();
-          c.updateAnimation();
-        }
-        else c.display();
-
-        c.counter++;
-      }
-    }
-
-    if(this.hue!=0)
-      mCtx.filter = `hue-rotate(${this.hue}deg)`;
-    mCtx.drawImage(this.img.img, -this.halfsize,-this.halfsize , this.size, this.size);
+    // display any children:
+    this.displayChildren(children);
+    // display sprite:
+    hue(this.hue);
+    image(this.img,0,0,this.half,this.size);
     mCtx.restore();
   }
 
+  displayChildren(children){
+    if(children!=undefined){
+      // this is an exception for the player
+      // object only, don't draw children if player isn't boarded.
+      if(this.boarded){
+        children.forEach(c=>{
+          // if child is AnimObject
+          if(c.drawMe!=undefined){
+            c.drawMe(c.x,c.y);
+            c.updateAnimation();
+          }
+          // else if child is Object
+          else c.display();
+
+          c.counter++;
+        });
+      }
+    }
+  }
+
   updateAnimation(){
-    // update animation
+    // set sprite according to counter
     if(this.counter%this.animRate==0){
       this.img = this.frames[this.fcount];
+      // update counter
       this.fcount = (this.fcount+1)%this.frames.length;
     }
   }
