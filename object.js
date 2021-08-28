@@ -26,14 +26,24 @@ class SimpleObject {
 
     if(this.active&&this.img!=undefined){
       mCtx.save();
+
       if(this.hue!=0)
         mCtx.filter = `hue-rotate(${this.hue}deg)`;
-      //let dy =0;
-      //if(this.type=="tree") dy -= this.halfsize;
 
       mCtx.drawImage(this.img.img, this.x-this.halfsize, this.y-this.halfsize, this.size, this.size);
       mCtx.restore();
     }
+  }
+
+  displayShadow(){
+    if(this.active&&this.img!=undefined){
+    mCtx.save();
+    mCtx.translate(this.x,this.y+this.halfsize);
+    mCtx.transform(1,0.15,1.2,1,-5,-5);
+    mCtx.filter = "brightness(0) opacity(0.3)"
+    mCtx.drawImage(this.img.img, -this.halfsize, -this.size, this.size, this.size);
+    mCtx.restore();
+  }
   }
 
   interact(){

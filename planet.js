@@ -178,13 +178,17 @@ class Planet {
         mCtx.stroke();
         mCtx.fill();
 
+
+
         mCtx.fillStyle = this.groundColor2;
         this.spots.forEach(spot=>{
           mCtx.beginPath();
           mCtx.ellipse(pos.x + spot.x, pos.y + spot.y,spot.r,spot.r,0,0,TWO_PI);
           mCtx.fill();
         });
-
+        
+        mCtx.translate(pos.x,pos.y);
+        this.features.forEach(f=>f.displayShadow());
       mCtx.restore();
 
       mCtx.save();
