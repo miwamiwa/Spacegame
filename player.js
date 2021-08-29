@@ -5,6 +5,7 @@ let availableText;
 let availableText2;
 let textCounter=0;
 let crashtext; // text displayed on crash
+let inventory = [];
 
 // setupPlayer()
 //
@@ -141,6 +142,18 @@ let planetInputs=()=>{
   let p = player.nearestPlanet;
   if(dist(player,{x:Dude.x+p.x,y:Dude.y+p.y})<HopDistance)
     canEnter = true;
+
+    // look through all features
+    player.nearestPlanet.features.forEach(f=>{
+      // if collider enabled
+      if(f.talker){
+        let d = dist({x:Dude.x+Dude.half,y:Dude.y+Dude.half},{x:f.x,y:f.y+f.half});
+        // if feature is in talk range,
+        // configure text interaction
+        if(d<f.talkrange)
+          availableText = f;
+      }
+    });
 }
 
 
@@ -365,4 +378,13 @@ let drawText=(txt,x,y,color)=>{
   }
   mCtx.fillStyle=color;
   mCtx.fillText(txt,x,y)
+}
+
+
+let AddToInventory =(item)=>{
+  if(inventory[item]==undefined)
+    inventory[item] = 0;
+
+
+  inventory[item] ++;
 }

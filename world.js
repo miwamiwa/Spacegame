@@ -15,7 +15,8 @@ let middle = {};
 let canBoard = false;
 let rightPlanetsEnabled = false;
 let crackersFound =0;
-
+let HomeObject;
+let HomeCouch;
 
 // setupcanvas()
 //
@@ -65,7 +66,13 @@ let setupPlanets=()=>{
 
   // place home
   let pos = HomePlanet.findAvailableSpot();
-  HomePlanet.features.push(new StaticObject(pos.x,pos.y,home_png, 100, HomePlanetText, triggerStoryStart));
+  HomeObject = new StaticObject(pos.x,pos.y,home_png, 100, HomePlanetText, undefined);
+  HomePlanet.features.push(HomeObject);
+
+  pos = HomePlanet.findAvailableSpot();
+  HomeCouch =new StaticObject(pos.x,pos.y,couch_png, 100, HomeCouchText, triggerStoryStart);
+  HomePlanet.features.push(HomeCouch);
+
   // sort planet sub-elements by y coordinate
   HomePlanet.sortFeatures();
 
@@ -80,6 +87,31 @@ let setupPlanets=()=>{
   ToddsPlanet.features.push(ToddsCouch);
   // sort planet sub-elements
   ToddsPlanet.sortFeatures();
+}
+
+let muffinType;
+let homeObjectText=()=>{
+  let make;
+  for(let b in inventory){
+    console.log(b)
+    if(inventory[b]>4) make = b;
+  }
+  console.log(make)
+  if(make!=undefined){
+    muffinType=make;
+    HomeObject.firstReadAction = makeMuffins;
+    HomeObject.text= ["Oh! You brought berries!\nLet's make muffinnnnzzzz",".....","all done!\nhere's a "+muffinType+" muffin"];
+  }
+  else HomeObject.text= HomePlanetText;
+}
+
+let makeMuffins =()=>{
+  console.log("muffin!")
+  inventory[muffinType] -= 5;
+  let m = muffinType+" muffin";
+  if(inventory[m]==undefined)
+    inventory[m] = 1;
+  else inventory[m] ++;
 }
 
 
@@ -104,6 +136,7 @@ let triggerTommysHouseFound=()=>{
   HelpOff = true;
   // update couch text
   ToddsCouch.text = CouchText2;
+  HomeCouch.text= HCouchText2;
   // assign next trigger to couch
   ToddsCouch.firstReadAction = triggerGoToPlanetsOnRight;
 

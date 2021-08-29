@@ -3,14 +3,26 @@
 class StaticObject extends BasicObject {
 
   constructor(x,y,img,size,text,firstReadAction){
-    // initialize object 
+    // initialize object
     super(x,y,size,img);
     this.collider = true;
+    this.talker = false;
     this.collidersize = size * 0.65;
     this.talkrange = size * 0.8;
     this.text = text;
     this.edible = false;
     this.firstReadAction = firstReadAction;
+  }
+
+  // for tree objects
+  lootBerry(){
+    AddToInventory(this.berry);
+    this.talker = false;
+    //availableText = undefined;
+  }
+
+  berryText(){
+    return ["this tree has "+this.berry+"berries.","You picked a "+this.berry+" berry."]
   }
 
 

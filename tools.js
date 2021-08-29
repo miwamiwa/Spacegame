@@ -74,7 +74,6 @@ input.forEach(el=>el.update());
 let displayShadow=(obj)=>{
 
   if(obj.active&&obj.img!=undefined){
-    if(obj==Dude) console.log("yo dude")
     mCtx.save();
     mCtx.translate(obj.x,obj.y+obj.half);
     mCtx.transform(1,0.15,1.2,1,-5,-5);
@@ -145,7 +144,7 @@ let usedPlanetNames = [];
 // RandomPlanetName()
 //
 // get a random planet name,
-// add a random number if it's a name we already used. 
+// add a random number if it's a name we already used.
 let RandomPlanetName=()=>{
   name = RandomFromArray(PlanetNames);
   while(usedPlanetNames.includes(name))

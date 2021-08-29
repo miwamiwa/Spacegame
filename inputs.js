@@ -89,7 +89,7 @@ let SpacePressInGameState =()=>{
     camera.targetIsVessel();
     // player controls vessel now
     player.boarded = true;
-
+    Dude.planetMode=undefined;
     // close active text box
     availableText2 = undefined;
   }
@@ -116,6 +116,7 @@ let SpacePressInGameState =()=>{
     // display text box:
     if(!player.reading){
       player.reading = true;
+      if(availableText==HomeObject) homeObjectText();
       textCounter =0;
     }
 
@@ -128,8 +129,11 @@ let SpacePressInGameState =()=>{
         &&availableText.firstReadAction!=undefined)
         availableText.firstReadAction();
         // remove text box
-        if(textCounter==availableText.text.length)
-        player.reading = false;
+        if(textCounter==availableText.text.length){
+          availableText = undefined;
+          player.reading = false;
+        }
+
 
       }
     }

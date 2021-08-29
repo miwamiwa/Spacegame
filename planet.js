@@ -134,8 +134,8 @@ class Planet {
     // generate a unique tree family for this planet
     // see nature.js
     this.treeFamily = createNewTreeType();
-    let treeCount = flo(rand(3,12));
-
+    let treeCount = flo(rand(6,12));
+    let berry = RandomFromArray(BerryNames);
     for(let i=0; i<treeCount; i++){
 
       // pick a random tree and position
@@ -145,7 +145,12 @@ class Planet {
       // create tree object
       let tree = new StaticObject(pos.x,pos.y -90,{img:pick},200);
       tree.collider = false;
+      tree.talker = true;
+      tree.talkrange = 34;
+      tree.berry = berry;
+      tree.text=tree.berryText();
       tree.id="tree";
+      tree.firstReadAction = tree.lootBerry;
 
       // add to features[]
       this.features.push(tree);
@@ -171,7 +176,7 @@ class Planet {
   addCheese(){
     let count = flo(rand(6,12));
     for(let i=0; i<count; i++){
-      let pos = rSurf(1);
+      let pos = this.rSurf(1);
       let c = new StaticObject(pos.x,pos.y,cracker_png,10);
       c.edible = true;
       c.collider = false;
@@ -205,7 +210,7 @@ class Planet {
       drawCircle(0,0,this.radius,this.groundColor);
       // draw circular shadow overtop
       drawCircle(0,0,this.radius,
-        gradient(-20,0, this.radius, pos.x-20,pos.y, this.radius-100,"#0003","#0000"));
+        gradient(-20,0, this.radius, pos.x-20,pos.y, this.radius-100,"#0006","#0000"));
 
       // draw "spots"
       this.spots.forEach(spot=>{

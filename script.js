@@ -90,7 +90,7 @@ let runStartScreen=()=>{
 //
 let startGame=()=>{
   gamestate = "focused"
-  startSound();
+  //startSound();
   intro =0;
   setupPlayer();
   setupStars();
@@ -121,5 +121,4 @@ let runGame=()=>{
 
   camera.update();
   updatePlayerUi();
-
 }

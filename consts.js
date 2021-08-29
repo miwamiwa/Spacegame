@@ -64,6 +64,9 @@ const PlanetNames = [ ////https://www.fantasynamegenerators.com/planet_names.php
 "Garvis 5",
 "Lloria ER2"
 ];
+const BerryNames=[
+  "red","blue","orange","yellow","black"
+]
 
 
 // WORLD
@@ -85,10 +88,12 @@ const white = "#fffc";
 const IntroText = ["Welcome","To space game","woop woop"];
 const FailTextList = ["Ouch!","Don't scratch the car. -Mom.","Oof."];
 const HomePlanetText = [
-  "This is my home... \nI've lived here for the past 30 years.",
-  "Pretty neat."
+  "This is my home... \nI've always lived here!","Gooood oleeee hooooomeee","Oh hi mom!","Mom: Hey son! Want a muffin?","Yeah!","Mom: Go find me some berries then!\n5 of any kind. Thanks!","Oh"
+
 ];
 
+const HomeCouchText=["This is a nice couch","But you know who has an even\nbetter couch?","My neighbour Todd.","I should go over to Todd's place."]
+const HCouchText2 = ["<3 my couch"]
 const ToddsHomeText = [
   "This is Todd's home.\nThe jam space is in the basement.",
   "Ring! ring!!",

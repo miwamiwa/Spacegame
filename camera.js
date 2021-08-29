@@ -11,12 +11,15 @@ class Camera {
     if(!this.targetisdude){
       this.x = player.x;
       this.y = player.y;
+      //console.log("target is player")
     }
     else {
       this.x = player.nearestPlanet.x+Dude.x;
-      this.y = player.nearestPlanet.x+Dude.y + 200;
+      this.y = player.nearestPlanet.y+Dude.y-50;
+      //console.log("target is dude")
     }
 
+    //console.log(this.x,this.y)
     this.middle.x = this.x - middle.x;
     this.middle.y = this.y - middle.y;
 
