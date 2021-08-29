@@ -147,7 +147,7 @@ class Planet {
       tree.collider = false;
       tree.talker = true;
       tree.talkrange = 34;
-      tree.berry = berry;
+      tree.berry = berry+" berry";
       tree.text=tree.berryText();
       tree.id="tree";
       tree.firstReadAction = tree.lootBerry;
@@ -221,6 +221,10 @@ class Planet {
 
       // draw all the features' shadows
       this.features.forEach(f=>displayShadow(f));
+
+      mCtx.restore();
+      mCtx.save();
+      mCtx.translate(pos.x,pos.y);
       // then draw all features
       this.features.forEach(f=>f.display());
       mCtx.restore();

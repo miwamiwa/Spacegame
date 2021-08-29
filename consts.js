@@ -116,6 +116,15 @@ const CrackerText = ["a cracker","munch... munch...","Most definitely Todd's cra
 const CrackerText2 = ["More crackers.","But where is Todd?"];
 const CrackerText3 = ["These crackers are literally \neverywhere!"];
 
+const RandomHomeText1 =["Someone's inside...","Uhm hello... I was led here by\na handful of cr..","Nevermind. have you seen my friend Todd?",
+"Stranger: Todd? you mean that dork and his\ndorky guitar?","...","Stranger:Yeah I saw him!\nHe came here to hurt my ears!",
+"In fact you're hurting my ears!","Get out!"];
+
+const ToddsVesselText1 =["Todd: Hi dude!\nWhat are you doing over here?","You were looking for me??",
+"Whadd'ya mean, what am I doing here? ;)","Ealier today someone said I sounded\nterrible","So I got on my ship and started\nlooking for a place with better accoustics"
+,"This place is awesome!\nHear that?? Sounds amazing.","You: Todd..","Todd: wat","You: There's no accoustics in space..","You've always sounded awesome","Todd: ....?","Todd: Dang!","Now that you're here, let's jam!"];
+
+const ToddsVesselText2 = ["Todd: Hi dude!","Let's jam!"]
 // MUSIC
 const Edorian = [4,6,7,9,11,13,14];
 const FshPhrygi = [6,7,9,11,13,14,16];

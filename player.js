@@ -6,6 +6,7 @@ let availableText2;
 let textCounter=0;
 let crashtext; // text displayed on crash
 let inventory = [];
+let inventoryString = ""
 
 // setupPlayer()
 //
@@ -277,6 +278,9 @@ let updatePlayerUi=()=>{
   if(!HelpOff&&player.boarded&&!player.landed)
     drawText("w to throttle. a,d to steer.", middle.x + 100, middle.y + 50)
 
+  if(inventory.length>0){
+
+  }
 }
 
 // showCrackerCounter()
@@ -339,7 +343,7 @@ let showQuestText=()=>{
     // "investigation" part
     if(availableText2[textCounter]==InvestigationText[6]
       ||availableText2[textCounter]==InvestigationText[8])
-      drawBg();
+      bg();
 
     // display hint
     drawText("press space");
@@ -353,18 +357,21 @@ let showQuestText=()=>{
 // split text into multiple lines,
 // and display text box
 
-let showTextArray=(txtarr)=>{
+let showTextArray=(txtarr,x,y)=>{
   mCtx.fillStyle = "black";
   mCtx.fillRect(TextBox.x,TextBox.y, 300, 40);
 
-  let i=0;
   if(txtarr!=undefined)
-  txtarr[textCounter].split("\n").forEach(line=>{
-    drawText(line, TextBox.x + 10, TextBox.y+17 + i);
+  SplitText(txtarr[textCounter],TextBox.x+5,TextBox.y+12);
+}
+
+let SplitText=(text,x,y)=>{
+  let i=0;
+  text.split("\n").forEach(line=>{
+    drawText(line, x, y + i);
     i+= 10;
   });
 }
-
 
 // drawText()
 //
@@ -383,8 +390,13 @@ let drawText=(txt,x,y,color)=>{
 
 let AddToInventory =(item)=>{
   if(inventory[item]==undefined)
-    inventory[item] = 0;
+    inventory[item] = 1;
+  else inventory[item] ++;
+
+  inventoryString = "inventory";
+  for(let i in inventory)
+    if(inventory[i]>0)
+    inventoryString += "\n"+i+": "+inventory[i];
 
 
-  inventory[item] ++;
 }

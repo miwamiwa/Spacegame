@@ -121,4 +121,6 @@ let runGame=()=>{
 
   camera.update();
   updatePlayerUi();
+
+  SplitText(inventoryString, 5, 200);
 }

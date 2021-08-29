@@ -17,6 +17,7 @@ let rightPlanetsEnabled = false;
 let crackersFound =0;
 let HomeObject;
 let HomeCouch;
+let RandomHome;
 
 // setupcanvas()
 //
@@ -66,7 +67,7 @@ let setupPlanets=()=>{
 
   // place home
   let pos = HomePlanet.findAvailableSpot();
-  HomeObject = new StaticObject(pos.x,pos.y,home_png, 100, HomePlanetText, undefined);
+  HomeObject = new StaticObject(pos.x,pos.y,home_png, 100, HomePlanetText, talkedToMom);
   HomePlanet.features.push(HomeObject);
 
   pos = HomePlanet.findAvailableSpot();
@@ -89,29 +90,69 @@ let setupPlanets=()=>{
   ToddsPlanet.sortFeatures();
 }
 
+
+let talkedToMom=()=>{
+  talkedToMomOnce = true;
+}
+
+let talkedToMomOnce = false;
 let muffinType;
+let talkedToMysteryDudeOnce = false;
+let mysteryDudeGone = false;
+
+let mysteryHomeText=()=>{
+
+  // check if we have muffins
+  let muffin = undefined;
+  for(let i in inventory)
+    if(inventory[i].includes("muffin")) muffin = i;
+
+  if(!talkedToMysteryDudeOnce){
+    RandomHome.text=RandomHomeText1;
+    RandomHome.firstReadAction=()=>{talkedToMysteryDudeOnce=true;}
+  }
+  else if(!mysteryDudeGone){
+    if(muffin==undefined){
+      RandomHome.text=["I'm hungry."];
+      RandomHome.firstReadAction=undefined;
+    }
+    else {
+      RandomHome.text=["Oh, that muffin. Can I have it?","Wow thanks!\nMunch... munch...",
+      "That was an amazing muffin.","Do you know who made this?","Some stranger who lives light years\naway from here?","I see..","Well I should leave now if I want to\nmeet them before I get hungry again.","Thanks. Bye."]
+      RandomHome.firstReadAction=()=> triggerFinalPart();
+    }
+  }
+  else {
+    RandomHome.text=undefined;
+  }
+}
+
+
 let homeObjectText=()=>{
-  let make;
+  let make = undefined
   for(let b in inventory){
-    console.log(b)
+    //console.log(b)
     if(inventory[b]>4) make = b;
   }
-  console.log(make)
-  if(make!=undefined){
+  //console.log(make)
+
+  if(talkedToMomOnce&&make!=undefined){
     muffinType=make;
+
     HomeObject.firstReadAction = makeMuffins;
     HomeObject.text= ["Oh! You brought berries!\nLet's make muffinnnnzzzz",".....","all done!\nhere's a "+muffinType+" muffin"];
+    make = undefined
   }
   else HomeObject.text= HomePlanetText;
 }
 
 let makeMuffins =()=>{
-  console.log("muffin!")
-  inventory[muffinType] -= 5;
-  let m = muffinType+" muffin";
-  if(inventory[m]==undefined)
-    inventory[m] = 1;
-  else inventory[m] ++;
+  //console.log("muffin!")
+  if(inventory[muffinType]>4){
+    inventory[muffinType] -= 5;
+    AddToInventory(muffinType+" muffin");
+  }
+
 }
 
 
@@ -236,8 +277,8 @@ let continueInvestigation=()=>{
   planets.push(MysteryPlanet);
 
   // this should be a dude not a couch lol
-  MysteryPlanet.features.push(new StaticObject(-90,40,couch_png, 100, CouchText1));
-  MysteryPlanet.features[MysteryPlanet.features.length-1].collider = false;
+  RandomHome = new StaticObject(-90,40,home_png, 120, RandomHomeText1);
+  MysteryPlanet.features.push(RandomHome);
   // wouldbe nice if the dude sends you on a stupid / mundane quest
   // that makes him seem more annoying than anything else
 
@@ -251,4 +292,9 @@ let continueInvestigation=()=>{
   // conversation with todd
 
   // the end, pan out?
+}
+
+
+let triggerFinalPart=()=>{
+  mysteryDudeGone = true;
 }

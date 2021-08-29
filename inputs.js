@@ -78,7 +78,7 @@ let SpacePressInGameState =()=>{
 
   // if vessel is in range
   // and boarding is enabled
-  if(canEnter&&canBoard){
+  if(canEnter&&canBoard&&talkedToMomOnce){
     // update dude
     Dude.x =0;
     Dude.y =0;
@@ -117,6 +117,7 @@ let SpacePressInGameState =()=>{
     if(!player.reading){
       player.reading = true;
       if(availableText==HomeObject) homeObjectText();
+      if(availableText==RandomHome) mysteryHomeText();
       textCounter =0;
     }
 
