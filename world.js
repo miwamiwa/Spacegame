@@ -1,70 +1,28 @@
-const HomePlanetText = [
-  "This is my home... \nI've lived here for the past 30 years.",
-  "Pretty neat."
-];
-
-const ToddsHomeText = [
-  "This is Todd's home.\nThe jam space is in the basement.",
-  "Ring! ring!!",
-  "...",
-  "Todd's not here.",
-  "What's that over here? A package with a note...",
-  "\"Sorry for the delay, \nThis box should complete your recent order of",
-  "875 bags of cheese crackers.\nThank you for your business. You are our favorite customer.\" ",
-  "Todd WAS here all right!"
-];
-
-const CouchText1 = ["This couch..."];
-const CouchText2 = ["This is Todd's couch.\nBest couch ever!",
-"This couch, in this place, it's the best view ever.\nTrust me we tried all the couches.",
-"Oh dang, a note",
-"\"scurred off to one of the planets to the right.\nprolly gonna hit up all of em\""]
-
-// text which appears during the part with crackers on 3 planets
-const CrackerText = ["a cracker","munch... munch...","Most definitely Todd's cracker"];
-const CrackerText2 = ["More crackers.","But where is Todd?"];
-const CrackerText3 = ["These crackers are literally \neverywhere!"];
-
 // this is to count how many planets we explored
 // during cracker on 3 planets part
 let planetsIFoundCrackersOn = [];
-
 // the investigation follows the crackers on 3 planets part
 let investigationTriggered = false;
-
 let InvestigationText = [];
-
-const HomePlanetRadius = 250;
-const DistanceToTodd = 12000;
-
 let HomePlanet;
 let ToddsPlanet;
 let ToddsCouch;
 let MysteryPlanet;
-
-
 let HelpOff = false; // display flight instructions
-
 let mainCanvas;
 let mCtx;
 let middle = {};
 let canBoard = false;
 let rightPlanetsEnabled = false;
-
 let crackersFound =0;
 
 
-function trackQuests(){
-  if(player.boarded && rightPlanetsEnabled && planetsIFoundCrackersOn.length>1){
-    triggerCrackerInvestigation();
-  }
-}
 // setupcanvas()
 //
 // called on start. setup the canvas area,
 // and the key inputs as well
 
-function setupCanvas(){
+let setupCanvas=()=>{
 
   // create canvas
   mainCanvas = document.getElementById("canvas");
@@ -82,11 +40,24 @@ function setupCanvas(){
 }
 
 
+
+// trackQuests()
+//
+// called in main game loop, runGame()/
+// a place to look out for quest even triggers
+
+let trackQuests=()=>{
+  if(player.boarded && rightPlanetsEnabled && planetsIFoundCrackersOn.length>1)
+    triggerCrackerInvestigation();
+}
+
+
+
 // setupPlanets()
 //
 // create home planet and todd's planet
 
-function setupPlanets(){
+let setupPlanets=()=>{
 
   // create home planet
   HomePlanet = new Planet(player.x,player.y + HomePlanetRadius + Planet1Distance, true, "Home, sweet home", HomePlanetRadius, 1500);
@@ -117,10 +88,8 @@ function setupPlanets(){
 // first trigger in the game. interact with the home before you can
 // enter the rocket.
 
-function triggerStoryStart(){
-  canBoard = true;
+let triggerStoryStart=()=> canBoard = true;
 
-}
 
 // triggerTommysHouseFound
 //
@@ -128,7 +97,7 @@ function triggerStoryStart(){
 // go interact with todd's house. it enables the couch text,
 // where you find todd's note
 
-function triggerTommysHouseFound(){
+let triggerTommysHouseFound=()=>{
 
   mutechords = false;
   // disable flight instructions since we succesfully landed somewhere.
@@ -145,7 +114,7 @@ function triggerTommysHouseFound(){
 // todd's note sends you to planets on the right.
 // create those (3) planets and litter them with cheese.
 
-function triggerGoToPlanetsOnRight(){
+let triggerGoToPlanetsOnRight=()=>{
   if(!rightPlanetsEnabled){
 
     let p = ToddsPlanet;
@@ -170,13 +139,12 @@ function triggerGoToPlanetsOnRight(){
 // nextCrackerText()
 //
 // set which text appears during the part with crackers on 3 planets
-function nextCrackerText (){
+let nextCrackerText=()=>{
   let l = planetsIFoundCrackersOn.length;
   textCounter =0;
-  if(l==0)
-    availableText2 = CrackerText;
-  else if(l==1)
-    availableText2 = CrackerText2;
+
+  if(l==0) availableText2 = CrackerText;
+  else if(l==1) availableText2 = CrackerText2;
   else if(l==2) availableText2 = CrackerText3;
   else availableText2=undefined;
 }
@@ -184,16 +152,14 @@ function nextCrackerText (){
 // closeTextBox()
 //
 // close text popup
-function closeTextBox(){
-  availableText2 = undefined;
-}
+let closeTextBox=()=> availableText2 = undefined;
 
 
 // playerFoundCracker()
 //
 // in class StaticObject (object.js)
 // what to do when player finds crackers
-function playerFoundCracker(){
+let playerFoundCracker=()=>{
 
   if(!planetsIFoundCrackersOn.includes(player.nearestPlanet)){
     // display text
@@ -207,11 +173,10 @@ function playerFoundCracker(){
 
 // triggered in player.js:HandlePlayerInputs()
 // when crackers have been found on 2 planets
-function triggerCrackerInvestigation(){
+let triggerCrackerInvestigation=()=>{
   if(!investigationTriggered&&player.nearestPlanet==undefined){
 
     continueInvestigation();
-
 
     InvestigationText = ["I don't get it","I found nothing but a bunch \nof cheese crackers"
       ,"What does it all mean?","Is Todd ok?",
@@ -219,14 +184,14 @@ function triggerCrackerInvestigation(){
       "I'm not eating any more of these crackers!"];
     availableText2 = InvestigationText;
 
-    console.log("investigation started")
+    //console.log("investigation started")
     investigationTriggered = true;
     textCounter =0;
   }
 }
 
 
-function continueInvestigation(){
+let continueInvestigation=()=>{
 
   // new planet
   let pos = {

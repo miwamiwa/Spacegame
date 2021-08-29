@@ -34,6 +34,10 @@ const RadarMin = 200;
 const RadarMax = 20000;
 const HopDistance = 60;  // dist travelled when hopping off ship
 
+const CrashAnimLength = 120;
+const CrashThreshold = 18; // see planet.js
+const VesselMass = 0.8;
+
 
 // UI
 const TopText = {x: 4, y: 10};
@@ -48,12 +52,30 @@ const GravityConstant = 50;
 const PlanetMassMin = 800;
 const PlanetMassMax = 2000;
 const MinDistanceBetweenFeatures = 50;
+const PlanetNames = [ ////https://www.fantasynamegenerators.com/planet_names.php
+  "Nuchearus",
+"Binvethea",
+"Eccurn",
+"Hinomia",
+"Haotov",
+"Peiyama",
+"Strutacarro",
+"Llenigawa",
+"Garvis 5",
+"Lloria ER2"
+];
 
 
 // WORLD
 const Planet1Distance = 1;
+const HomePlanetRadius = 250;
+const DistanceToTodd = 12000;
 
-// UTILITIES 
+
+// STARS
+const NumStars = 16;
+
+// UTILITIES
 const PI = Math.PI;
 const TWO_PI = 2*Math.PI;
 const grey = "#eee8";
@@ -62,3 +84,83 @@ const white = "#fffc";
 // TEXT
 const IntroText = ["Welcome","To space game","woop woop"];
 const FailTextList = ["Ouch!","Don't scratch the car. -Mom.","Oof."];
+const HomePlanetText = [
+  "This is my home... \nI've lived here for the past 30 years.",
+  "Pretty neat."
+];
+
+const ToddsHomeText = [
+  "This is Todd's home.\nThe jam space is in the basement.",
+  "Ring! ring!!",
+  "...",
+  "Todd's not here.",
+  "What's that over here? A package with a note...",
+  "\"Sorry for the delay, \nThis box should complete your recent order of",
+  "875 bags of cheese crackers.\nThank you for your business. You are our favorite customer.\" ",
+  "Todd WAS here all right!"
+];
+
+const CouchText1 = ["This couch..."];
+const CouchText2 = ["This is Todd's couch.\nBest couch ever!",
+"This couch, in this place, it's the best view ever.\nTrust me we tried all the couches.",
+"Oh dang, a note",
+"\"scurred off to one of the planets to the right.\nprolly gonna hit up all of em\""]
+
+// text which appears during the part with crackers on 3 planets
+const CrackerText = ["a cracker","munch... munch...","Most definitely Todd's cracker"];
+const CrackerText2 = ["More crackers.","But where is Todd?"];
+const CrackerText3 = ["These crackers are literally \neverywhere!"];
+
+// MUSIC
+const Edorian = [4,6,7,9,11,13,14];
+const FshPhrygi = [6,7,9,11,13,14,16];
+const CLydian = [0,2,4,6,7,9,11];
+const ADorian = [9,11,13,14,16,18,19];
+const DMixo = [2,4,6,7,9,11,12];
+const GLydian = [7,9,11,13,14,16,18];
+const Fmin7flat5 = [6,7,9,11,12,14,16];
+const BMixo = [11,13,15,16,18,20,21];
+const Emaj7 = [4,6,8,10,11,13,15];
+const FShDorian = [6,8,9,11,13,15,16];
+const ALydian = [9,11,13,15,16,18,20];
+const G6 = [7,9,11,13,14,16,18];
+const AMixo = [9,11,13,15,16,18,19];
+
+const scales = [
+  Edorian,FshPhrygi,Edorian,FshPhrygi,
+  CLydian,CLydian,CLydian,CLydian,
+  ADorian,DMixo,GLydian,CLydian,
+  GLydian,CLydian,Fmin7flat5,BMixo,
+  Emaj7,FShDorian, Emaj7,FShDorian,
+  ALydian,ALydian,ALydian,ALydian,
+  ADorian,DMixo,GLydian,CLydian,
+  GLydian,
+  CLydian,Fmin7flat5, BMixo,
+  Edorian,Edorian,Fmin7flat5,BMixo,
+  Edorian,Edorian,CLydian,CLydian,
+  CLydian,CLydian,AMixo,AMixo,
+  GLydian,CLydian,CLydian,DMixo,
+  G6,CLydian,G6,CLydian,
+  GLydian,CLydian,Fmin7flat5,BMixo
+];
+
+const melodyA = [4, 11, 11, 6, 4, 4, -1, 4, 4, 6, 4, false];
+const melodyB = [4, 11, 9, 4, 6, 2, 2, 9, 7, 0, false, false];
+const melodyC = [-1, 0, 2, 4, 6, 7]
+const melodyD = [9, 11, 9, 3, false, false];
+const melodyE = [9, 10, 11, 12, false, false];
+const melodyF = [false, 11, 11, 11, false, 4, false, 9, 9, 9, false, 3];
+const melodyG = [false, 7, 7, 7, false, -1, 4, false, false]
+const melodyH = [false, false, 4, 4, 6, 4, 6, 4, 6, 7, 9, 7, 9, false, 7, 11, 12, 11, 12, false, false, false, false, false];
+const melodyI = [11, false, false, 7, false, false];
+
+const patterns = [
+  [0,1,2,3],
+  [0,1,0],
+  [0,4,3,0,1],
+  [0,4,3],
+  [1,2,0]
+];
+
+// default octave (improv)
+const defoctave = 6;

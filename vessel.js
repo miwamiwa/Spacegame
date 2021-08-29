@@ -1,18 +1,14 @@
-const CrashAnimLength = 120;
-const CrashThreshold = 18; // see planet.js
-const VesselMass = 0.8;
+
 
 class Vessel extends AnimObject {
   constructor(x,y,size,frames){
 
-    console.log(x,y,size,frames)
     super(x,y,size,frames);
 
     this.vel = 1;
     this.throttle =0;
     this.mass = VesselMass;
 
-    console.log(this.lastvx,this.lastvy)
     this.nearestPlanet =undefined;
     this.flame = new AnimObject(0,55,50,FlameAnimation);
     this.children = [this.flame];
@@ -25,8 +21,6 @@ class Vessel extends AnimObject {
     this.lastvx =0;
     this.lastvy =0;
 
-    //console.log(this)
-    //console.log(this.x,this.y,this.vx,this.vy,this.lastvx,this.lastvy)
   }
 
 
@@ -34,38 +28,27 @@ class Vessel extends AnimObject {
   update(){
 
 
-    //this.vx =0;
-    //this.vy =0;
-
     if(!this.crashed){
 
       // update radar and check for nearby
       // planet exerting gravity on this vessel
       this.findNearestPlanet();
-      //console.log(this.nearestPlanet.name)
-
-
 
       // if affected by gravity, update velocity
       if(this.gravity)
         this.applyGravity();
-
-        //console.log(player);
-        //return;
 
       // if accelerating, update velocity
       if(this.throttle > 0){
 
         let ax = this.throttle * Math.sin(this.bearing);
         let ay = this.throttle * Math.cos(this.bearing);
-        if(!(
-          dist({x:0,y:0},{x:this.vx+ax,y:this.vy+ay})
+        // check if new speed is below the speed limit
+        if(!( dist({x:0,y:0},{x:this.vx+ax,y:this.vy+ay})
           >SpeedLimit)){
             this.vx += ax;
             this.vy += ay;
         }
-
-
       }
 
       // update flame position according to throttle power
@@ -84,50 +67,47 @@ class Vessel extends AnimObject {
     }
 
     // if crashed
-    else{
-      this.display();
-    }
+    else this.display();
 
   }
 
 
   applyGravity(){
 
-    //console.log(this.nearestPlanet)
     if(this.nearestPlanet!=undefined){
 
       let p = this.nearestPlanet;
       let d = dist(this,p);
-      //console.log(d)
-      //console.log(this)
-      //console.log(p.name)
-      if(d >= p.mass){
+
+      // if we're beyond range of gravity (which == mass lol)
+      // then nearest planet is undefined.
+      if(d >= p.mass)
         this.nearestPlanet =undefined;
-      }
+
       else {
-        //console.log(p.name,d)
+        // if in gravity range:
+
+        // get gravity factor
         let g = p.getGravityFor(this,d);
 
-        //console.log(g)
-
+        // if landed, set velocity
         if(this.landed){
           this.vx =0;
           this.vy =0;
         }
+
+        // if in flight, apply gravity
         else {
-          //console.log(p,this)
           let dir = directionFromObjectToObject(p,this);
-          //console.log(dir)
           this.vx +=  g * dir.x;
           this.vy +=  g * dir.y;
         }
-
       }
     }
-
-
   }
 
+  // crash()
+  // things to do when crash happens
   crash(){
     this.crashed = true;
     crashtext = RandomFromArray(FailTextList);
@@ -135,29 +115,41 @@ class Vessel extends AnimObject {
     this.setFrames(CrashAnimation);
   }
 
-
+  // findNearestPlanet()
+  //
+  // find closest planet, and update list of planets on radar
+  // while we're at it
   findNearestPlanet(){
+    // no need to do this every frame
     if(this.counter % 2 ==0){
-
       this.onradar = [];
+
+      // for each planet
       planets.forEach(p=>{
         let d = dist(this,p);
 
+        // are we in gravity range of this planet?
         if(d < p.mass)
           this.nearestPlanet = p;
-
+        // calculate distance to planet
         p.d2p = abs(flo(d));
-        if(this.radar){
 
+        // update radar.
+        if(this.radar){
+          // add to radar list if in range
           if(d>p.radius + RadarMin&&d<p.radius + RadarMax)
             this.onradar.push(p);
-
+          // add to radar by default if already visited.
           else if(p.visited)
             this.onradar.push(p);
         }
       });
     }
   }
+
+  // displayRadar()
+  //
+  // display radar ui
 
   displayRadar(){
     if(this.radar && this.boarded){
@@ -170,50 +162,49 @@ class Vessel extends AnimObject {
           //console.log("radar")
           let dir = directionFromObjectToObject(this,p);
           mCtx.save();
-          mCtx.translate(middle.x,middle.y);
-          mCtx.translate(radarArrowDist * -dir.x, radarArrowDist * dir.y);
-          let from = {
-            x:-dir.x*20,
-            y:dir.y*20
-          }
-          let to = {
-            x:-dir.x*50,
-            y:dir.y*50
-          }
+          mCtx.translate(
+            middle.x+radarArrowDist * -dir.x,
+            middle.y+radarArrowDist * dir.y
+          );
+
+          // draw line
           mCtx.beginPath();
           mCtx.strokeStyle = "white";
-          mCtx.moveTo(from.x,from.y);
-          mCtx.lineTo(to.x,to.y);
+          mCtx.moveTo(-dir.x*20,dir.y*20);
+          mCtx.lineTo(-dir.x*50,dir.y*50);
           mCtx.stroke();
 
+          // draw text
           let visit = "";
-
           if(p.visited){
             visit = " (visited)";
             mCtx.fillStyle = "green";
           }
           else mCtx.fillStyle = "white";
-
           mCtx.fillText("planet: "+p.name+visit+". distance: "+p.d2p,-35,0);
+
           mCtx.restore();
         }
-
       });
     }
   }
 
+  // accelerate
   plusThrottle(amount){
     this.throttle = Math.min(this.throttle + amount, AccelerationLimit);
   }
 
+  // decelerate
   minusThrottle(amount){
     this.throttle = Math.max(player.throttle - amount, 0);
   }
 
+  // rotate
   rotate(amount){
     this.bearing = (this.bearing - amount)%TWO_PI;
   }
 
+  // reset to initial position
   resetPos(x,y){
     this.crashed = false;
     this.x = x;

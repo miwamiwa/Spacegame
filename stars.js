@@ -1,16 +1,21 @@
 let stars = [];
-const NumStars = 16;
 
-function setupStars(){
-
+// setupStars()
+//
+// trigger on game start
+let setupStars=()=>{
   // create stars
   for(let i=0; i<NumStars; i++)
     stars.push(new AnimObject(-1000,-1000,10,StarAnimation))
-
 }
 
+// updateStars()
+//
+// remove stars that are too far away,
+// add new stars to replace them,
+// display current stars.
 
-function updateStars(){
+let updateStars=()=>{
 
   stars.forEach(s=>{
     let pos = camera.position(s);
@@ -27,7 +32,6 @@ function updateStars(){
 
     // draw sprite
     s.drawMe(pos.x,pos.y);
-
     s.updateAnimation();
 
     // update our inner clock
