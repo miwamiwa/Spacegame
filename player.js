@@ -1,12 +1,18 @@
 let Dude;
 let canExit = false; // trigger exit vehicle prompt
-let canEnter = false; // are we in range of the ship?
+let canEnter = true; // are we in range of the ship?
+let canBoard = true;
+let talkedToMomOnce = true;
+let muffinType;
+let talkedToMysteryDudeOnce = false;
+let mysteryDudeGone = false;
 let availableText;
 let availableText2;
 let textCounter=0;
 let crashtext; // text displayed on crash
 let inventory = [];
-let inventoryString = ""
+let inventoryString = "";
+let stopSpeed =0;
 
 // setupPlayer()
 //
@@ -70,7 +76,7 @@ let HandlePlayerInputs=()=>{
 //
 //
 let vesselInputs=()=>{
-
+  if(autopilotActive) return;
   // press w to toggle throttle
   if(inputs.w) player.plusThrottle(PlayerAcceleration);
   else player.minusThrottle(PlayerDeceleration);
@@ -105,7 +111,7 @@ let playerLanded=()=>{
   Dude.planetMode = true;
   let p = player.nearestPlanet;
   p.features.push(Dude);
-  let pos = p.findAvailableSpot();
+  let pos = p.findAvailableSpot(100);
   Dude.x =  pos.x;
   Dude.y =  pos.y;
 }
@@ -259,7 +265,7 @@ let updatePlayerUi=()=>{
   // top of the screen
   showTopText();
   // bottom
-  showCrackerCounter();
+  //showCrackerCounter();
 
   // interaction text box and hints
   showInteractionText();
@@ -275,23 +281,24 @@ let updatePlayerUi=()=>{
   if(canEnter&&canBoard)
     drawText("press space to board");
   // when in flight
-  if(!HelpOff&&player.boarded&&!player.landed)
+  if(!HelpOff&&player.boarded&&!player.landed){
     drawText("w to throttle. a,d to steer.", middle.x + 100, middle.y + 50)
-
-  if(inventory.length>0){
-
+    drawText("l to stop", middle.x + 100, middle.y + 64)
   }
+
+
+
 }
 
 // showCrackerCounter()
 //
 // show cracker counter at bottom of the screen
-
+/*
 let showCrackerCounter=()=>{
   if(crackersFound>0)
     drawText(`crackers found: `+crackersFound,middle.x - 50, mainCanvas.height - 16);
 }
-
+*/
 // showTopText()
 //
 // show text at the top of the screen.
@@ -307,7 +314,8 @@ let showTopText=()=>{
     vX : ${flo(player.lastvx)}
     vY : ${flo(player.lastvy)}
     throttle: ${flo(10*player.throttle)/10}
-    bearing: ${flo(radians_to_degrees(player.bearing))}`, TopText.x, TopText.y);
+    bearing: ${flo(radians_to_degrees(player.bearing))}
+    actual_direction: ${angleFromDirection(-player.vx,-player.vy)}`, TopText.x, TopText.y);
 
   // if we're on a planet
   else
@@ -398,5 +406,77 @@ let AddToInventory =(item)=>{
     if(inventory[i]>0)
     inventoryString += "\n"+i+": "+inventory[i];
 
+}
 
+let autopilotActive = false;
+let autopilotPhase;
+
+let LandPlayer =()=>{
+  if(!autopilotActive){
+    player.targetbearing=undefined;
+    console.log("autopilot active")
+    autopilotPhase="start";
+    autopilotActive = true;
+  }
+}
+
+let angleFromDirection=(dx,dy)=>
+  Math.acos( (0*dx+1*dy)/ (Math.sqrt(Math.pow(0,2)+Math.pow(1,2))*Math.sqrt(Math.pow(dx,2)+Math.pow(dy,2))) )
+
+let updateAutopilot=()=>{
+
+  if(autopilotActive){
+    if(autopilotPhase=="start"){
+
+      if(player.throttle>0)
+        player.minusThrottle(PlayerDeceleration);
+      else {
+        autopilotPhase="turn1";
+        player.targetbearing = angleFromDirection(-player.vx,-player.vy);
+        if(player.vx>0) player.targetbearing *=-1;
+      }
+    }
+    else if(autopilotPhase=="turn1"){
+      if (reachTargetRotation())
+        autopilotPhase="slow";
+    }
+    else if(autopilotPhase=="slow"){
+        player.plusThrottle(PlayerAcceleration);
+        let currentSpeed = dist({x:0,y:0},{x:player.vx,y:player.vy});
+        // account for deceleration time
+        let decel=0;
+        stopspeed =PlayerDeceleration;
+        while(decel<player.throttle){
+          decel+=PlayerDeceleration;
+          stopSpeed+=decel;
+        }
+
+        if(currentSpeed<10){
+          if(currentSpeed<Math.max(stopSpeed,2))
+            autopilotPhase="slow2"
+        }
+    }
+    else if(autopilotPhase=="slow2"){
+      if(player.throttle>0)
+        player.minusThrottle(PlayerDeceleration);
+      else autopilotPhase="stop"
+    }
+
+    else if(autopilotPhase=="stop"){
+      autopilotActive = false;
+      player.vx/=2;
+      player.vy/=2;
+    }
+  }
+}
+
+let reachTargetRotation=()=>{
+
+  if(player.bearing-PlayerRotateRate>player.targetbearing)
+    player.rotate(PlayerRotateRate);
+  else if(player.bearing+PlayerRotateRate<player.targetbearing)
+    player.rotate(-PlayerRotateRate);
+    else return true;
+
+  return false;
 }

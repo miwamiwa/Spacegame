@@ -123,7 +123,6 @@ class Vessel extends AnimObject {
     // no need to do this every frame
     if(this.counter % 2 ==0){
       this.onradar = [];
-
       // for each planet
       planets.forEach(p=>{
         let d = dist(this,p);
@@ -191,13 +190,17 @@ class Vessel extends AnimObject {
 
   // accelerate
   plusThrottle(amount){
+  //  console.log("plus")
     this.throttle = Math.min(this.throttle + amount, AccelerationLimit);
   }
 
   // decelerate
   minusThrottle(amount){
+    //console.log("minus")
     this.throttle = Math.max(player.throttle - amount, 0);
   }
+
+
 
   // rotate
   rotate(amount){

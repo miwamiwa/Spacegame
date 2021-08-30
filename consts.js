@@ -20,9 +20,9 @@ const TreeCanvasH = 100;
 const ItemPickupRange = 34; //in SimpleObject (object.js)
 const PlayerAcceleration = 0.05;
 const PlayerDeceleration = 0.2; // rate at which player.throttle recedes to 0.
-const PlayerRotateRate = 0.1;
+const PlayerRotateRate = 0.14;
 const AccelerationLimit = 3;
-const SpeedLimit = 80;
+const SpeedLimit = 60;
 const PlayerWalkVelocity = 4;
 
 const PlayerStartX = 50;
@@ -37,7 +37,6 @@ const HopDistance = 60;  // dist travelled when hopping off ship
 const CrashAnimLength = 120;
 const CrashThreshold = 18; // see planet.js
 const VesselMass = 0.8;
-
 
 // UI
 const TopText = {x: 4, y: 10};

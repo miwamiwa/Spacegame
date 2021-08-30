@@ -115,7 +115,8 @@ let runGame=()=>{
   updateAll(planets);
 
   HandlePlayerInputs();
-
+  updateAutopilot();
+  
   player.update();
   resetPlayerOnCrash();
 

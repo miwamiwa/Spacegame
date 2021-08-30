@@ -107,7 +107,7 @@ class Planet {
   // get a random surface position that isn't
   // right on top of another object (hopefully lol)
 
-  findAvailableSpot(){
+  findAvailableSpot(d){
     let pos;
     let found = false;
 
@@ -116,9 +116,16 @@ class Planet {
       pos = this.rSurf(0.5);
       let clear = true;
 
-      for(let j=0; j<this.features.length; j++)
-        if(this.features[j]!=Dude&&dist(pos,this.features[j])<MinDistanceBetweenFeatures)
+      for(let j=0; j<this.features.length; j++){
+        let distance = dist(pos,this.features[j]);
+
+        if(this.features[j].id=="tree"){
+          if(distance<50) clear=false;
+        }
+        else if (this.features[j]!=Dude&&distance<d)
           clear  = false;
+      }
+
 
       found = clear;
     }
@@ -140,7 +147,7 @@ class Planet {
 
       // pick a random tree and position
       let pick = RandomFromArray(this.treeFamily);
-      let pos = this.findAvailableSpot();
+      let pos = this.findAvailableSpot(MinDistanceBetweenFeatures);
 
       // create tree object
       let tree = new StaticObject(pos.x,pos.y -90,{img:pick},200);

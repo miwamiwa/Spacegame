@@ -6,13 +6,15 @@ let investigationTriggered = false;
 let InvestigationText = [];
 let HomePlanet;
 let ToddsPlanet;
+let FinalPlanet;
+let ToddsVessel;
 let ToddsCouch;
 let MysteryPlanet;
 let HelpOff = false; // display flight instructions
 let mainCanvas;
 let mCtx;
 let middle = {};
-let canBoard = false;
+
 let rightPlanetsEnabled = false;
 let crackersFound =0;
 let HomeObject;
@@ -66,11 +68,11 @@ let setupPlanets=()=>{
   planets.push(HomePlanet);
 
   // place home
-  let pos = HomePlanet.findAvailableSpot();
+  let pos = HomePlanet.findAvailableSpot(MinDistanceBetweenFeatures);
   HomeObject = new StaticObject(pos.x,pos.y,home_png, 100, HomePlanetText, talkedToMom);
   HomePlanet.features.push(HomeObject);
 
-  pos = HomePlanet.findAvailableSpot();
+  pos = HomePlanet.findAvailableSpot(100);
   HomeCouch =new StaticObject(pos.x,pos.y,couch_png, 100, HomeCouchText, triggerStoryStart);
   HomePlanet.features.push(HomeCouch);
 
@@ -95,10 +97,7 @@ let talkedToMom=()=>{
   talkedToMomOnce = true;
 }
 
-let talkedToMomOnce = false;
-let muffinType;
-let talkedToMysteryDudeOnce = false;
-let mysteryDudeGone = false;
+
 
 let mysteryHomeText=()=>{
 
@@ -242,7 +241,7 @@ let playerFoundCracker=()=>{
   }
 
   // keep a score for funsies
-  crackersFound++;
+  AddToInventory("cracker");
 }
 
 // triggered in player.js:HandlePlayerInputs()
@@ -297,4 +296,19 @@ let continueInvestigation=()=>{
 
 let triggerFinalPart=()=>{
   mysteryDudeGone = true;
+  let pos = {
+    x:player.x + rand(5000,7000),
+    y:player.y + rand(8000,9000)
+  }
+  FinalPlanet = new Planet(pos.x,pos.y, true);
+  FinalPlanet.addCheese();
+
+  ToddsVessel = new StaticObject(80,-80,vessel_png,80,ToddsVesselText1,jamWithTodd);
+  FinalPlanet.features.push(ToddsVessel);
+  planets.push(FinalPlanet);
+}
+
+
+let jamWithTodd=()=>{
+  ToddsVessel.text=ToddsVesselText2;
 }

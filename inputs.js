@@ -5,7 +5,8 @@ let inputs = {
   d:false,
   b:false, // 66
   space:false, //32
-  e:false
+  e:false,
+  l:false
 }
 
 // keyUp()
@@ -21,6 +22,7 @@ let keyUp=(e)=>{
     case 66: inputs.b = false; break; // b
     case 32: inputs.space = false; break;
     case 69: inputs.e = false; break;
+    case 76: inputs.l = false; break;
   }
 }
 
@@ -36,6 +38,11 @@ let keyDown=(e)=>{
     case 68: inputs.d = true; break; //d
     case 69: inputs.e = true; break;
     case 66: inputs.b = true; break; // b
+
+    // l pressed
+    case 76: inputs.l = true;
+    LandPlayer();
+    break;
 
     // THE SPACE BUTTON
     case 32: inputs.space =true;
@@ -82,6 +89,7 @@ let SpacePressInGameState =()=>{
     // update dude
     Dude.x =0;
     Dude.y =0;
+    player.throttle=0;
     Dude.visible = false;
     player.dude = Dude;
     player.nearestPlanet.removeDude();
