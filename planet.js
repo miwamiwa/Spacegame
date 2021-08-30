@@ -244,11 +244,11 @@ class Planet {
     if(d==undefined) d = dist(this,input);
 
     // nextd is the distance to center from where the object is headed
-    let nextd = dist(this,{x:input.x + input.lastvx, y:input.y + input.lastvy});
+    let nextd = dist(this,{x:input.x + input.vx, y:input.y + input.vy});
 
     // if this is true, we are touching the surface
     if(nextd<this.radius){
-      let vel = dist({x:0,y:0},{x:input.lastvx,y:input.lastvy});
+      let vel = dist(zero,{x:input.vx,y:input.vy});
 
       // crash if going too fast
       if(vel>CrashThreshold / input.mass && !input.crashed)

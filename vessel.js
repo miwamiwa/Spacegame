@@ -18,8 +18,6 @@ class Vessel extends AnimObject {
 
     this.vx =0;
     this.vy =0;
-    this.lastvx =0;
-    this.lastvy =0;
 
   }
 
@@ -44,7 +42,7 @@ class Vessel extends AnimObject {
         let ax = this.throttle * Math.sin(this.bearing);
         let ay = this.throttle * Math.cos(this.bearing);
         // check if new speed is below the speed limit
-        if(!( dist({x:0,y:0},{x:this.vx+ax,y:this.vy+ay})
+        if(!( dist(zero,{x:this.vx+ax,y:this.vy+ay})
           >SpeedLimit)){
             this.vx += ax;
             this.vy += ay;
@@ -57,10 +55,6 @@ class Vessel extends AnimObject {
       // apply velocity
       this.x += this.vx;
       this.y -= this.vy;
-
-      // save this to check for crashes in planet.js:getGravityFor()
-      this.lastvx = this.vx;
-      this.lastvy = this.vy;
 
       // display object, and its children
       this.display(this.children);
@@ -77,12 +71,10 @@ class Vessel extends AnimObject {
     if(this.nearestPlanet!=undefined){
 
       let p = this.nearestPlanet;
-      let d = dist(this,p);
-
+      let d =dist(this,p);
       // if we're beyond range of gravity (which == mass lol)
       // then nearest planet is undefined.
-      if(d >= p.mass)
-        this.nearestPlanet =undefined;
+      if(d >= p.mass) p=undefined;
 
       else {
         // if in gravity range:
@@ -90,7 +82,7 @@ class Vessel extends AnimObject {
         // get gravity factor
         let g = p.getGravityFor(this,d);
 
-        // if landed, set velocity
+        // if landed, stop vehicle
         if(this.landed){
           this.vx =0;
           this.vy =0;
@@ -111,7 +103,7 @@ class Vessel extends AnimObject {
   crash(){
     this.crashed = true;
     crashtext = RandomFromArray(FailTextList);
-    this.crashFrame = this.counter;
+    this.crashFrame = this.counter; // time at which crash animation started
     this.setFrames(CrashAnimation);
   }
 
@@ -131,7 +123,7 @@ class Vessel extends AnimObject {
         if(d < p.mass)
           this.nearestPlanet = p;
         // calculate distance to planet
-        p.d2p = abs(flo(d));
+        p.d2p = flo(d);
 
         // update radar.
         if(this.radar){
@@ -152,18 +144,27 @@ class Vessel extends AnimObject {
 
   displayRadar(){
     if(this.radar && this.boarded){
-      let radarArrowDist = 150;
-
 
       this.onradar.forEach(p=>{
+        // don't update if too close to planet
+        if(p.d2p >= p.radius + RaDist){
 
-        if(p.d2p >= p.radius + 200){
-          //console.log("radar")
+          // direction from obj to obj in vector form
           let dir = directionFromObjectToObject(this,p);
+          let visit = ""; // did we visit this place?
+          let col; // text color (white by default)
+
+          // setup text
+          if(p.visited){
+            visit = " (visited)";
+            col= "green";
+          }
+
+          // position
           mCtx.save();
           mCtx.translate(
-            middle.x+radarArrowDist * -dir.x,
-            middle.y+radarArrowDist * dir.y
+            middle.x+RaDist * -dir.x,
+            middle.y+RaDist * dir.y
           );
 
           // draw line
@@ -174,16 +175,7 @@ class Vessel extends AnimObject {
           mCtx.stroke();
 
           // draw text
-          let visit = "";
-          if(p.visited){
-            visit = " (visited)";
-            mCtx.fillStyle = "green";
-          }
-          else mCtx.fillStyle = "white";
-          mCtx.fillText("planet: "+p.name+visit+". distance: "+p.d2p,-35,0);
-          mCtx.fillStyle="tomato"
-          if(!HelpOff&&p.d2p<5000) mCtx.fillText("press L to slow down before landing", -35,15)
-
+          SplitText("planet: "+p.name+visit+"\ndistance: "+p.d2p,-35,0,col);
           mCtx.restore();
         }
       });
@@ -214,10 +206,7 @@ class Vessel extends AnimObject {
     this.crashed = false;
     this.x = x;
     this.y = y;
-    this.vx =0;
-    this.vy =0;
-    this.throttle =0;
     this.bearing =0;
-    this.fcount =0;
+    // this.fcount =0; // don't think anything breaks if i remove this
   }
 }

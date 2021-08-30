@@ -208,7 +208,7 @@ let moveIt =(deltaX,deltaY)=>{
   if(CheckCollisionsOnPlanet(p)) return;
 
   // if collisions with planet edges also checks out
-  if(dist(p, {x:0,y:0}) < player.nearestPlanet.radius){
+  if(dist(p, zero) < player.nearestPlanet.radius){
     // then move player
     if(deltaX!=0) Dude.x += deltaX;
     else Dude.y += deltaY;
@@ -311,11 +311,11 @@ let showTopText=()=>{
   // if we're aboard the space chips
   else if(player.boarded)
   drawText(`You're aboard the greenmobile:
-    vX : ${flo(player.lastvx)}
-    vY : ${flo(player.lastvy)}
+    vX : ${flo(player.vx)}
+    vY : ${flo(player.vy)}
     throttle: ${flo(10*player.throttle)/10}
-    bearing: ${flo(radians_to_degrees(player.bearing))}
-    actual_direction: ${angleFromDirection(-player.vx,-player.vy)}`, TopText.x, TopText.y);
+    bearing: ${flo(radians_to_degrees(player.bearing))}`, TopText.x, TopText.y);
+    //actual_direction: ${angleFromDirection(-player.vx,-player.vy)}
 
   // if we're on a planet
   else
@@ -373,10 +373,10 @@ let showTextArray=(txtarr,x,y)=>{
   SplitText(txtarr[textCounter],TextBox.x+5,TextBox.y+12);
 }
 
-let SplitText=(text,x,y)=>{
+let SplitText=(text,x,y,c)=>{
   let i=0;
   text.split("\n").forEach(line=>{
-    drawText(line, x, y + i);
+    drawText(line, x, y + i,c);
     i+= 10;
   });
 }
@@ -442,7 +442,7 @@ let updateAutopilot=()=>{
     }
     else if(autopilotPhase=="slow"){
         player.plusThrottle(PlayerAcceleration);
-        let currentSpeed = dist({x:0,y:0},{x:player.vx,y:player.vy});
+        let currentSpeed = dist(zero,{x:player.vx,y:player.vy});
         // account for deceleration time
         let decel=0;
         stopspeed =PlayerDeceleration;

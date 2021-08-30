@@ -1,18 +1,18 @@
-
-
+// game objects
 let player;
-let gameloop;
 let camera;
 let planets = [];
 let gamestate = "startscreen";
-let intro = -1;
+
+// counter
+let intro = 0; // intro text counter
 
 
 // start gameon page load
 window.onload = ()=>{
   loadImages();
   setupCanvas();
-  gameloop = setInterval(run,40);
+  setInterval(run,40);
 }
 
 
@@ -26,7 +26,7 @@ let run=()=>{
 
   // run start screen
   if(gamestate=="startscreen")
-    runStartScreen();
+    runStartScreen(200,middle.y);
 
   // run game
   else if(gamestate=="game")
@@ -34,7 +34,7 @@ let run=()=>{
 
   // run "focused mode"
   else if(gamestate=="focused")
-    focusedMode();
+    focusedMode(200,middle.y);
 
   mCtx.restore();
 }
@@ -52,16 +52,14 @@ let bg=()=>{
 //
 // draw only an empty background, some text and the player.
 
-let focusedMode=()=>{
+let focusedMode=(x,y)=>{
 
-  player.update();
   camera.update();
+  player.update();
 
-  let x = middle.x-90;
-  let y = middle.y+50;
-  drawText(IntroText[intro],x,y,white);
-  y += 12;
-  drawText("press space to continue",x,y,grey);
+
+  drawText(IntroText[intro],x,y);
+  drawText("press space to continue",x,y+14,grey);
 
 }
 
@@ -69,16 +67,10 @@ let focusedMode=()=>{
 // runStartScreen()
 //
 //
-let runStartScreen=()=>{
+let runStartScreen=(x,y)=>{
 
-
-  let x = 200;
-  let y = middle.y;
-  drawText("space game",x, y,white)
-  y+=12;
-  drawText("press space to start",x,y,grey)
-  y+=12;
-  drawText("press c for controls",x,y,grey);
+  drawText("space game",x,y);
+  drawText("press space to start",x,y+14,grey);
 
   if(inputs.space) startGame();
 }
@@ -90,12 +82,10 @@ let runStartScreen=()=>{
 //
 let startGame=()=>{
   gamestate = "focused"
-  //startSound();
-  intro =0;
+  startSound();
   setupPlayer();
   setupStars();
   camera = new Camera(player);
-  camera.targetIsDude();
   setupPlanets();
   player.nearestPlanet = HomePlanet;
   playerLanded()
@@ -116,7 +106,7 @@ let runGame=()=>{
 
   HandlePlayerInputs();
   updateAutopilot();
-  
+
   player.update();
   resetPlayerOnCrash();
 

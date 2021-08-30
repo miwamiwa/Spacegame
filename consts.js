@@ -30,13 +30,18 @@ const PlayerStartY = 50;
 const PlayerSize = 100;
 const DudeSize = 50;
 
-const RadarMin = 200;
-const RadarMax = 20000;
 const HopDistance = 60;  // dist travelled when hopping off ship
 
 const CrashAnimLength = 120;
 const CrashThreshold = 18; // see planet.js
 const VesselMass = 0.8;
+
+
+// RADAR
+const RaDist = 180;
+const RadarMin = 200;
+const RadarMax = 20000;
+
 
 // UI
 const TopText = {x: 4, y: 10};

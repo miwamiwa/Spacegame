@@ -128,6 +128,8 @@ let directionFromObjectToObject=(o1, o2)=>{
   return {x:  dx/t, y:- dy/t};
 }
 
+let zero={x:0,y:0};
+
 // abs()
 //
 // returns abs value

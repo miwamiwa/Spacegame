@@ -4,7 +4,6 @@ class AnimObject extends BasicObject {
     super(x,y,size);
     this.bearing =0;
     // animation
-    this.fcount =0;
     this.animRate = 5;
     this.setFrames(frames);
     // states
@@ -14,6 +13,7 @@ class AnimObject extends BasicObject {
 
   // setup animation frames
   setFrames(anim){
+    this.fcount=0;
     this.frames = anim;
     this.img = anim[0];
   }
@@ -21,10 +21,11 @@ class AnimObject extends BasicObject {
   // display current sprite & any children
   display(children){
 
-    // get on screen position
-    let pos = camera.position(this);
 
-    // if on planet (this is for Dude)
+
+    // if on planet (this is for Dude),
+    // then skip the cam positioning stuff
+    // since we are a child of the planet object
     if(this.planetMode!=undefined){
       // update "z-index"
       if(this.nearestPlanet!=undefined)
@@ -37,8 +38,12 @@ class AnimObject extends BasicObject {
       return;
     }
 
+
     // if not on a planet,
-    // check if on screen first
+    // get position relative to camera
+    let pos = camera.position(this,this.half);
+
+    // if on screen
     if(camera.isOnScreen(pos,this.half)){
         // draw & update sprite and any children
       this.drawMe(pos.x,pos.y,children);
