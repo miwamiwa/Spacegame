@@ -181,6 +181,8 @@ class Vessel extends AnimObject {
           }
           else mCtx.fillStyle = "white";
           mCtx.fillText("planet: "+p.name+visit+". distance: "+p.d2p,-35,0);
+          mCtx.fillStyle="tomato"
+          if(!HelpOff&&p.d2p<5000) mCtx.fillText("press L to slow down before landing", -35,15)
 
           mCtx.restore();
         }

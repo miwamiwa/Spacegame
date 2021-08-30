@@ -4,7 +4,7 @@ class Planet {
 
     // mass and radius
     if(rad==undefined){
-      rad=rand(150,320);
+      rad=rand(250,380);
       mas=rand(PlanetMassMin,PlanetMassMax)
     }
     this.radius = rad;

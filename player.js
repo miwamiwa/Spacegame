@@ -234,13 +234,13 @@ let CheckCollisionsOnPlanet=(p)=>{
   player.nearestPlanet.features.forEach(f=>{
     // if collider enabled
     if(f.collider){
-      let d = dist(p,{x:f.x,y:f.y});
+      let d = dist(p,f);
       // if feature is in talk range,
       // configure text interaction
       if(d<f.talkrange)
         availableText = f;
       // if collided with collider
-      if(d<f.collidersize)
+      if(d<=f.collidersize)
          r= true;
     }
   });

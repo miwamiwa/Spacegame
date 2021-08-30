@@ -104,11 +104,12 @@ let mysteryHomeText=()=>{
   // check if we have muffins
   let muffin = undefined;
   for(let i in inventory)
-    if(inventory[i].includes("muffin")) muffin = i;
+    if(i.indexOf("muffin")!=-1) muffin = i;
 
   if(!talkedToMysteryDudeOnce){
+    console.log("talked to mystery dude")
     RandomHome.text=RandomHomeText1;
-    RandomHome.firstReadAction=()=>{talkedToMysteryDudeOnce=true;}
+    RandomHome.firstReadAction=talkToMDude;
   }
   else if(!mysteryDudeGone){
     if(muffin==undefined){
@@ -118,13 +119,17 @@ let mysteryHomeText=()=>{
     else {
       RandomHome.text=["Oh, that muffin. Can I have it?","Wow thanks!\nMunch... munch...",
       "That was an amazing muffin.","Do you know who made this?","Some stranger who lives light years\naway from here?","I see..","Well I should leave now if I want to\nmeet them before I get hungry again.","Thanks. Bye."]
-      RandomHome.firstReadAction=()=> triggerFinalPart();
+      RandomHome.firstReadAction=triggerFinalPart;
     }
   }
   else {
     RandomHome.text=undefined;
   }
 }
+
+let talkToMDude=()=>
+  talkedToMysteryDudeOnce=true;
+
 
 
 let homeObjectText=()=>{
@@ -260,6 +265,7 @@ let triggerCrackerInvestigation=()=>{
     //console.log("investigation started")
     investigationTriggered = true;
     textCounter =0;
+    LandPlayer();
   }
 }
 
@@ -310,5 +316,5 @@ let triggerFinalPart=()=>{
 
 
 let jamWithTodd=()=>{
-  ToddsVessel.text=ToddsVesselText2;
+  console.log("win")
 }

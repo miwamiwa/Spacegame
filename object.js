@@ -45,8 +45,7 @@ class StaticObject extends BasicObject {
       if(p==undefined) return;
 
       // if in range
-      if(dist({x:this.x+p.x,y:this.y+p.y},
-        {x:player.x+player.dude.x,y:player.y+player.dude.y})<ItemPickupRange){
+      if(dist(this,Dude)<ItemPickupRange){
         // pick up item
         this.active = false;
         if(this.id=="cheese")
