@@ -128,7 +128,7 @@ class Vessel extends AnimObject {
         // update radar.
         if(this.radar){
           // add to radar list if in range
-          if(d>p.radius + RadarMin&&d<p.radius + RadarMax)
+          if(d>p.r + RadarMin&&d<p.r + RadarMax)
             this.onradar.push(p);
           // add to radar by default if already visited.
           else if(p.visited)
@@ -147,7 +147,7 @@ class Vessel extends AnimObject {
 
       this.onradar.forEach(p=>{
         // don't update if too close to planet
-        if(p.d2p >= p.radius + RaDist){
+        if(p.d2p >= p.r + RaDist){
 
           // direction from obj to obj in vector form
           let dir = directionFromObjectToObject(this,p);

@@ -28,16 +28,20 @@ let gradient=(x1,y1,r1,x2,y2,r2,c2,c1)=>{
   return g;
 }
 
+let sq=(i)=>Math.pow(i,2)
+
 // drawCircle()
 //
 // draw a circle on the canvas
 let drawCircle=(x,y,r,fill)=>{
   mCtx.fillStyle = fill;
   mCtx.beginPath();
-  mCtx.ellipse(x,y,r,r, 0,0, TWO_PI);
+  circ(x,y,r);
   mCtx.fill();
 }
 
+let circ =(x,y,r)=>
+  mCtx.ellipse(x,y,r,r, 0,0, TWO_PI);
 
 // rgba()
 //
@@ -84,6 +88,10 @@ let displayShadow=(obj)=>{
 }
 
 
+let angleFromDirection=(dx,dy)=>
+  Math.acos( dy/ Math.sqrt(sq(dx)+sq(dy)) )
+
+
 // rand()
 //
 // get a random value
@@ -102,7 +110,7 @@ let rand =(min,max)=>{
 //
 // get absolute distance between 2 objects
 let dist =(obj1,obj2)=>
-Math.sqrt( Math.pow(obj1.x-obj2.x,2) + Math.pow(obj1.y-obj2.y,2));
+Math.sqrt( sq(obj1.x-obj2.x) + sq(obj1.y-obj2.y));
 
 
 // flo()

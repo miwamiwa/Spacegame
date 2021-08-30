@@ -7,7 +7,7 @@ class Planet {
       rad=rand(250,380);
       mas=rand(PlanetMassMin,PlanetMassMax)
     }
-    this.radius = rad;
+    this.r = rad;
     this.mass = mas;
 
     // position
@@ -23,6 +23,7 @@ class Planet {
 
     // random hue
     this.hue =flo(rand(360));
+    this.grd =gradient(0,0, this.r, 0,0, this.r-90,"#0004","#0000");
 
     // random planet name
     if(name==undefined) name = RandomPlanetName();
@@ -98,7 +99,7 @@ class Planet {
   // return a random position on this planet
 
   rPos(){
-    return rand(-this.radius,this.radius);
+    return rand(-this.r,this.r);
   }
 
 
@@ -210,21 +211,16 @@ class Planet {
 
       // set mask around contour
       mCtx.beginPath();
-      mCtx.arc(0,0, this.radius, 0, TWO_PI, true);
+      circ(0,0,this.r);
       mCtx.clip();
 
       // draw planet
-      drawCircle(0,0,this.radius,this.groundColor);
+      drawCircle(0,0,this.r,this.groundColor);
       // draw circular shadow overtop
-      drawCircle(0,0,this.radius,
-        gradient(-20,0, this.radius, pos.x-20,pos.y, this.radius-100,"#0006","#0000"));
+      drawCircle(0,0,this.r,this.grd);
 
       // draw "spots"
-      this.spots.forEach(spot=>{
-        mCtx.save();
-        drawCircle(spot.x,spot.y,spot.r,spot.g);
-        mCtx.restore();
-      });
+      this.spots.forEach(spot=>drawCircle(spot.x,spot.y,spot.r,spot.g));
 
       // draw all the features' shadows
       this.features.forEach(f=>displayShadow(f));
@@ -240,14 +236,9 @@ class Planet {
 
   getGravityFor(input,d){
     // d is the distance from the input object to the center of this planet
-    // calculate if not provided
-    if(d==undefined) d = dist(this,input);
-
-    // nextd is the distance to center from where the object is headed
-    let nextd = dist(this,{x:input.x + input.vx, y:input.y + input.vy});
 
     // if this is true, we are touching the surface
-    if(nextd<this.radius){
+    if(d<this.r){
       let vel = dist(zero,{x:input.vx,y:input.vy});
 
       // crash if going too fast
@@ -259,13 +250,14 @@ class Planet {
 
       input.landed = true;
     }
-    else input.landed = false;
+    else{
+      input.landed = false;
+      return GravityConstant * (this.mass * input.mass) / sq(d); // gmm/r^2
+    }
 
-    // if input is in the air return gravity
-    if(!input.landed && d>this.radius)
-      return GravityConstant * (this.mass * input.mass) / Math.pow(d,2); // gmm/r^2
+
       // otherwise gravity is 0
-    else return 0;
+    return 0;
   }
 
   // removeDude()

@@ -208,7 +208,7 @@ let moveIt =(deltaX,deltaY)=>{
   if(CheckCollisionsOnPlanet(p)) return;
 
   // if collisions with planet edges also checks out
-  if(dist(p, zero) < player.nearestPlanet.radius){
+  if(dist(p, zero) < player.nearestPlanet.r){
     // then move player
     if(deltaX!=0) Dude.x += deltaX;
     else Dude.y += deltaY;
@@ -414,14 +414,13 @@ let autopilotPhase;
 let LandPlayer =()=>{
   if(!autopilotActive){
     player.targetbearing=undefined;
-    console.log("autopilot active")
+    //console.log("autopilot active")
     autopilotPhase="start";
     autopilotActive = true;
   }
 }
 
-let angleFromDirection=(dx,dy)=>
-  Math.acos( (0*dx+1*dy)/ (Math.sqrt(Math.pow(0,2)+Math.pow(1,2))*Math.sqrt(Math.pow(dx,2)+Math.pow(dy,2))) )
+
 
 let updateAutopilot=()=>{
 
