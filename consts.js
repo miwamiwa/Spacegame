@@ -68,15 +68,17 @@ const PlanetNames = [ ////https://www.fantasynamegenerators.com/planet_names.php
 "Garvis 5",
 "Lloria ER2"
 ];
+
 const BerryNames=[
   "red","blue","orange","yellow","black"
-]
+];
 
 
 // WORLD
 const Planet1Distance = 1;
 const HomePlanetRadius = 250;
 const DistanceToTodd = 12000;
+const FarRange = 50000;
 
 
 // STARS
@@ -85,8 +87,12 @@ const NumStars = 16;
 // UTILITIES
 const PI = Math.PI;
 const TWO_PI = 2*Math.PI;
+
+// COLORS
 const grey = "#eee8";
 const white = "#fffc";
+const bgFill = "#2a1f42";
+const black = "black";
 
 // TEXT
 const IntroText = ["Welcome","To space game","woop woop"];

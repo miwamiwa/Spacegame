@@ -3,13 +3,13 @@ let player;
 let camera;
 let planets = [];
 let gamestate = "startscreen";
-
+let genplanets = [];
 // counter
 let intro = 0; // intro text counter
 
 
 // start gameon page load
-window.onload = ()=>{
+window.onload =()=>{
   loadImages();
   setupCanvas();
   setInterval(run,40);
@@ -26,15 +26,15 @@ let run=()=>{
 
   // run start screen
   if(gamestate=="startscreen")
-    runStartScreen(200,middle.y);
+  runStartScreen(200,middle.y);
 
   // run game
   else if(gamestate=="game")
-    runGame();
+  runGame();
 
   // run "focused mode"
   else if(gamestate=="focused")
-    focusedMode(200,middle.y);
+  focusedMode(200,middle.y);
 
   mCtx.restore();
 }
@@ -44,7 +44,7 @@ let run=()=>{
 // draw background
 
 let bg=()=>{
-  mCtx.fillStyle = "#2a1f42";
+  fill(bgFill);
   mCtx.fillRect(0,0,mainCanvas.width,mainCanvas.height);
 }
 
@@ -57,10 +57,8 @@ let focusedMode=(x,y)=>{
   camera.update();
   player.update();
 
-
   drawText(IntroText[intro],x,y);
   drawText("press space to continue",x,y+14,grey);
-
 }
 
 
@@ -98,6 +96,7 @@ let startGame=()=>{
 //
 let runGame=()=>{
 
+  playerCurrentSpeed = dist(zero,{x:player.vx,y:player.vy});
   trackQuests();
   updateStars();
 
@@ -114,4 +113,14 @@ let runGame=()=>{
   updatePlayerUi();
 
   SplitText(inventoryString, 5, 200);
+
+  let x = Math.round(player.x/FarRange);
+  let y = Math.round(player.y/FarRange);
+  let index = x+","+y;
+  if(index!="0,0"&&index!="1,0"&&!genplanets.includes(index)){
+    planets.push(new Planet(x*FarRange+rand(-5000,5000),y*FarRange+rand(-5000,5000),true));
+    genplanets.push(index);
+  }
+
+
 }

@@ -142,7 +142,7 @@ class Planet {
     // generate a unique tree family for this planet
     // see nature.js
     this.treeFamily = createNewTreeType();
-    let treeCount = flo(rand(6,12));
+    let treeCount = flo(rand(0,16));
     let berry = RandomFromArray(BerryNames);
     for(let i=0; i<treeCount; i++){
 
@@ -242,7 +242,7 @@ class Planet {
       let vel = dist(zero,{x:input.vx,y:input.vy});
 
       // crash if going too fast
-      if(vel>CrashThreshold / input.mass && !input.crashed)
+      if(vel>input.crashThreshold && !input.crashed)
         input.crash();
 
       if(!input.crashed)

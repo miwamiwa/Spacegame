@@ -8,6 +8,7 @@ class Vessel extends AnimObject {
     this.vel = 1;
     this.throttle =0;
     this.mass = VesselMass;
+    this.crashThreshold = CrashThreshold / this.mass;
 
     this.nearestPlanet =undefined;
     this.flame = new AnimObject(0,55,50,FlameAnimation);

@@ -13,6 +13,7 @@ let crashtext; // text displayed on crash
 let inventory = [];
 let inventoryString = "";
 let stopSpeed =0;
+let playerCurrentSpeed =0;
 
 // setupPlayer()
 //
@@ -309,17 +310,34 @@ let showTopText=()=>{
     drawText(crashtext,TopText.x,TopText.y);
 
   // if we're aboard the space chips
-  else if(player.boarded)
-  drawText(`You're aboard the greenmobile:
-    vX : ${flo(player.vx)}
-    vY : ${flo(player.vy)}
-    throttle: ${flo(10*player.throttle)/10}
-    bearing: ${flo(radians_to_degrees(player.bearing))}`, TopText.x, TopText.y);
-    //actual_direction: ${angleFromDirection(-player.vx,-player.vy)}
+  else if(player.boarded){
+    drawText(`You're aboard the greenmobile.
+      vX : ${flo(player.vx)}
+      vY : ${flo(player.vy)}
+      speed : ${flo(playerCurrentSpeed)}
+      bearing: ${flo(radians_to_degrees(player.bearing))}°
+      throttle: ${flo(10*player.throttle)/10}`,TopText.x,TopText.y);
 
+        //console.log(player.crashThreshold,playerCurrentSpeed)
+        if(playerCurrentSpeed>player.crashThreshold)
+          drawText("Speed is unsafe for landing", TopText.x,TopText.y+15, "red");
+        else drawText("Speed is safe for landing", TopText.x,TopText.y+15,"green");
+
+  }
+  /*
+  drawText(`:
+    }
+
+
+
+    //actual_direction: ${angleFromDirection(-player.vx,-player.vy)}
+    */
   // if we're on a planet
   else
     drawText(`Planet ${player.nearestPlanet.name}.`,TopText.x,TopText.y);
+
+
+
 }
 
 // showInteractionText()
@@ -366,7 +384,7 @@ let showQuestText=()=>{
 // and display text box
 
 let showTextArray=(txtarr,x,y)=>{
-  mCtx.fillStyle = "black";
+  fill(black);
   mCtx.fillRect(TextBox.x,TextBox.y, 300, 40);
 
   if(txtarr!=undefined)
@@ -386,12 +404,12 @@ let SplitText=(text,x,y,c)=>{
 // display text on canvas
 
 let drawText=(txt,x,y,color)=>{
-  if(color==undefined) color = "white";
-  if(x==undefined){
+  if(!color) color = "white";
+  if(!x){
     x=middle.x;
     y=middle.y;
   }
-  mCtx.fillStyle=color;
+  fill(color);
   mCtx.fillText(txt,x,y)
 }
 
@@ -441,7 +459,7 @@ let updateAutopilot=()=>{
     }
     else if(autopilotPhase=="slow"){
         player.plusThrottle(PlayerAcceleration);
-        let currentSpeed = dist(zero,{x:player.vx,y:player.vy});
+
         // account for deceleration time
         let decel=0;
         stopspeed =PlayerDeceleration;
@@ -450,8 +468,8 @@ let updateAutopilot=()=>{
           stopSpeed+=decel;
         }
 
-        if(currentSpeed<10){
-          if(currentSpeed<Math.max(stopSpeed,2))
+        if(playerCurrentSpeed<10){
+          if(playerCurrentSpeed<Math.max(stopSpeed,2))
             autopilotPhase="slow2"
         }
     }

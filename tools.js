@@ -16,14 +16,15 @@ let HexToRgba =(hexinput)=>{
   ];
 }
 
+let fill =(f)=> mCtx.fillStyle=f;
+
 // gradient()
 //
 // create a canvas ctx gradient
 let gradient=(x1,y1,r1,x2,y2,r2,c2,c1)=>{
-  let g = mCtx.createRadialGradient(x1,y1,r1,x2,y2,r2);
-  if(c1!=undefined)
-  g.addColorStop(0, c1);
 
+  let g = mCtx.createRadialGradient(x1,y1,r1,x2,y2,r2);
+  if(c1!=undefined) g.addColorStop(0, c1);
   g.addColorStop(1, c2);
   return g;
 }
@@ -33,8 +34,8 @@ let sq=(i)=>Math.pow(i,2)
 // drawCircle()
 //
 // draw a circle on the canvas
-let drawCircle=(x,y,r,fill)=>{
-  mCtx.fillStyle = fill;
+let drawCircle=(x,y,r,f)=>{
+  fill(f);
   mCtx.beginPath();
   circ(x,y,r);
   mCtx.fill();
@@ -73,6 +74,7 @@ let image =(img,x,y,h,s)=> mCtx.drawImage(img.img, x-h,y-h, s, s);
 // update all elements in a list
 let updateAll=(input)=>
 input.forEach(el=>el.update());
+
 
 
 let displayShadow=(obj)=>{
