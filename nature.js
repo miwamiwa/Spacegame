@@ -57,8 +57,7 @@ let createNewTreeType=()=>{
     canvas.width = TreeCanvasW;
     canvas.height = TreeCanvasH;
 
-    let ctx = canvas.getContext("2d");
-    ctx.imageSmoothingEnabled= false;
+    let ctx = getCtx(canvas);
     ctx.filter = `hue-rotate(${Hue}deg)`;
 
     // individual tree settings

@@ -48,9 +48,7 @@ class Planet {
 
 
   spot(obj,r){
-    let p = this.findAvailableSpot(r);
-    obj.x=p.x;
-    obj.y=p.y;
+    setV(obj,this.findAvailableSpot(r));
   }
 
   // sortFeatures()
@@ -123,13 +121,14 @@ class Planet {
   // get a random surface position that isn't
   // right on top of another object (hopefully lol)
 
-  findAvailableSpot(d){
+  findAvailableSpot(d,i){
     let pos;
     let found = false;
 
     // keep picking positions until one with no overlaps is found
     while(!found){
-      pos = this.rSurf(0.5);
+      if(!i)i=0.5;
+      pos = this.rSurf(i);
       let clear = true;
 
       for(let j=0; j<this.features.length; j++){

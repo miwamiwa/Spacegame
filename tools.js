@@ -29,7 +29,22 @@ let gradient=(x1,y1,r1,x2,y2,r2,c2,c1)=>{
   return g;
 }
 
-let sq=(i)=>Math.pow(i,2)
+let sq=(i)=>Math.pow(i,2);
+
+// vector operations
+
+let addV=(v,v2)=>{
+  return {x:v.x+v2.x,y:v.y+v2.y}
+}
+
+let subV=(v,v2)=>{
+  return {x:v.x-v2.x,y:v.y-v2.y}
+}
+
+let setV=(v,v2)=>{
+  v.x=v2.x;
+  v.y=v2.y;
+}
 
 // drawCircle()
 //
@@ -54,6 +69,11 @@ let rgba =(r,g,b,a) =>`rgba(${r},${g},${b},${a})`;
 // make a canvas
 let canv=()=> document.createElement("canvas");
 
+let getCtx=(c)=>{
+  let ctx = c.getContext("2d");
+  ctx.imageSmoothingEnabled= false;
+  return ctx;
+}
 
 // hue()
 //

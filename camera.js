@@ -6,26 +6,17 @@ class Camera {
 
   update(){
 
-    if(!this.targetisdude){
-      this.x = player.x;
-      this.y = player.y;
-      //console.log("target is player")
-    }
-    else {
-      this.x = player.nearestPlanet.x+Dude.x;
-      this.y = player.nearestPlanet.y+Dude.y-50;
-    }
-    //console.log(this.x,this.y)
-    this.middle.x = this.x - middle.x;
-    this.middle.y = this.y - middle.y;
+    // lock on target
+    if(!this.targetisdude) setV(this,player);
+    else setV(this,addV(player.nearestPlanet,Dude));
 
+    //set camera center
+    setV(this.middle,subV(this,middle));
   }
 
   // position object relative to camera target
   position(input){
-    return {x: input.x - this.middle.x ,
-    y: input.y - this.middle.y,
-  };
+    return subV(input,this.middle);
   }
 
   // check if input object is visible

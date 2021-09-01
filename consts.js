@@ -17,7 +17,7 @@ const TreeCanvasW = 100;
 const TreeCanvasH = 100;
 
 // PLAYER
-const PlayerAcceleration = 0.05;
+const PlayerAcceleration = 0.045;
 const PlayerDeceleration = 0.2; // rate at which player.throttle recedes to 0.
 const PlayerRotateRate = 0.14;
 const PlayerRotateRate2 = 0.24;
@@ -158,8 +158,7 @@ const scales = [
   Emaj7,FShDorian, Emaj7,FShDorian,
   ALydian,ALydian,ALydian,ALydian,
   ADorian,DMixo,GLydian,CLydian,
-  GLydian,
-  CLydian,Fmin7flat5, BMixo,
+  GLydian,CLydian,Fmin7flat5,BMixo,
   Edorian,Edorian,Fmin7flat5,BMixo,
   Edorian,Edorian,CLydian,CLydian,
   CLydian,CLydian,AMixo,AMixo,

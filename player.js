@@ -41,6 +41,8 @@ let resetPlayerOnCrash=()=>{
     if(player.counter-player.crashFrame>CrashAnimLength){
       // reset player
       player.resetPos(PlayerStartX,PlayerStartY);
+      // replace crash animation
+      player.setFrames(VesselAnimation);
       player.crashed = false;
       player.landed = false;
       board();
@@ -98,14 +100,18 @@ let vesselInputs=()=>{
 let playerLanded=()=>{
   // unboard
   player.boarded = false;
-
   // switch camera target to dude
   camera.targetIsDude();
-
   // move dude to planet
   Dude.visible = true;
   Dude.planetMode = true;
-  player.nearestPlanet.addFeature(Dude,100);
+  let p=player.nearestPlanet;
+  let pos;
+  p.addFeature(Dude,100);
+  while(dist(player,addV(p,Dude))>155){
+    pos=p.findAvailableSpot(100,(p.r-100)/p.r);
+    setV(Dude,pos);
+  }
 }
 
 
@@ -139,14 +145,14 @@ let planetInputs=()=>{
   // enable hopping ON vessel when in range
   // (actually happens in keyDown)
   let p = player.nearestPlanet;
-  if(dist(player,{x:Dude.x+p.x,y:Dude.y+p.y})<HopDistance)
+  if(dist(player,addV(Dude,p))<HopDistance)
   canEnter = true;
 
   // look through all features
-  player.nearestPlanet.features.forEach(f=>{
+  p.features.forEach(f=>{
     // if collider enabled
     if(f.talker){
-      let d = dist({x:Dude.x+Dude.half,y:Dude.y+Dude.half},{x:f.x,y:f.y+f.half});
+      let d = dist({x:Dude.x,y:Dude.y+Dude.half},{x:f.x,y:f.y+f.half});
       // if feature is in talk range,
       // configure text interaction
       if(d<f.talkrange)
@@ -417,7 +423,7 @@ let showQuestText=()=>{
     if(!autopilotActive){
       player.targetbearing=undefined;
       //console.log("autopilot active")
-      autopilotPhase="start";
+      autopilotPhase=0;
       autopilotActive = true;
     }
   }
@@ -427,37 +433,35 @@ let showQuestText=()=>{
   let updateAutopilot=()=>{
 
     if(autopilotActive){
-      if(autopilotPhase=="start"){
+      if(autopilotPhase==0){
 
-        if(player.throttle>0)
-        player.minusThrottle();
+        if(player.throttle>0) player.minusThrottle();
         else {
-          autopilotPhase="turn1";
+          autopilotPhase++;
           slowframes = Math.sqrt(playerCurrentSpeed)*5.8;
           player.targetbearing = angleFromDirection(vxy(player));
           if(player.vx>0) player.targetbearing *=-1;
         }
       }
-      else if(autopilotPhase=="turn1"){
+      else if(autopilotPhase==1){
         if (reachTargetRotation()){
-          autopilotPhase="slow";
+          autopilotPhase++;
           player.bearing=player.targetbearing;
         }
 
       }
-      else if(autopilotPhase=="slow"){
+      else if(autopilotPhase==2){
         player.plusThrottle();
         slowframes--;
 
-        if(slowframes<=0)
-          autopilotPhase="slow2";
+        if(slowframes<=0) autopilotPhase++;
       }
-      else if(autopilotPhase=="slow2"){
+      else if(autopilotPhase==3){
         if(player.throttle>0) player.minusThrottle();
-        else autopilotPhase="stop"
+        else autopilotPhase++;
       }
 
-      else if(autopilotPhase=="stop"){
+      else if(autopilotPhase==4){
         autopilotActive = false;
         player.vx/=2;
         player.vy/=2;

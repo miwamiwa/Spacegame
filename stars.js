@@ -31,10 +31,7 @@ let updateStars=()=>{
     }
 
     // draw sprite
-    s.drawMe(pos.x,pos.y);
-    s.updateAnimation();
-
-    // update our inner clock
-    s.counter++;
+    s.draw(pos);
+    
   });
 }

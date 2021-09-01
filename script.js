@@ -97,7 +97,7 @@ let startGame=()=>{
 let runGame=()=>{
 
   playerCurrentSpeed = dist(zero,vxy(player));
-  trackQuests();
+
   updateStars();
 
   player.displayRadar();
@@ -113,6 +113,10 @@ let runGame=()=>{
   updatePlayerUi();
 
   SplitText(inventoryString, 5, 200);
+
+  // quest tracking
+  if(player.boarded && rightPlanetsEnabled && planetsIFoundCrackersOn.length>1)
+    triggerCrackerInvestigation();
 
   // add random planets
   let x = Math.round(player.x/FarRange);

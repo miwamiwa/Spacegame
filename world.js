@@ -29,25 +29,12 @@ let setupCanvas=()=>{
   mainCanvas = canv();
   mainCanvas.width = 600;
   mainCanvas.height = 600;
-  mCtx = mainCanvas.getContext("2d");
-  mCtx.imageSmoothingEnabled= false;
+  mCtx = getCtx(mainCanvas);
 
   let b=document.body;
   b.appendChild(mainCanvas);
   b.onkeydown = keyDown;
   b.onkeyup = keyUp;
-}
-
-
-
-// trackQuests()
-//
-// called in main game loop, runGame()/
-// a place to look out for quest even triggers
-
-let trackQuests=()=>{
-  if(player.boarded && rightPlanetsEnabled && planetsIFoundCrackersOn.length>1)
-    triggerCrackerInvestigation();
 }
 
 
@@ -112,16 +99,20 @@ let talkToMDude=()=>
 
 
 let homeObjectText=()=>{
-  let make = undefined
+  let make;
+
+  // what's a type of muffin we can make?
   for(let b in inventory)
     if(inventory[b]>4) make = b;
 
+  // if we can make something, make it
   if(talkedToMomOnce&&make){
     muffinType=make;
     HomeObject.setTandA(["Oh! You brought berries!\nLet's make muffinnnnzzzz",
       ".....","all done!\nhere's a "+muffinType+" muffin"], makeMuffins);
     make = undefined
   }
+  // otherwise just talk to mom
   else HomeObject.text= HomePlanetText;
 }
 
@@ -168,14 +159,11 @@ let triggerGoToPlanetsOnRight=()=>{
 
     let p = ToddsPlanet;
     for(let i=0; i<3; i++){
-
       p = new Planet(p.x+roughly(9000), p.y+roughly(0), true);
       p.addCheese();
     }
 
     rightPlanetsEnabled = true;
-
-    // add improv line to BGM
     muteimprov = false;
   }
 }
@@ -188,12 +176,14 @@ let triggerGoToPlanetsOnRight=()=>{
 // set which text appears during the part with crackers on 3 planets
 let nextCrackerText=()=>{
   let l = planetsIFoundCrackersOn.length;
-  textCounter =0;
+  let t;
 
-  if(l==0) availableText2 = CrackerText;
-  else if(l==1) availableText2 = CrackerText2;
-  else if(l==2) availableText2 = CrackerText3;
-  else availableText2=undefined;
+  if(l==0) t = CrackerText;
+  else if(l==1) t = CrackerText2;
+  else if(l==2) t = CrackerText3;
+
+  availableText2=t;
+  textCounter =0;
 }
 
 // closeTextBox()
@@ -221,8 +211,9 @@ let playerFoundCracker=()=>{
 // triggered in player.js:HandlePlayerInputs()
 // when crackers have been found on 2 planets
 let triggerCrackerInvestigation=()=>{
-  if(!investigationTriggered&&player.nearestPlanet==undefined){
-
+  //console.log("trigg")
+  if(!investigationTriggered&&dist(player,player.nearestPlanet)>2000){
+    //console.log("trigger")
     continueInvestigation();
 
     InvestigationText = ["I don't get it","I found nothing but a bunch \nof cheese crackers"
@@ -230,10 +221,9 @@ let triggerCrackerInvestigation=()=>{
       "I need a clue! \nHEY CRACKER!","TAKE ME TO YOUR LEADER!","\"fine.\"","what?",`"head to the planet called ${MysteryPlanet.name}"`,
       "I'm not eating any more of these crackers!"];
     availableText2 = InvestigationText;
-
-    //console.log("investigation started")
     investigationTriggered = true;
     textCounter =0;
+    //player.reading=true;
     LandPlayer();
   }
 }
@@ -245,22 +235,9 @@ let continueInvestigation=()=>{
   MysteryPlanet = new Planet(player.x + roughly(1500), player.y-roughly(0), true);
   MysteryPlanet.addCheese();
 
-  // this should be a dude not a couch lol
+  // this is the object thru which we interact with the mystery guy
   RandomHome = new StaticObject(-90,40,home_png, 120, RandomHomeText1);
   MysteryPlanet.addFeature(RandomHome);
-  // wouldbe nice if the dude sends you on a stupid / mundane quest
-  // that makes him seem more annoying than anything else
-
-  // perhaps he's the dude who offended todd?
-  // could there be a (subtle?) link there?
-
-  // once the quest is done, the dude points you to 2-3 more planets
-  // theres wierd stuff on the planets
-
-  // todd appears on a moon just off the last planet
-  // conversation with todd
-
-  // the end, pan out?
 }
 
 

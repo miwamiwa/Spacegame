@@ -390,10 +390,6 @@ let playSound=(arr,vol,filterT,filterF,filterG)=>{
 
 }
 
-let soundCheck=()=>{
-  playSnare()
-}
-
 
 
 // **** SOUNDS ******
@@ -445,63 +441,28 @@ let playNoiseySynthog=(freq)=>
 
 //  ****** MATH that generates sounds ********
 
-
+// sin of a value at index i in the sample buffer.
+let sine=(i,a,d)=>Math.sin(i/(a+d));
 
 // synth used in playhop2 and playcash
-let constSineZ=(i,dividor)=>
-constrain(rand(0.1)+0.8*(Math.sin(i / (0.2*i+dividor))),0,0.60);
+let constSineZ=(i,d)=>
+constrain(rand(0.1)+0.8*sine(i,0.2*i,d), 0,0.60);
 
 // synth used in hats
-let noisey=(i,dividor)=>rand(0.02);
+let noisey=(i,d)=>rand(0.02);
 
 // synth sound used in melody notes, improv notes and snare lol
-let noisey2=(i,dividor)=> rand(constrain(Math.round(Math.sin(i / (i+dividor))),0,0.130));
+let noisey2=(i,d)=> rand(constrain(Math.round(sine(i,i,d)),0,0.130));
 
 // synth used in chords
-let constSine=(i,dividor)=>
-constrain(Math.sin(i / dividor),-0.8,0.8);
+let constSine=(i,d)=>
+constrain( sine(i,0,d),-0.8,0.8);
 
 // used in thunder and bass
-let constSine5=(i,dividor)=>
-constrain(rand(0.2)*(Math.sin(i / dividor)+Math.sin(i / (1000+dividor))),0,0.10);
+let constSine5=(i,d)=>
+constrain(rand(0.2)*(sine(i,0,d) + sine(i,1000,d)),0,0.10);
 
 // synth used in wobble bass and noisey synth and noiseysynth og
 let sine4fact=0.8;
-let constSine4=(i,dividor)=>
-constrain(rand(0.1,0.3)*sine4fact+0.3*(Math.sin(i / dividor)+0.3*Math.sin(i / (2+dividor))),0,0.10);
-
-
-
-//let sine4counter=0;
-
-// used in playhop
-//let wubfact2=200;
-//let constSine2=(i,dividor)=>
-//constrain(0.5*(Math.sin(i / dividor)+Math.sin(i / (wubfact2+dividor))),0,0.10);
-
-// used in damage sfx
-//let constSine3=(i,dividor)=>
-//constrain(0.2*Math.random()*(Math.sin(i / dividor)+Math.sin(i / (100+dividor))),0,0.10);
-
-//let constSineB=(i,dividor)=>
-//constrain(Math.round(Math.sin(i / (dividor+i/100))),0,0.10);
-
-//let constSineB2=(i,dividor)=>
-//constrain(Math.round(Math.sin(i / (dividor+i/1000))),0,0.10);
-
-//let playHop=(fact)=>
-//play(fact,0.01,0.11,0.3,0.31,10,constSine2,8,'highpass',500,2,-0.001);
-
-//let playHop2=()=>
-//play( 200,0.01,0.11,0.3,0.31,200,constSineZ,9,'highshelf',1500,2);
-
-// factor:
-// compact bassy hits <1500, trappy pitched long hits 6000-20000
-//let playBlaster=(factor,vol)=>
-//play( factor, 0.01,0.11,0.3,0.25, 100,constSineB2 ,vol,'highpass',1080,8);
-
-//let playDamageFX=()=>
-//play( 20, 0.01,0.11,0.3,0.31, 60+randInt(20),constSine3 ,14,'highshelf',1500,2);
-
-//let playThunder=()=>
-//play( 15+randInt(85), 0.3,0.61,0.3,2.81, 20+randInt(50),constSine5 ,4,'lowpass',300+randInt(2200),2);
+let constSine4=(i,d)=>
+constrain(rand(0.1,0.3)*sine4fact+0.3*(sine(i,0,d)+0.3*sine(i,2,d)),0,0.10);

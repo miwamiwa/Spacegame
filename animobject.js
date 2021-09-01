@@ -26,31 +26,28 @@ class AnimObject extends BasicObject {
     // if on planet (this is for Dude),
     // then skip the cam positioning stuff
     // since we are a child of the planet object
-    if(this.planetMode!=undefined){
+    if(this.planetMode){
       // update "z-index"
-      if(this.nearestPlanet!=undefined)
+      if(this.nearestPlanet)
         this.nearestPlanet.sortFeatures();
       // draw & update sprite
-      this.drawMe(this.x,this.y);
-      this.updateAnimation();
-      // update our inner clock
-      this.counter++;
-      return;
+      this.draw(this);
     }
+    else {
+      // if not on a planet,
+      // get position relative to camera
+      let pos = camera.position(this,this.half);
 
-
-    // if not on a planet,
-    // get position relative to camera
-    let pos = camera.position(this,this.half);
-
-    // if on screen
-    if(camera.isOnScreen(pos,this.half)){
-        // draw & update sprite and any children
-      this.drawMe(pos.x,pos.y,children);
-      this.updateAnimation();
-      // update our inner clock
-      this.counter++;
+      // if on screen
+      if(camera.isOnScreen(pos,this.half))
+          this.draw(pos,children);
     }
+  }
+
+  draw(p,c){
+    this.drawMe(p.x,p.y,c);
+    this.updateAnimation();
+    this.counter++;
   }
 
   // drawMe()
@@ -77,15 +74,10 @@ class AnimObject extends BasicObject {
       // object only, don't draw children if player isn't boarded.
       if(this.boarded){
         children.forEach(c=>{
-          // if child is AnimObject
-          if(c.drawMe!=undefined){
-            c.drawMe(c.x,c.y);
-            c.updateAnimation();
-          }
-          // else if child is Object
+          // check which method to use then draw object
+          if(c.drawMe) c.draw(c);
           else c.display();
 
-          c.counter++;
         });
       }
     }

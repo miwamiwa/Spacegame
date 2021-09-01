@@ -30,7 +30,7 @@ let setKey=(e,b)=>{
 let keyDown=(e)=>{
   e = e.keyCode;
   setKey(e,true);
-  if(e==76) LandPlayer();
+  if(e==76&&!player.landed) LandPlayer();
   if(e==32){
     inputs.space=true;
     if(gamestate=="focused") SpacePressInFocusState();
@@ -59,8 +59,7 @@ let SpacePressInFocusState =()=>{
 //
 // hop on board
 let board=()=>{
-  Dude.x =0;
-  Dude.y =0;
+  setV(Dude,zero);
   player.throttle=0;
   Dude.visible = false;
   player.boarded = true;

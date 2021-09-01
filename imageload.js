@@ -32,7 +32,7 @@ let loadImage=(input)=>{
   // now we can infer canvas size
   lCanvas.width = input.w;
   lCanvas.height = Math.ceil(pixels.length / input.w);
-  let lCtx = lCanvas.getContext("2d");
+  let lCtx = getCtx(lCanvas);
 
   // create pixel data object
   let lpix = lCtx.getImageData(0,0,lCanvas.width,lCanvas.height);
