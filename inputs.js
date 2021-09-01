@@ -14,46 +14,27 @@ let inputs = {
 // track keyup events
 
 let keyUp=(e)=>{
-  switch(e.keyCode){
-    case 87: inputs.w = false; break; // w
-    case 65: inputs.a = false; break; //a
-    case 83: inputs.s = false; break; //s
-    case 68: inputs.d = false; break; //d
-    case 66: inputs.b = false; break; // b
-    case 32: inputs.space = false; break;
-    case 69: inputs.e = false; break;
-    case 76: inputs.l = false; break;
-  }
+  e = e.keyCode;
+  setKey(e,false);
+  if(e==32) inputs.space = false;
 }
 
+let setKey=(e,b)=>{
+  for(let i in inputs)
+    if(i.toUpperCase().charCodeAt(0)==e) inputs[i]=b;
+}
 // keydown()
 //
 // track key down events
 
 let keyDown=(e)=>{
-  switch(e.keyCode){
-    case 87: inputs.w = true; break; // w
-    case 65: inputs.a = true; break; //a
-    case 83: inputs.s = true; break; //s
-    case 68: inputs.d = true; break; //d
-    case 69: inputs.e = true; break;
-    case 66: inputs.b = true; break; // b
-
-    // l pressed
-    case 76: inputs.l = true;
-    LandPlayer();
-    break;
-
-    // THE SPACE BUTTON
-    case 32: inputs.space =true;
-
-    if(gamestate=="focused")
-    SpacePressInFocusState();
-
-    else if(gamestate=="game")
-    SpacePressInGameState();
-
-    break;
+  e = e.keyCode;
+  setKey(e,true);
+  if(e==76) LandPlayer();
+  if(e==32){
+    inputs.space=true;
+    if(gamestate=="focused") SpacePressInFocusState();
+    else if(gamestate=="game") SpacePressInGameState();
   }
 }
 
@@ -74,6 +55,18 @@ let SpacePressInFocusState =()=>{
 }
 
 
+// board()
+//
+// hop on board
+let board=()=>{
+  Dude.x =0;
+  Dude.y =0;
+  player.throttle=0;
+  Dude.visible = false;
+  player.boarded = true;
+  Dude.planetMode=undefined;
+}
+
 // SpacePressInGameState()
 //
 // do various things by pressing space
@@ -87,17 +80,13 @@ let SpacePressInGameState =()=>{
   // and boarding is enabled
   if(canEnter&&canBoard&&talkedToMomOnce){
     // update dude
-    Dude.x =0;
-    Dude.y =0;
-    player.throttle=0;
-    Dude.visible = false;
-    player.dude = Dude;
+    board();
+
     player.nearestPlanet.removeDude();
     // update camera target
     camera.targetIsVessel();
     // player controls vessel now
-    player.boarded = true;
-    Dude.planetMode=undefined;
+
     // close active text box
     availableText2 = undefined;
   }
@@ -107,7 +96,7 @@ let SpacePressInGameState =()=>{
   // (quest popup text)
 
   // if there is available text
-  else if (availableText2!=undefined){
+  else if (availableText2){
     // read next text
     textCounter++;
     // close if end reached
@@ -119,7 +108,7 @@ let SpacePressInGameState =()=>{
   // (text that appears when u interact w something)
 
   // if there is available text
-  else if(availableText!=undefined){
+  else if(availableText){
 
     // display text box:
     if(!player.reading){
@@ -135,7 +124,7 @@ let SpacePressInGameState =()=>{
       // do action if last frame is reached and there is
       // a follow-up action available
       if(textCounter==availableText.text.length-1
-        &&availableText.firstReadAction!=undefined)
+        &&availableText.firstReadAction)
         availableText.firstReadAction();
         // remove text box
         if(textCounter==availableText.text.length){

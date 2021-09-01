@@ -96,7 +96,7 @@ let startGame=()=>{
 //
 let runGame=()=>{
 
-  playerCurrentSpeed = dist(zero,{x:player.vx,y:player.vy});
+  playerCurrentSpeed = dist(zero,vxy(player));
   trackQuests();
   updateStars();
 
@@ -114,13 +114,12 @@ let runGame=()=>{
 
   SplitText(inventoryString, 5, 200);
 
+  // add random planets
   let x = Math.round(player.x/FarRange);
   let y = Math.round(player.y/FarRange);
   let index = x+","+y;
   if(index!="0,0"&&index!="1,0"&&!genplanets.includes(index)){
-    planets.push(new Planet(x*FarRange+rand(-5000,5000),y*FarRange+rand(-5000,5000),true));
+    new Planet(x*FarRange+5*roughly(0),y*FarRange+5*roughly(0),true);
     genplanets.push(index);
   }
-
-
 }

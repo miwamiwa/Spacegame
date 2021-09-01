@@ -51,12 +51,9 @@ let mutebass = true;
 let head =0;
 
 let bassOctave = 3; // 2 and 3 both nice
-
+let scale;
 // chord settings
-let chord8ve = 5;
-let chordfilt = "lowpass";
-let chordvol = 0.15
-let sustainTime = 1.1
+
 
 // startsound()
 //
@@ -79,15 +76,9 @@ let startSound=()=>{
 //
 // build the melody array
 let setupMel = () =>{
-  // phrase 1
   phrase1 = melodyA.concat(melodyA).concat(melodyB).concat(melodyC);
-
-  fullmel = phrase1.concat(melodyD)
-  // phrase2
-  .concat(phrase1).concat(melodyE)
-  // phrase3
-  .concat(melodyF).concat(melodyG)
-  .concat(melodyH).concat(melodyI);
+  fullmel = phrase1.concat(melodyD).concat(phrase1).concat(melodyE)
+    .concat(melodyF).concat(melodyG).concat(melodyH).concat(melodyI);
 }
 
 
@@ -98,7 +89,7 @@ let setupMel = () =>{
 
 let playbar = () =>{
   // get current scale
-  let scale = scales[bars];
+  scale = scales[bars];
 
   // TRIGGER DRUMS
 
@@ -110,7 +101,7 @@ let playbar = () =>{
   // TRIGGER BASS
 
   if(!mutebass)
-  startBassNotes([800,200,200],[0,flo(rand(2,4)),6],bassOctave,constSine5,scale);
+  startBassNotes([800,200,200],[0,flo(rand(2,4)),6],bassOctave,constSine5);
 
   // TRIGGER MELODY
 
@@ -121,16 +112,15 @@ let playbar = () =>{
   // TRIGGER IMPROV LINE
 
   if(!muteimprov)
-  startImprovNotes([200,400,400,200], noisey2, scale, rand((bars%4)/4+0.3));
+  startImprovNotes([200,400,400,200], noisey2, rand((bars%4)/4+0.3));
 
   // TRIGGER CHORDS
 
   if(!mutechords)
   setTimeout(()=>{
-
-    play(noteToFreq(flo(rand(4,6))*12+scale[0]), 0.1, sustainTime, 0.3, 0.3, 4, constSine, chordvol, chordfilt, 4400, 1)
-    play(noteToFreq(flo(rand(4,6))*12+scale[2]), 0.1, sustainTime, 0.3, 0.3, 4, constSine, chordvol, chordfilt, 4400, 1)
-    play(noteToFreq(flo(rand(4,6))*12+scale[6]), 0.1, sustainTime, 0.3, 0.3, 4, constSine, chordvol, chordfilt, 4400, 1)
+    chordNote(0);
+    chordNote(2);
+    chordNote(6);
   }, flo(rand(1.5))*200)
 
   // increment bars
@@ -151,11 +141,15 @@ let playbar = () =>{
   }
 }
 
+let chordNote=(i)=>
+  play(noteToFreq(flo(rand(4,6))*12+scale[i]), 0.1, 1.1, 0.3, 0.3, 4, constSine, 0.15, "lowpass", 4400, 1)
+
+
 // startImprovNotes()
 //
 // generate next few notes to play for the improv line
 
-let startImprovNotes=(beat,sound,scale,temperament)=>{
+let startImprovNotes=(beat,sound,temperament)=>{
   let counter =0;
 
   // if scale changed, move the currentNote to the
@@ -225,14 +219,14 @@ let startImprovNotes=(beat,sound,scale,temperament)=>{
 //
 //
 
-let findClosestNoteInScale=(scale)=>{
+let findClosestNoteInScale=(sca)=>{
   let octave = 4;
   let note = currentNote;
   let found =999;
   let res = 99;
   while(res>3){
-    for(let i=0; i<scale.length; i++){
-      let note2 = scale[i] + octave * 12;
+    for(let i=0; i<sca.length; i++){
+      let note2 = sca[i] + octave * 12;
       res = abs(note2-note);
       if(res<abs(found-note)) found = note2;
 
@@ -279,7 +273,7 @@ let startMelNotes=(beat,octave,sound)=>{
 //
 // trigger bass notes for a given bar
 
-let startBassNotes = (beat,notes,octave,sound,scale)=>{
+let startBassNotes = (beat,notes,octave,sound)=>{
   let counter =0;
   for(let i=0; i<beat.length; i++){
     setTimeout(playWobbleBass,counter,noteToFreq(octave*12 + scale[notes[i]]))
@@ -417,14 +411,16 @@ let playSnare=()=>
 // more like a wierd percussive thing now
 let cash2timeout;
 let playCash=()=>{
-  play(noteToFreq(36+scales[bars-1][0]), 0.01,0.2,0.3,0.1, 5,constSineZ,2.1,'highpass',500,3);
+  perc();
   if(rand()>.5){
     clearTimeout(cash2timeout);
-    cash2timeout=setTimeout(function(){
-      play(noteToFreq(36+scales[bars-1][0]), 0.01,0.32,0.3,0.2, 20,constSineZ,2.1,'highpass',1500,2);
+    cash2timeout=setTimeout(()=>{
+      perc();
     }, 260);
   }
 }
+
+let perc=()=>play(noteToFreq(36+scales[bars-1][0]), 0.01,0.2,0.3,0.1, 5,constSineZ,2.1,'highpass',500,3);
 
 // play a ride / hi hat sound
 let playHats=()=>
@@ -453,15 +449,13 @@ let playNoiseySynthog=(freq)=>
 
 // synth used in playhop2 and playcash
 let constSineZ=(i,dividor)=>
-constrain(0.1*Math.random()+0.8*(Math.sin(i / (0.2*i+dividor))),0,0.60);
+constrain(rand(0.1)+0.8*(Math.sin(i / (0.2*i+dividor))),0,0.60);
 
 // synth used in hats
-let noisey=(i,dividor)=>
-Math.random()*0.02;
+let noisey=(i,dividor)=>rand(0.02);
 
 // synth sound used in melody notes, improv notes and snare lol
-let noisey2=(i,dividor)=> Math.
-random()*constrain(Math.round(Math.sin(i / (i+dividor))),0,0.130);
+let noisey2=(i,dividor)=> rand(constrain(Math.round(Math.sin(i / (i+dividor))),0,0.130));
 
 // synth used in chords
 let constSine=(i,dividor)=>
@@ -469,7 +463,7 @@ constrain(Math.sin(i / dividor),-0.8,0.8);
 
 // used in thunder and bass
 let constSine5=(i,dividor)=>
-constrain(0.2*Math.random()*(Math.sin(i / dividor)+Math.sin(i / (1000+dividor))),0,0.10);
+constrain(rand(0.2)*(Math.sin(i / dividor)+Math.sin(i / (1000+dividor))),0,0.10);
 
 // synth used in wobble bass and noisey synth and noiseysynth og
 let sine4fact=0.8;

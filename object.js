@@ -6,46 +6,43 @@ class StaticObject extends BasicObject {
     // initialize object
     super(x,y,size,img);
     this.collider = true;
-    this.talker = false;
     this.collidersize = size * 0.65;
     this.talkrange = size * 0.8;
-    this.text = text;
-    this.edible = false;
-    this.firstReadAction = firstReadAction;
+    this.setTandA(text,firstReadAction);
+  }
+
+  setTandA(t,a){
+    this.text=t;
+    this.firstReadAction=a;
   }
 
   // for tree objects
   lootBerry(){
     AddToInventory(this.berry);
-    this.talker = false;
-    //availableText = undefined;
+    this.talker = undefined;
   }
 
   berryText(){
-    return ["this tree has "+this.berry+"berries.","You picked a "+this.berry+" berry."]
+    return ["this tree has "+this.berry.replace("berry","")+"berries.","You picked a "+this.berry+"."]
   }
 
 
   display(){
-    // handle pickup if this is "edible"
-    if(this.edible) this.interact();
-
-    // display sprite
-    if(this.active&&this.img!=undefined){
+    if(this.active){
+      // display sprite
       mCtx.save();
       hue(this.hue);
       image(this.img,this.x,this.y,this.half,this.size);
       mCtx.restore();
+
+      if(this.edible) this.interact();
     }
   }
 
   interact(){
-    if(this.active && player.landed && !player.boarded){
-      let p = player.nearestPlanet;
-      if(p==undefined) return;
-
+    if(!player.boarded){
       // if in range
-      if(dist(this,Dude)<ItemPickupRange){
+      if(dist(this,Dude)<34){
         // pick up item
         this.active = false;
         if(this.id=="cheese")

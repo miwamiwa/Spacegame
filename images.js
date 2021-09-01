@@ -15,11 +15,7 @@ let crash3_png = {
   t:"03120125071426310415253303162312310317011431011831153001173215300215321630021334170214341130130216351303163413033114351104312111370031032436003302250031233302302500253203302400253107210223",
   c:[0,2,3,1]
 };
-let empty_png = {
-  w:4,
-  t:"041000100110",
-  c:[4,5]
-};
+
 let fire1_png = {
   w:20,
   t:"01132:1300132:1301122:1301112;1202142111241201152112221301152112221301120011211222110010011200112014201203110111201100112011051001112011001408140113081302130813021308130212091302120:1103120:11",
@@ -135,5 +131,4 @@ let cracker_png = {
   t:"0213051403170118001L001802150711",
   c:[0,25]
 };
-let all_images = [crash1_png,crash2_png,crash3_png,empty_png,fire1_png,fire2_png,home_png,leaf1_png,player1_png,player2_png,star1_png,rock_png,star2_png,trunkbit_png,vessel_png,vessel2_png,walk_down_1_png,walk_down_2_png,walk_left_1_png,walk_left_2_png,walk_right_1_png,walk_right_2_png,walk_up_1_png,walk_up_2_png,branchbit_png,couch_png,cracker_png];
-      
+let all_images = [crash1_png,crash2_png,crash3_png,fire1_png,fire2_png,home_png,leaf1_png,player1_png,player2_png,star1_png,rock_png,star2_png,trunkbit_png,vessel_png,vessel2_png,walk_down_1_png,walk_down_2_png,walk_left_1_png,walk_left_2_png,walk_right_1_png,walk_right_2_png,walk_up_1_png,walk_up_2_png,branchbit_png,couch_png,cracker_png];

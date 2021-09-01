@@ -1,7 +1,6 @@
 // this is to count how many planets we explored
 // during cracker on 3 planets part
 let planetsIFoundCrackersOn = [];
-// the investigation follows the crackers on 3 planets part
 let investigationTriggered = false;
 let InvestigationText = [];
 let HomePlanet;
@@ -13,8 +12,7 @@ let MysteryPlanet;
 let HelpOff = false; // display flight instructions
 let mainCanvas;
 let mCtx;
-let middle = {};
-
+let middle = {x:300,y:260};
 let rightPlanetsEnabled = false;
 let crackersFound =0;
 let HomeObject;
@@ -27,20 +25,17 @@ let RandomHome;
 // and the key inputs as well
 
 let setupCanvas=()=>{
-
   // create canvas
-  mainCanvas = document.getElementById("canvas");
+  mainCanvas = canv();
   mainCanvas.width = 600;
   mainCanvas.height = 600;
   mCtx = mainCanvas.getContext("2d");
   mCtx.imageSmoothingEnabled= false;
-  document.body.appendChild(mainCanvas);
-  // middle of the canvas
-  middle.x = 300;
-  middle.y = 260;
-  // key controls
-  document.body.onkeydown = keyDown;
-  document.body.onkeyup = keyUp;
+
+  let b=document.body;
+  b.appendChild(mainCanvas);
+  b.onkeydown = keyDown;
+  b.onkeyup = keyUp;
 }
 
 
@@ -65,37 +60,24 @@ let setupPlanets=()=>{
 
   // create home planet
   HomePlanet = new Planet(player.x,player.y + HomePlanetRadius + Planet1Distance, true, "Home, sweet home", HomePlanetRadius, 1500);
-  planets.push(HomePlanet);
+  HomeObject=new StaticObject(0,0,home_png, 100, HomePlanetText, talkedToMom);
+  HomeCouch = new StaticObject(0,0,couch_png, 100, HomeCouchText, triggerStoryStart);
+  HomePlanet.addFeature(HomeObject,100);
+  HomePlanet.addFeature(HomeCouch,100);
 
-  // place home
-  let pos = HomePlanet.findAvailableSpot(MinDistanceBetweenFeatures);
-  HomeObject = new StaticObject(pos.x,pos.y,home_png, 100, HomePlanetText, talkedToMom);
-  HomePlanet.features.push(HomeObject);
-
-  pos = HomePlanet.findAvailableSpot(100);
-  HomeCouch =new StaticObject(pos.x,pos.y,couch_png, 100, HomeCouchText, triggerStoryStart);
-  HomePlanet.features.push(HomeCouch);
-
-  // sort planet sub-elements by y coordinate
-  HomePlanet.sortFeatures();
 
   // create todd's planet
   ToddsPlanet = new Planet(HomePlanet.x + 200, HomePlanet.y-DistanceToTodd, true, "Todd's place",310,1200);
-  planets.push(ToddsPlanet);
 
-  // create todd's home
-  ToddsPlanet.features.push(new StaticObject(80,0,home_png, 100, ToddsHomeText, triggerTommysHouseFound));
-  // create couch
-  ToddsCouch = new StaticObject(-90,40,couch_png, 100, CouchText1);
-  ToddsPlanet.features.push(ToddsCouch);
-  // sort planet sub-elements
-  ToddsPlanet.sortFeatures();
+  ToddsPlanet.addFeature(new StaticObject(80,0,home_png, 100, ToddsHomeText, triggerTommysHouseFound));
+  ToddsCouch=new StaticObject(-90,40,couch_png, 100, CouchText1);
+  ToddsPlanet.addFeature(ToddsCouch);
 }
 
 
-let talkedToMom=()=>{
+let talkedToMom=()=>
   talkedToMomOnce = true;
-}
+
 
 
 
@@ -106,25 +88,22 @@ let mysteryHomeText=()=>{
   for(let i in inventory)
     if(i.indexOf("muffin")!=-1) muffin = i;
 
-  if(!talkedToMysteryDudeOnce){
-    console.log("talked to mystery dude")
-    RandomHome.text=RandomHomeText1;
-    RandomHome.firstReadAction=talkToMDude;
-  }
+  if(!talkedToMysteryDudeOnce)
+  RandomHome.setTandA(RandomHomeText1, talkToMDude);
+
   else if(!mysteryDudeGone){
-    if(muffin==undefined){
-      RandomHome.text=["I'm hungry."];
-      RandomHome.firstReadAction=undefined;
-    }
-    else {
-      RandomHome.text=["Oh, that muffin. Can I have it?","Wow thanks!\nMunch... munch...",
-      "That was an amazing muffin.","Do you know who made this?","Some stranger who lives light years\naway from here?","I see..","Well I should leave now if I want to\nmeet them before I get hungry again.","Thanks. Bye."]
-      RandomHome.firstReadAction=triggerFinalPart;
-    }
+    if (!muffin)
+      RandomHome.setTandA(["I'm hungry."]);
+    else
+      RandomHome.setTandA(["Oh, that muffin. Can I have it?","Wow thanks!\nMunch... munch...",
+      "That was an amazing muffin.","Do you know who made this?",
+      "Some stranger who lives light years\naway from here?","I see..",
+      "Well I should leave now if I want to\nmeet them before I get hungry again.",
+      "Thanks. Bye."],triggerFinalPart);
+
   }
-  else {
-    RandomHome.text=undefined;
-  }
+  else RandomHome.setTandA();
+
 }
 
 let talkToMDude=()=>
@@ -134,29 +113,23 @@ let talkToMDude=()=>
 
 let homeObjectText=()=>{
   let make = undefined
-  for(let b in inventory){
-    //console.log(b)
+  for(let b in inventory)
     if(inventory[b]>4) make = b;
-  }
-  //console.log(make)
 
-  if(talkedToMomOnce&&make!=undefined){
+  if(talkedToMomOnce&&make){
     muffinType=make;
-
-    HomeObject.firstReadAction = makeMuffins;
-    HomeObject.text= ["Oh! You brought berries!\nLet's make muffinnnnzzzz",".....","all done!\nhere's a "+muffinType+" muffin"];
+    HomeObject.setTandA(["Oh! You brought berries!\nLet's make muffinnnnzzzz",
+      ".....","all done!\nhere's a "+muffinType+" muffin"], makeMuffins);
     make = undefined
   }
   else HomeObject.text= HomePlanetText;
 }
 
 let makeMuffins =()=>{
-  //console.log("muffin!")
   if(inventory[muffinType]>4){
     inventory[muffinType] -= 5;
     AddToInventory(muffinType+" muffin");
   }
-
 }
 
 
@@ -180,10 +153,8 @@ let triggerTommysHouseFound=()=>{
   // disable flight instructions since we succesfully landed somewhere.
   HelpOff = true;
   // update couch text
-  ToddsCouch.text = CouchText2;
-  HomeCouch.text= HCouchText2;
-  // assign next trigger to couch
-  ToddsCouch.firstReadAction = triggerGoToPlanetsOnRight;
+  ToddsCouch.setTandA(CouchText2,triggerGoToPlanetsOnRight);
+  HomeCouch.text=HCouchText2;
 
 }
 
@@ -198,10 +169,8 @@ let triggerGoToPlanetsOnRight=()=>{
     let p = ToddsPlanet;
     for(let i=0; i<3; i++){
 
-      p = new Planet(p.x+rand(8000,11000), p.y+rand(-1000,1000), true);
+      p = new Planet(p.x+roughly(9000), p.y+roughly(0), true);
       p.addCheese();
-      planets.push(p);
-
     }
 
     rightPlanetsEnabled = true;
@@ -273,17 +242,12 @@ let triggerCrackerInvestigation=()=>{
 let continueInvestigation=()=>{
 
   // new planet
-  let pos = {
-    x:player.x + rand(14000,16000),
-    y:player.y-rand(-1000,1000)
-  }
-  MysteryPlanet = new Planet(pos.x, pos.y, true);
+  MysteryPlanet = new Planet(player.x + roughly(1500), player.y-roughly(0), true);
   MysteryPlanet.addCheese();
-  planets.push(MysteryPlanet);
 
   // this should be a dude not a couch lol
   RandomHome = new StaticObject(-90,40,home_png, 120, RandomHomeText1);
-  MysteryPlanet.features.push(RandomHome);
+  MysteryPlanet.addFeature(RandomHome);
   // wouldbe nice if the dude sends you on a stupid / mundane quest
   // that makes him seem more annoying than anything else
 
@@ -300,18 +264,13 @@ let continueInvestigation=()=>{
 }
 
 
+
+
 let triggerFinalPart=()=>{
   mysteryDudeGone = true;
-  let pos = {
-    x:player.x + rand(5000,7000),
-    y:player.y + rand(8000,9000)
-  }
-  FinalPlanet = new Planet(pos.x,pos.y, true);
+  FinalPlanet = new Planet(player.x+roughly(6000),player.y+roughly(8000), true);
   FinalPlanet.addCheese();
-
-  ToddsVessel = new StaticObject(80,-80,vessel_png,80,ToddsVesselText1,jamWithTodd);
-  FinalPlanet.features.push(ToddsVessel);
-  planets.push(FinalPlanet);
+  FinalPlanet.addFeature(new StaticObject(80,-80,vessel_png,80,ToddsVesselText1,jamWithTodd));
 }
 
 

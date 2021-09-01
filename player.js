@@ -27,10 +27,7 @@ let setupPlayer=()=>{
 
   // setup player
   player.radar = true;
-  player.dude = Dude;
   player.reading = false;
-  player.boarded = false;
-  Dude.visible = true;
   player.animRate = 10;
   player.running = false;
 }
@@ -44,11 +41,9 @@ let resetPlayerOnCrash=()=>{
     if(player.counter-player.crashFrame>CrashAnimLength){
       // reset player
       player.resetPos(PlayerStartX,PlayerStartY);
-      player.setFrames(VesselAnimation);
       player.crashed = false;
       player.landed = false;
-      player.boarded = true;
-      Dude.visible = false;
+      board();
     }
   }
 }
@@ -65,7 +60,7 @@ let HandlePlayerInputs=()=>{
 
     // if boarded
     if(player.boarded)
-      vesselInputs();
+    vesselInputs();
 
     // if not boarded
     else planetInputs();
@@ -79,8 +74,8 @@ let HandlePlayerInputs=()=>{
 let vesselInputs=()=>{
   if(autopilotActive) return;
   // press w to toggle throttle
-  if(inputs.w) player.plusThrottle(PlayerAcceleration);
-  else player.minusThrottle(PlayerDeceleration);
+  if(inputs.w) player.plusThrottle();
+  else player.minusThrottle();
 
   // press a/d to rotate
   if(inputs.a) player.rotate(PlayerRotateRate);
@@ -92,7 +87,7 @@ let vesselInputs=()=>{
     canExit = true;
     // press e to exit vessel
     if(inputs.e&&!player.crashed)
-      playerLanded();
+    playerLanded();
   }
 }
 
@@ -103,18 +98,14 @@ let vesselInputs=()=>{
 let playerLanded=()=>{
   // unboard
   player.boarded = false;
-  Dude.visible = true;
 
   // switch camera target to dude
   camera.targetIsDude();
 
   // move dude to planet
+  Dude.visible = true;
   Dude.planetMode = true;
-  let p = player.nearestPlanet;
-  p.features.push(Dude);
-  let pos = p.findAvailableSpot(100);
-  Dude.x =  pos.x;
-  Dude.y =  pos.y;
+  player.nearestPlanet.addFeature(Dude,100);
 }
 
 
@@ -129,10 +120,10 @@ let planetInputs=()=>{
   player.running = false;
 
   // if inputs pressed, move player
-  if(inputs.d) movePlayerOnPlanetX(1);
-  if(inputs.a) movePlayerOnPlanetX(-1);
-  if(inputs.w) movePlayerOnPlanetY(-1);
-  if(inputs.s) movePlayerOnPlanetY(1);
+  if(inputs.d) moveX(1);
+  if(inputs.a) moveX(-1);
+  if(inputs.w) moveY(-1);
+  if(inputs.s) moveY(1);
 
   // update animation
   if(running!=player.running){
@@ -149,27 +140,27 @@ let planetInputs=()=>{
   // (actually happens in keyDown)
   let p = player.nearestPlanet;
   if(dist(player,{x:Dude.x+p.x,y:Dude.y+p.y})<HopDistance)
-    canEnter = true;
+  canEnter = true;
 
-    // look through all features
-    player.nearestPlanet.features.forEach(f=>{
-      // if collider enabled
-      if(f.talker){
-        let d = dist({x:Dude.x+Dude.half,y:Dude.y+Dude.half},{x:f.x,y:f.y+f.half});
-        // if feature is in talk range,
-        // configure text interaction
-        if(d<f.talkrange)
-          availableText = f;
-      }
-    });
+  // look through all features
+  player.nearestPlanet.features.forEach(f=>{
+    // if collider enabled
+    if(f.talker){
+      let d = dist({x:Dude.x+Dude.half,y:Dude.y+Dude.half},{x:f.x,y:f.y+f.half});
+      // if feature is in talk range,
+      // configure text interaction
+      if(d<f.talkrange)
+      availableText = f;
+    }
+  });
 }
 
 
-// movePlayerOnPlanetX()
+// moveX()
 //
 // move player horizontally on a planet
 
-let movePlayerOnPlanetX=(delta)=>{
+let moveX=(delta)=>{
   // set animation
   if(delta==1) player.running = "right";
   else player.running = "left";
@@ -177,11 +168,11 @@ let movePlayerOnPlanetX=(delta)=>{
   moveIt( PlayerWalkVelocity * delta, 0);
 }
 
-// movePlayerOnPlanetY();
+// moveY();
 //
 // move player vertically on a planet
 
-let movePlayerOnPlanetY=(delta)=>{
+let moveY=(delta)=>{
   // set animation
   if(delta==1) player.running="down";
   else player.running="up";
@@ -239,17 +230,17 @@ let CheckCollisionsOnPlanet=(p)=>{
       // if feature is in talk range,
       // configure text interaction
       if(d<f.talkrange)
-        availableText = f;
+      availableText = f;
       // if collided with collider
       if(d<=f.collidersize)
-         r= true;
+      r= true;
     }
   });
 
   // reset text counter if in range of
   // a new talkable element
   if(lastAvailTxt!=availableText)
-    textCounter =0;
+  textCounter =0;
 
   return r;
 }
@@ -277,10 +268,10 @@ let updatePlayerUi=()=>{
 
   // when boarded and on ground
   if(canExit&&!player.crashed)
-    drawText("press e to exit. hold w to launch.", middle.x + 100, middle.y + 50);
+  drawText("press e to exit. hold w to launch.", middle.x + 100, middle.y + 50);
   // when able to board
   if(canEnter&&canBoard)
-    drawText("press space to board");
+  drawText("press space to board");
   // when in flight
   if(!HelpOff&&player.boarded&&!player.landed){
     drawText("w to throttle. a,d to steer.", middle.x + 100, middle.y + 50)
@@ -296,8 +287,8 @@ let updatePlayerUi=()=>{
 // show cracker counter at bottom of the screen
 /*
 let showCrackerCounter=()=>{
-  if(crackersFound>0)
-    drawText(`crackers found: `+crackersFound,middle.x - 50, mainCanvas.height - 16);
+if(crackersFound>0)
+drawText(`crackers found: `+crackersFound,middle.x - 50, mainCanvas.height - 16);
 }
 */
 // showTopText()
@@ -307,34 +298,27 @@ let showCrackerCounter=()=>{
 let showTopText=()=>{
   // if we crashed, Top text becomes crash text
   if(player.crashed)
-    drawText(crashtext,TopText.x,TopText.y);
+  drawText(crashtext,TopText.x,TopText.y);
 
   // if we're aboard the space chips
   else if(player.boarded){
     drawText(`You're aboard the greenmobile.
-      vX : ${flo(player.vx)}
-      vY : ${flo(player.vy)}
-      speed : ${flo(playerCurrentSpeed)}
-      bearing: ${flo(radians_to_degrees(player.bearing))}°
-      throttle: ${flo(10*player.throttle)/10}`,TopText.x,TopText.y);
+    vx : ${flo(player.vx)}
+    vy : ${flo(player.vy)}
+    speed : ${flo(playerCurrentSpeed)}
+    bearing: ${flo(radians_to_degrees(player.bearing))}°
+    throttle: ${flo(10*player.throttle)/10}`,TopText.x,TopText.y);
 
-        //console.log(player.crashThreshold,playerCurrentSpeed)
-        if(playerCurrentSpeed>player.crashThreshold)
-          drawText("Speed is unsafe for landing", TopText.x,TopText.y+15, "red");
-        else drawText("Speed is safe for landing", TopText.x,TopText.y+15,"green");
+    //console.log(player.crashThreshold,playerCurrentSpeed)
+    if(playerCurrentSpeed>player.crashThreshold)
+    drawText("Speed is unsafe for landing", TopText.x,TopText.y+15, "red");
+    else drawText("Speed is safe for landing", TopText.x,TopText.y+15,"green");
 
   }
-  /*
-  drawText(`:
-    }
 
-
-
-    //actual_direction: ${angleFromDirection(-player.vx,-player.vy)}
-    */
   // if we're on a planet
   else
-    drawText(`Planet ${player.nearestPlanet.name}.`,TopText.x,TopText.y);
+  drawText(`Planet ${player.nearestPlanet.name}.`,TopText.x,TopText.y);
 
 
 
@@ -353,7 +337,7 @@ let showInteractionText=()=>{
 
     // display text
     if(player.reading)
-      showTextArray(availableText.text);
+    showTextArray(availableText.text);
   }
 }
 
@@ -371,129 +355,122 @@ let showQuestText=()=>{
       ||availableText2[textCounter]==InvestigationText[8])
       bg();
 
-    // display hint
-    drawText("press space");
-    // display text
-    showTextArray(availableText2);
+      // display hint
+      drawText("press space");
+      // display text
+      showTextArray(availableText2);
+    }
   }
-}
 
-// showTextArray()
-//
-// split text into multiple lines,
-// and display text box
+  // showTextArray()
+  //
+  // split text into multiple lines,
+  // and display text box
 
-let showTextArray=(txtarr,x,y)=>{
-  fill(black);
-  mCtx.fillRect(TextBox.x,TextBox.y, 300, 40);
+  let showTextArray=(txtarr,x,y)=>{
+    fill(black);
+    mCtx.fillRect(TextBox.x,TextBox.y, 300, 40);
 
-  if(txtarr!=undefined)
-  SplitText(txtarr[textCounter],TextBox.x+5,TextBox.y+12);
-}
-
-let SplitText=(text,x,y,c)=>{
-  let i=0;
-  text.split("\n").forEach(line=>{
-    drawText(line, x, y + i,c);
-    i+= 10;
-  });
-}
-
-// drawText()
-//
-// display text on canvas
-
-let drawText=(txt,x,y,color)=>{
-  if(!color) color = "white";
-  if(!x){
-    x=middle.x;
-    y=middle.y;
+    if(txtarr!=undefined)
+    SplitText(txtarr[textCounter],TextBox.x+5,TextBox.y+12);
   }
-  fill(color);
-  mCtx.fillText(txt,x,y)
-}
+
+  let SplitText=(text,x,y,c)=>{
+    let i=0;
+    text.split("\n").forEach(line=>{
+      drawText(line, x, y + i,c);
+      i+= 10;
+    });
+  }
+
+  // drawText()
+  //
+  // display text on canvas
+
+  let drawText=(txt,x,y,color)=>{
+    if(!color) color = "white";
+    if(!x){
+      x=middle.x;
+      y=middle.y;
+    }
+    fill(color);
+    mCtx.fillText(txt,x,y)
+  }
 
 
-let AddToInventory =(item)=>{
-  if(inventory[item]==undefined)
+  let AddToInventory =(item)=>{
+    if(inventory[item]==undefined)
     inventory[item] = 1;
-  else inventory[item] ++;
+    else inventory[item] ++;
 
-  inventoryString = "inventory";
-  for(let i in inventory)
+    inventoryString = "inventory";
+    for(let i in inventory)
     if(inventory[i]>0)
     inventoryString += "\n"+i+": "+inventory[i];
 
-}
-
-let autopilotActive = false;
-let autopilotPhase;
-
-let LandPlayer =()=>{
-  if(!autopilotActive){
-    player.targetbearing=undefined;
-    //console.log("autopilot active")
-    autopilotPhase="start";
-    autopilotActive = true;
   }
-}
+
+  let autopilotActive = false;
+  let autopilotPhase;
+
+  let LandPlayer =()=>{
+    if(!autopilotActive){
+      player.targetbearing=undefined;
+      //console.log("autopilot active")
+      autopilotPhase="start";
+      autopilotActive = true;
+    }
+  }
 
 
+  let slowframes;
+  let updateAutopilot=()=>{
 
-let updateAutopilot=()=>{
+    if(autopilotActive){
+      if(autopilotPhase=="start"){
 
-  if(autopilotActive){
-    if(autopilotPhase=="start"){
+        if(player.throttle>0)
+        player.minusThrottle();
+        else {
+          autopilotPhase="turn1";
+          slowframes = Math.sqrt(playerCurrentSpeed)*5.8;
+          player.targetbearing = angleFromDirection(vxy(player));
+          if(player.vx>0) player.targetbearing *=-1;
+        }
+      }
+      else if(autopilotPhase=="turn1"){
+        if (reachTargetRotation()){
+          autopilotPhase="slow";
+          player.bearing=player.targetbearing;
+        }
 
-      if(player.throttle>0)
-        player.minusThrottle(PlayerDeceleration);
-      else {
-        autopilotPhase="turn1";
-        player.targetbearing = angleFromDirection(-player.vx,-player.vy);
-        if(player.vx>0) player.targetbearing *=-1;
+      }
+      else if(autopilotPhase=="slow"){
+        player.plusThrottle();
+        slowframes--;
+
+        if(slowframes<=0)
+          autopilotPhase="slow2";
+      }
+      else if(autopilotPhase=="slow2"){
+        if(player.throttle>0) player.minusThrottle();
+        else autopilotPhase="stop"
+      }
+
+      else if(autopilotPhase=="stop"){
+        autopilotActive = false;
+        player.vx/=2;
+        player.vy/=2;
       }
     }
-    else if(autopilotPhase=="turn1"){
-      if (reachTargetRotation())
-        autopilotPhase="slow";
-    }
-    else if(autopilotPhase=="slow"){
-        player.plusThrottle(PlayerAcceleration);
-
-        // account for deceleration time
-        let decel=0;
-        stopspeed =PlayerDeceleration;
-        while(decel<player.throttle){
-          decel+=PlayerDeceleration;
-          stopSpeed+=decel;
-        }
-
-        if(playerCurrentSpeed<10){
-          if(playerCurrentSpeed<Math.max(stopSpeed,2))
-            autopilotPhase="slow2"
-        }
-    }
-    else if(autopilotPhase=="slow2"){
-      if(player.throttle>0)
-        player.minusThrottle(PlayerDeceleration);
-      else autopilotPhase="stop"
-    }
-
-    else if(autopilotPhase=="stop"){
-      autopilotActive = false;
-      player.vx/=2;
-      player.vy/=2;
-    }
   }
-}
 
-let reachTargetRotation=()=>{
-
-  if(player.bearing-PlayerRotateRate>player.targetbearing)
-    player.rotate(PlayerRotateRate);
-  else if(player.bearing+PlayerRotateRate<player.targetbearing)
-    player.rotate(-PlayerRotateRate);
+  let reachTargetRotation=()=>{
+    if(player.bearing-PlayerRotateRate2>player.targetbearing)
+    player.rotate(PlayerRotateRate2);
+    else if(player.bearing+PlayerRotateRate2<player.targetbearing)
+    player.rotate(-PlayerRotateRate2);
     else return true;
 
-  return false;
-}
+    return false;
+  }

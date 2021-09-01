@@ -90,9 +90,12 @@ let displayShadow=(obj)=>{
 }
 
 
-let angleFromDirection=(dx,dy)=>
-  Math.acos( dy/ Math.sqrt(sq(dx)+sq(dy)) )
+let angleFromDirection=(d)=>
+  Math.acos( -d.y/ Math.sqrt(sq(d.x)+sq(d.y)) );
 
+let vxy=(i)=>{
+  return {x:i.vx,y:i.vy}
+}
 
 // rand()
 //
@@ -107,6 +110,9 @@ let rand =(min,max)=>{
   // 2 args: from arg1 to arg2
   else return min + rand() * (max-min);
 }
+
+
+let roughly=(i)=>rand(i-1000,i+1000);
 
 //dist()
 //

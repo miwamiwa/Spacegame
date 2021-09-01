@@ -5,20 +5,18 @@ class Vessel extends AnimObject {
 
     super(x,y,size,frames);
 
-    this.vel = 1;
     this.throttle =0;
     this.mass = VesselMass;
     this.crashThreshold = CrashThreshold / this.mass;
 
-    this.nearestPlanet =undefined;
     this.flame = new AnimObject(0,55,50,FlameAnimation);
     this.children = [this.flame];
     this.gravity = true;
     this.radar = false;
     this.crashed = false;
 
-    this.vx =0;
-    this.vy =0;
+
+    this.stop();
 
   }
 
@@ -84,10 +82,7 @@ class Vessel extends AnimObject {
         let g = p.getGravityFor(this,d);
 
         // if landed, stop vehicle
-        if(this.landed){
-          this.vx =0;
-          this.vy =0;
-        }
+        if(this.landed) this.stop();
 
         // if in flight, apply gravity
         else {
@@ -97,6 +92,11 @@ class Vessel extends AnimObject {
         }
       }
     }
+  }
+
+  stop(){
+    this.vx=0;
+    this.vy=0;
   }
 
   // crash()
@@ -184,15 +184,15 @@ class Vessel extends AnimObject {
   }
 
   // accelerate
-  plusThrottle(amount){
+  plusThrottle(){
   //  console.log("plus")
-    this.throttle = Math.min(this.throttle + amount, AccelerationLimit);
+    this.throttle = Math.min(this.throttle + PlayerAcceleration, AccelerationLimit);
   }
 
   // decelerate
-  minusThrottle(amount){
+  minusThrottle(){
     //console.log("minus")
-    this.throttle = Math.max(player.throttle - amount, 0);
+    this.throttle = Math.max(player.throttle - PlayerDeceleration, 0);
   }
 
 

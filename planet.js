@@ -3,7 +3,7 @@ class Planet {
   constructor(x,y,randomscenery,name, rad, mas){
 
     // mass and radius
-    if(rad==undefined){
+    if(!rad){
       rad=rand(250,380);
       mas=rand(PlanetMassMin,PlanetMassMax)
     }
@@ -36,6 +36,21 @@ class Planet {
     if(randomscenery)
     this.setupScenery();
 
+    planets.push(this);
+  }
+
+  addFeature(obj, r){
+    if(r) this.spot(obj,r);
+
+    this.features.push(obj);
+    this.sortFeatures();
+  }
+
+
+  spot(obj,r){
+    let p = this.findAvailableSpot(r);
+    obj.x=p.x;
+    obj.y=p.y;
   }
 
   // sortFeatures()
@@ -142,7 +157,7 @@ class Planet {
     // generate a unique tree family for this planet
     // see nature.js
     this.treeFamily = createNewTreeType();
-    let treeCount = flo(rand(0,16));
+    let treeCount = flo(rand(3,9));
     let berry = RandomFromArray(BerryNames);
     for(let i=0; i<treeCount; i++){
 
@@ -156,9 +171,8 @@ class Planet {
       tree.talker = true;
       tree.talkrange = 34;
       tree.berry = berry+" berry";
-      tree.text=tree.berryText();
+      tree.setTandA(tree.berryText(),tree.lootBerry);
       tree.id="tree";
-      tree.firstReadAction = tree.lootBerry;
 
       // add to features[]
       this.features.push(tree);
@@ -239,7 +253,7 @@ class Planet {
 
     // if this is true, we are touching the surface
     if(d<this.r){
-      let vel = dist(zero,{x:input.vx,y:input.vy});
+      let vel = dist(zero,vxy(input));
 
       // crash if going too fast
       if(vel>input.crashThreshold && !input.crashed)

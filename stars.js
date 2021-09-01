@@ -24,8 +24,8 @@ let updateStars=()=>{
     if(!player.landed&&!camera.isOnScreen(pos,400)){
       // place somewhere off screen but not too far
       while(! (camera.isOnScreen(pos,400) && !camera.isOnScreen(pos,10)) ){
-        s.x = rand(player.x - 1000, player.x + 1000);
-        s.y = rand(player.y - 1000, player.y + 1000);
+        s.x = player.x + roughly(0);
+        s.y = player.y + roughly(0);
         pos = camera.position(s);
       }
     }
