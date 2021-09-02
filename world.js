@@ -18,7 +18,7 @@ let crackersFound =0;
 let HomeObject;
 let HomeCouch;
 let RandomHome;
-
+let font = 16;
 // setupcanvas()
 //
 // called on start. setup the canvas area,
@@ -30,6 +30,7 @@ let setupCanvas=()=>{
   mainCanvas.width = 600;
   mainCanvas.height = 600;
   mCtx = getCtx(mainCanvas);
+  mCtx.font = font+"px Arial";
 
   let b=document.body;
   b.appendChild(mainCanvas);
@@ -220,10 +221,10 @@ let triggerCrackerInvestigation=()=>{
       ,"What does it all mean?","Is Todd ok?",
       "I need a clue! \nHEY CRACKER!","TAKE ME TO YOUR LEADER!","\"fine.\"","what?",`"head to the planet called ${MysteryPlanet.name}"`,
       "I'm not eating any more of these crackers!"];
+
     availableText2 = InvestigationText;
     investigationTriggered = true;
     textCounter =0;
-    //player.reading=true;
     LandPlayer();
   }
 }

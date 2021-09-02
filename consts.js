@@ -43,7 +43,7 @@ const RadarMax = 20000;
 
 
 // UI
-const TopText = {x: 4, y: 10};
+const TopText = {x: 4, y: 16};
 // text box default size
 const TextBox = {
   x:100,

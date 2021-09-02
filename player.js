@@ -1,19 +1,21 @@
-let Dude;
+
 let canExit = false; // trigger exit vehicle prompt
 let canEnter = false; // are we in range of the ship?
 let canBoard = false;
 let talkedToMomOnce = false;
-let muffinType;
 let talkedToMysteryDudeOnce = false;
 let mysteryDudeGone = false;
+let muffinType;
+let crashtext; // text displayed on crash
 let availableText;
 let availableText2;
+let Dude;
 let textCounter=0;
-let crashtext; // text displayed on crash
-let inventory = [];
-let inventoryString = "";
 let stopSpeed =0;
 let playerCurrentSpeed =0;
+let inventory = [];
+let inventoryString = "";
+
 
 // setupPlayer()
 //
@@ -271,17 +273,19 @@ let updatePlayerUi=()=>{
   showQuestText();
 
   // show other hints:
-
+  let x= middle.x +60;
+  let y=middle.y -40;
   // when boarded and on ground
   if(canExit&&!player.crashed)
-  drawText("press e to exit. hold w to launch.", middle.x + 100, middle.y + 50);
+  drawText("press e to exit. hold w to launch.", x,y);
   // when able to board
-  if(canEnter&&canBoard)
+  if(canEnter&&canBoard&&talkedToMomOnce)
   drawText("press space to board");
   // when in flight
   if(!HelpOff&&player.boarded&&!player.landed){
-    drawText("w to throttle. a,d to steer.", middle.x + 100, middle.y + 50)
-    drawText("l to stop", middle.x + 100, middle.y + 64)
+    drawText("FLIGHT CONTROLS:", x,y-font)
+    drawText("W to throttle. A and D to steer.", x,y)
+    drawText("SPACE to stop", x,y+font)
   }
 
 
@@ -317,8 +321,8 @@ let showTopText=()=>{
 
     //console.log(player.crashThreshold,playerCurrentSpeed)
     if(playerCurrentSpeed>player.crashThreshold)
-    drawText("Speed is unsafe for landing", TopText.x,TopText.y+15, "red");
-    else drawText("Speed is safe for landing", TopText.x,TopText.y+15,"green");
+    drawText("Speed is unsafe for landing", TopText.x,TopText.y+font, "red");
+    else drawText("Speed is safe for landing", TopText.x,TopText.y+font,"green");
 
   }
 
@@ -375,17 +379,17 @@ let showQuestText=()=>{
 
   let showTextArray=(txtarr,x,y)=>{
     fill(black);
-    mCtx.fillRect(TextBox.x,TextBox.y, 300, 40);
+    mCtx.fillRect(TextBox.x,TextBox.y, 320, 40);
 
     if(txtarr!=undefined)
-    SplitText(txtarr[textCounter],TextBox.x+5,TextBox.y+12);
+    SplitText(txtarr[textCounter],TextBox.x+5,TextBox.y+17);
   }
 
   let SplitText=(text,x,y,c)=>{
     let i=0;
     text.split("\n").forEach(line=>{
       drawText(line, x, y + i,c);
-      i+= 10;
+      i+= font;
     });
   }
 
@@ -396,8 +400,8 @@ let showQuestText=()=>{
   let drawText=(txt,x,y,color)=>{
     if(!color) color = "white";
     if(!x){
-      x=middle.x;
-      y=middle.y;
+      x=middle.x-50;
+      y=middle.y-40;
     }
     fill(color);
     mCtx.fillText(txt,x,y)
@@ -433,8 +437,9 @@ let showQuestText=()=>{
   let updateAutopilot=()=>{
 
     if(autopilotActive){
-      if(autopilotPhase==0){
+      switch(autopilotPhase){
 
+        case 0:
         if(player.throttle>0) player.minusThrottle();
         else {
           autopilotPhase++;
@@ -442,29 +447,31 @@ let showQuestText=()=>{
           player.targetbearing = angleFromDirection(vxy(player));
           if(player.vx>0) player.targetbearing *=-1;
         }
-      }
-      else if(autopilotPhase==1){
+        break;
+
+        case 1:
         if (reachTargetRotation()){
           autopilotPhase++;
           player.bearing=player.targetbearing;
         }
+        break;
 
-      }
-      else if(autopilotPhase==2){
+        case 2:
         player.plusThrottle();
         slowframes--;
-
         if(slowframes<=0) autopilotPhase++;
-      }
-      else if(autopilotPhase==3){
+        break;
+
+        case 3:
         if(player.throttle>0) player.minusThrottle();
         else autopilotPhase++;
-      }
+        break;
 
-      else if(autopilotPhase==4){
+        case 4:
         autopilotActive = false;
         player.vx/=2;
         player.vy/=2;
+        break;
       }
     }
   }

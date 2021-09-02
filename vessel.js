@@ -38,14 +38,21 @@ class Vessel extends AnimObject {
       // if accelerating, update velocity
       if(this.throttle > 0){
 
-        let ax = this.throttle * Math.sin(this.bearing);
-        let ay = this.throttle * Math.cos(this.bearing);
-        // check if new speed is below the speed limit
-        if(!( dist(zero,{x:this.vx+ax,y:this.vy+ay})
-          >SpeedLimit)){
-            this.vx += ax;
-            this.vy += ay;
+        let vxax = this.vx + this.throttle * Math.sin(this.bearing);
+        let vyay = this.vy + this.throttle * Math.cos(this.bearing);
+        let d = dist(zero,{x:vxax,y:vyay});
+
+        // if we are below the speed limit, add the acceleration
+        if(d<=SpeedLimit){
+          this.vx = vxax;
+          this.vy = vyay;
         }
+        // if we are above the speed limit, gotta compress the speed
+        else {
+          this.vx = vxax * SpeedLimit / d;
+          this.vy = vyay * SpeedLimit / d;
+        }
+
       }
 
       // update flame position according to throttle power

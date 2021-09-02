@@ -30,11 +30,11 @@ let setKey=(e,b)=>{
 let keyDown=(e)=>{
   e = e.keyCode;
   setKey(e,true);
-  if(e==76&&!player.landed) LandPlayer();
   if(e==32){
     if(!inputs.space){
       if(gamestate=="focused") SpacePressInFocusState();
       else if(gamestate=="game") SpacePressInGameState();
+
     }
 
     inputs.space=true;
@@ -76,6 +76,8 @@ let board=()=>{
 
 let SpacePressInGameState =()=>{
 
+
+  if(!player.landed) LandPlayer();
   // 1. BOARD VESSEL
 
   // if vessel is in range

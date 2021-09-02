@@ -86,8 +86,7 @@ let getCtx=(c)=>{
 //
 // update ctx hue-rotate
 let hue =(h)=>{
-  if(h&&h!=0)
-  mCtx.filter = `hue-rotate(${h}deg)`;
+  if(h&&h!=0) mCtx.filter = `hue-rotate(${h}deg)`;
 }
 
 // image()
