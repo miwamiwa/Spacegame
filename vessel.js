@@ -152,7 +152,8 @@ class Vessel extends AnimObject {
 
   displayRadar(){
     if(this.radar && this.boarded){
-
+      let ytaken = [];
+      let diff = 20;
       this.onradar.forEach(p=>{
         // don't update if too close to planet
         if(p.d2p >= p.r + RaDist){
@@ -161,7 +162,15 @@ class Vessel extends AnimObject {
           let dir = directionFromObjectToObject(this,p);
           let visit = ""; // did we visit this place?
           let col; // text color (white by default)
+          let y = diff*flo((middle.y+RaDist * dir.y)/diff);
+          let tries = 8;
+          while(ytaken.includes(y)&&tries>0){
+            y += diff;
+            tries--;
+          }
 
+
+          ytaken.push(y);
           // setup text
           if(p.visited){
             visit = " (visited)";
@@ -172,7 +181,7 @@ class Vessel extends AnimObject {
           mCtx.save();
           mCtx.translate(
             middle.x+RaDist * -dir.x,
-            middle.y+RaDist * dir.y
+            y + 30
           );
 
           // draw line
@@ -183,7 +192,8 @@ class Vessel extends AnimObject {
           mCtx.stroke();
 
           // draw text
-          SplitText("planet: "+p.name+visit+"\ndistance: "+p.d2p,-35,0,col);
+          mCtx.font="14px Arial"
+          SplitText("planet "+p.name+"\n"+visit+" ("+p.d2p+")",-35,0,col,14);
           mCtx.restore();
         }
       });

@@ -37,7 +37,7 @@ const VesselMass = 0.8;
 
 
 // RADAR
-const RaDist = 180;
+const RaDist = 200;
 const RadarMin = 200;
 const RadarMax = 20000;
 

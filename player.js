@@ -385,11 +385,12 @@ let showQuestText=()=>{
     SplitText(txtarr[textCounter],TextBox.x+5,TextBox.y+17);
   }
 
-  let SplitText=(text,x,y,c)=>{
+  let SplitText=(text,x,y,c,f)=>{
+    if(!f) f=font
     let i=0;
     text.split("\n").forEach(line=>{
       drawText(line, x, y + i,c);
-      i+= font;
+      i+= f;
     });
   }
 
