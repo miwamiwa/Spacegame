@@ -29,14 +29,52 @@ class Planet {
     if(name==undefined) name = RandomPlanetName();
     this.name = name;
 
-    // setup planet color, spots
-    this.addBasicFeatures();
 
     // add random scenery (==trees)
     if(randomscenery)
     this.setupScenery();
 
     planets.push(this);
+
+    this.make();
+  }
+
+
+  make(){
+
+    let r = flo(rand(40,60));
+    let g = 255-r;
+    let b = flo(rand(20,120));
+
+    this.groundColor = rgba(r,g,b,1);
+    this.groundColor2 = rgba(r+20,g+20,b+20,1);
+
+    this.planet=scanv();
+    this.planet2=scanv();
+
+    let ctx=getCtx(this.planet);
+    let ctx2=getCtx(this.planet2);
+
+    ctx2.fillStyle="black";
+    ctx.fillStyle="white"
+
+    for(let y=0; y<50; y++){
+      let r = rand(y%50);
+      let r2 = rand(y%30);
+      let fact = rand(0,10)
+      for(let x=0; x<50; x++){
+        if(dist({x:x,y:y},{x:25,y:25})<25){
+          if(x<r||x>r2) ctx.fillStyle="#8bef";
+          else ctx.fillStyle=`#${flo(rand(3,7))}8cf`;
+          ctx.fillRect(x,y,1,1);
+          ctx2.fillRect(x,y,1,1);
+        }
+
+        r2 += rand(-fact,fact)
+      }
+    }
+
+
   }
 
   addFeature(obj, r){
@@ -81,31 +119,7 @@ class Planet {
     this.features = sorted;
   }
 
-  // addBasicFeatures()
-  //
-  // generate ground color and spots
 
-  addBasicFeatures(){
-    let r = flo(rand(80,120));
-    let g = 255-r;
-    let b = flo(rand(80,120));
-    let rad = flo(rand(40, 140));
-    let spots = flo(rand(4,12));
-    let x;
-    let y;
-
-    this.groundColor = rgba(r,g,b,1);
-    this.groundColor2 = rgba(r+20,g+20,b+20,0.3);
-    this.spots = [];
-
-    for(let i=0; i<spots; i++){
-      x=this.rPos();
-      y=this.rPos();
-      this.spots.push({x:x, y:y, r:rad+rand(-10,10),g:gradient(x,y, 5, 10, 10, 30,this.groundColor2)});
-
-    }
-
-  }
 
   // rPos()
   //
@@ -222,26 +236,25 @@ class Planet {
       // draw a circle to show range of gravity
       drawCircle(0,0,this.mass,"#5593");
 
-      // set mask around contour
-      mCtx.beginPath();
-      circ(0,0,this.r);
-      mCtx.clip();
+      mCtx.globalCompositeOperation = 'destination-out';
+      mCtx.drawImage(this.planet2,-this.r,-this.r,this.r*4,this.r*4);
+      mCtx.save();
+      mCtx.globalCompositeOperation = 'xor';
 
-      // draw planet
-      drawCircle(0,0,this.r,this.groundColor);
-      // draw circular shadow overtop
-      drawCircle(0,0,this.r,this.grd);
+      mCtx.drawImage(this.planet,-this.r,-this.r,this.r*4,this.r*4);
 
-      // draw "spots"
-      this.spots.forEach(spot=>drawCircle(spot.x,spot.y,spot.r,spot.g));
-
-      // draw all the features' shadows
       this.features.forEach(f=>displayShadow(f));
 
+
       mCtx.restore();
-      mCtx.save();
-      mCtx.translate(pos.x,pos.y);
+
+      mCtx.restore();
+
+
       // then draw all features
+      mCtx.save();
+      hue(this.hue);
+      mCtx.translate(pos.x,pos.y);
       this.features.forEach(f=>f.display());
       mCtx.restore();
     }

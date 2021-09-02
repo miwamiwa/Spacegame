@@ -9,6 +9,7 @@ class AnimObject extends BasicObject {
     // states
     this.counter =0;
     this.boarded = true;
+    this.left=true;
   }
 
   // setup animation frames
@@ -64,6 +65,7 @@ class AnimObject extends BasicObject {
     this.displayChildren(children);
     // display sprite:
     hue(this.hue);
+    if(!this.left) mCtx.scale(-1,1);
     image(this.img,0,0,this.half,this.size);
     mCtx.restore();
   }

@@ -32,9 +32,12 @@ let keyDown=(e)=>{
   setKey(e,true);
   if(e==76&&!player.landed) LandPlayer();
   if(e==32){
+    if(!inputs.space){
+      if(gamestate=="focused") SpacePressInFocusState();
+      else if(gamestate=="game") SpacePressInGameState();
+    }
+
     inputs.space=true;
-    if(gamestate=="focused") SpacePressInFocusState();
-    else if(gamestate=="game") SpacePressInGameState();
   }
 }
 

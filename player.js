@@ -1,8 +1,8 @@
 let Dude;
 let canExit = false; // trigger exit vehicle prompt
-let canEnter = true; // are we in range of the ship?
-let canBoard = true;
-let talkedToMomOnce = true;
+let canEnter = false; // are we in range of the ship?
+let canBoard = false;
+let talkedToMomOnce = false;
 let muffinType;
 let talkedToMysteryDudeOnce = false;
 let mysteryDudeGone = false;
@@ -28,7 +28,7 @@ let setupPlayer=()=>{
   // setup player
   player.radar = true;
   player.reading = false;
-  player.animRate = 10;
+  player.animRate = 20;
   player.running = false;
 }
 
@@ -135,8 +135,8 @@ let planetInputs=()=>{
   if(running!=player.running){
     switch(player.running){
       case false: Dude.setFrames(PlayerAnimation); break;
-      case "left": Dude.setFrames(PlayerWalkLeft); break;
-      case "right": Dude.setFrames(PlayerWalkRight); break;
+      case "left": Dude.setFrames(PlayerWalkLeft); Dude.left=true; break;
+      case "right": Dude.setFrames(PlayerWalkLeft); Dude.left=false; break;
       case "down": Dude.setFrames(PlayerWalkDown); break;
       case "up": Dude.setFrames(PlayerWalkUp); break;
     }

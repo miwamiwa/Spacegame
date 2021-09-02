@@ -69,6 +69,13 @@ let rgba =(r,g,b,a) =>`rgba(${r},${g},${b},${a})`;
 // make a canvas
 let canv=()=> document.createElement("canvas");
 
+let scanv=()=>{
+  let c=canv();
+  c.width=100;
+  c.height=100;
+  return c;
+}
+
 let getCtx=(c)=>{
   let ctx = c.getContext("2d");
   ctx.imageSmoothingEnabled= false;
@@ -79,7 +86,7 @@ let getCtx=(c)=>{
 //
 // update ctx hue-rotate
 let hue =(h)=>{
-  if(h!=0)
+  if(h&&h!=0)
   mCtx.filter = `hue-rotate(${h}deg)`;
 }
 

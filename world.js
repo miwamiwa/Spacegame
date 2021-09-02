@@ -57,7 +57,7 @@ let setupPlanets=()=>{
   ToddsPlanet = new Planet(HomePlanet.x + 200, HomePlanet.y-DistanceToTodd, true, "Todd's place",310,1200);
 
   ToddsPlanet.addFeature(new StaticObject(80,0,home_png, 100, ToddsHomeText, triggerTommysHouseFound));
-  ToddsCouch=new StaticObject(-90,40,couch_png, 100, CouchText1);
+  ToddsCouch=new StaticObject(-90,40,couch_png, 100, CouchText2,triggerGoToPlanetsOnRight);
   ToddsPlanet.addFeature(ToddsCouch);
 }
 
@@ -144,7 +144,7 @@ let triggerTommysHouseFound=()=>{
   // disable flight instructions since we succesfully landed somewhere.
   HelpOff = true;
   // update couch text
-  ToddsCouch.setTandA(CouchText2,triggerGoToPlanetsOnRight);
+
   HomeCouch.text=HCouchText2;
 
 }
@@ -232,7 +232,7 @@ let triggerCrackerInvestigation=()=>{
 let continueInvestigation=()=>{
 
   // new planet
-  MysteryPlanet = new Planet(player.x + roughly(1500), player.y-roughly(0), true);
+  MysteryPlanet = new Planet(player.x + roughly(15000), player.y-roughly(0), true);
   MysteryPlanet.addCheese();
 
   // this is the object thru which we interact with the mystery guy

@@ -8,7 +8,6 @@ const CrashAnimation = [crash1_png,crash2_png,crash3_png];
 const StarAnimation = [star1_png,star2_png];
 const PlayerAnimation = [player1_png,player2_png];
 const PlayerWalkLeft = [walk_left_1_png,walk_left_2_png];
-const PlayerWalkRight = [walk_right_1_png,walk_right_2_png];
 const PlayerWalkUp = [walk_up_1_png,walk_up_2_png];
 const PlayerWalkDown = [walk_down_1_png,walk_down_2_png];
 

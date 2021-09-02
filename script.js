@@ -80,7 +80,7 @@ let runStartScreen=(x,y)=>{
 //
 let startGame=()=>{
   gamestate = "focused"
-  startSound();
+  //startSound();
   setupPlayer();
   setupStars();
   camera = new Camera(player);
