@@ -109,10 +109,13 @@ let playerLanded=()=>{
   Dude.planetMode = true;
   let p=player.nearestPlanet;
   let pos;
+  let d=0;
   p.addFeature(Dude,100);
-  while(dist(player,addV(p,Dude))>155){
-    pos=p.findAvailableSpot(100,(p.r-100)/p.r);
+  while(d>100||d<65){
+    pos=p.findAvailableSpot(100,(p.r-25)/p.r);
+
     setV(Dude,pos);
+    d=dist(player,addV(p,Dude));
   }
 }
 
@@ -418,7 +421,7 @@ let showQuestText=()=>{
   let autopilotActive = false;
   let autopilotPhase;
 
-  let LandPlayer =()=>{
+  let StopPlayer =()=>{
     if(!autopilotActive){
       player.targetbearing=undefined;
       //console.log("autopilot active")

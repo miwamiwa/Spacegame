@@ -57,7 +57,7 @@ let board=()=>{
 let SpacePressInGameState =()=>{
 
 
-  if(!player.landed && !availableText2) LandPlayer();
+  if(!player.landed && !availableText2) StopPlayer();
   // 1. BOARD VESSEL
 
   // if vessel is in range

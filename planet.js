@@ -142,7 +142,7 @@ class Planet {
     // keep picking positions until one with no overlaps is found
     while(!found){
       if(!i)i=0.5;
-      pos = this.rSurf(i);
+      pos = this.rInRange(i);
       let clear = true;
 
       for(let j=0; j<this.features.length; j++){
@@ -204,6 +204,12 @@ class Planet {
     return {x:this.rPos() * range,y:this.rPos() * range};
   }
 
+  rInRange(r){
+    let p = this.rSurf(1);
+    while(dist(zero,p)>r*this.r) p = this.rSurf(1);
+    return p;
+  }
+
   // addCheese()
   //
   // litter cheese crackers all over the place
@@ -257,6 +263,9 @@ class Planet {
       mCtx.translate(pos.x,pos.y);
       this.features.forEach(f=>f.display());
       mCtx.restore();
+
+
+
     }
   }
 
