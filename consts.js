@@ -45,17 +45,16 @@ const RadarMax = 20000;
 // UI
 const TopText = {x: 4, y: 16};
 // text box default size
-const TextBox = {
-  x:100,
-  y:100
-}
+const TextBox = {x:100, y:100};
 
 // PLANETS
 const GravityConstant = 50;
 const PlanetMassMin = 800;
 const PlanetMassMax = 2000;
 const MinDistanceBetweenFeatures = 50;
-const PlanetNames = [ ////https://www.fantasynamegenerators.com/planet_names.php
+
+//https://www.fantasynamegenerators.com/planet_names.php
+const PlanetNames = [
   "Nuchearus",
 "Binvethea",
 "Eccurn",
@@ -68,9 +67,7 @@ const PlanetNames = [ ////https://www.fantasynamegenerators.com/planet_names.php
 "Lloria ER2"
 ];
 
-const BerryNames=[
-  "red","blue","orange","yellow","black"
-];
+const BerryNames=["red","blue","orange","yellow","black"];
 
 
 // WORLD
@@ -94,46 +91,106 @@ const bgFill = "#2a1f42";
 const black = "black";
 
 // TEXT
-const IntroText = ["Welcome","To space game","woop woop"];
-const FailTextList = ["Ouch!","Don't scratch the car. -Mom.","Oof."];
+const IntroText = [
+  "Ready?",
+  "Go!"
+];
+
+const FailTextList = [
+  "Ouch!",
+  "Don't scratch the car. -Mom.",
+  "It takes up to 3000 units of space to stop"
+];
+
 const HomePlanetText = [
-  "This is my home... \nI've always lived here!","Gooood oleeee hooooomeee","Oh hi mom!","Mom: Hey son! Want a muffin?","Yeah!","Mom: Go find me some berries then!\n5 of any kind. Thanks!","Oh"
-
+  "This is my home.\nI've always lived here!",
+  "Gooood old hooooomeee",
+  "Oh hi mom!",
+  "Mom: Hey son! Want a muffin?",
+  "You: Yeah!",
+  "Mom: Go find berries or something, then!\n5 of any kind. Thanks!",
+  "You: Oh"
 ];
 
-const HomeCouchText=["This is a nice couch","But you know who has an even\nbetter couch?","My neighbour Todd.","I should go over to Todd's place."]
-const HCouchText2 = ["<3 my couch"]
+const luv="I <3 my couch";
+
+const HomeCouchText=[
+  luv,
+  "My friend Todd has the best couch",
+  "I should visit him, we haven't/njammed in a while"
+];
+
+const HCouchText2 = [
+  luv
+];
+
 const ToddsHomeText = [
-  "This is Todd's home.\nThe jam space is in the basement.",
-  "Ring! ring!!",
+  "This is Todd's home\nThe jam space is downstairs",
+  "ring! ring!!",
   "...",
-  "Todd's not here.",
-  "What's that over here? A package with a note...",
-  "\"Sorry for the delay, \nThis box should complete your recent order of",
-  "875 bags of cheese crackers.\nThank you for your business. You are our favorite customer.\" ",
-  "Todd WAS here all right!"
+  "Todd isn't there",
+  "What's this? A package with a note",
+  "\"Sorry for the delay\nThis box should complete your recent order of\"",
+  "\"875 bags of cheese crackers.\nThank you for your business\"",
+  "\"You are our favorite customer.\"",
+  "No surprise here"
 ];
 
-const CouchText1 = ["This couch..."];
-const CouchText2 = ["This is Todd's couch.\nBest couch ever!",
-"This couch, in this place, it's the best view ever.\nTrust me we tried all the couches.",
-"Oh dang, a note",
-"\"scurred off to one of the planets to the right.\nprolly gonna hit up all of em\""]
+const CouchText2 = [
+  "This is Todd's couch.\nBest couch ever!",
+  "It's like sitting on a cloud.\nUnreal.",
+  "Oh dang, a note",
+  "\"scurred off to one of the planets to the right.\nprolly gonna hit up all of em\""
+];
 
 // text which appears during the part with crackers on 3 planets
-const CrackerText = ["a cracker","munch... munch...","Most definitely Todd's cracker"];
-const CrackerText2 = ["More crackers.","But where is Todd?"];
-const CrackerText3 = ["These crackers are literally \neverywhere!"];
+const CrackerText = [
+  "A cracker",
+  "Munch... munch...",
+  "Most definitely Todd's cracker"
+];
 
-const RandomHomeText1 =["Someone's inside...","Uhm hello... I was led here by\na handful of cr..","Nevermind. have you seen my friend Todd?",
-"Stranger: Todd? you mean that dork and his\ndorky guitar?","...","Stranger:Yeah I saw him!\nHe came here to hurt my ears!",
-"In fact you're hurting my ears!","Get out!"];
+const CrackerText2 = [
+  "More crackers.",
+  "But no Todd."
+];
 
-const ToddsVesselText1 =["Todd: Hi dude!\nWhat are you doing over here?","You were looking for me??",
-"Whadd'ya mean, what am I doing here? ;)","Ealier today someone said I sounded\nterrible","So I got on my ship and started\nlooking for a place with better accoustics"
-,"This place is awesome!\nHear that?? Sounds amazing.","You: Todd..","Todd: wat","You: There's no accoustics in space..","You've always sounded awesome","Todd: ....?","Todd: Dang!","Now that you're here, let's jam!"];
+const CrackerText3 = [
+  "These crackers are literally\neverywhere!"
+];
 
-const ToddsVesselText2 = ["Todd: Hi dude!","Let's jam!"]
+const RandomHomeText1 =[
+  "Someone's inside...",
+  "Uhm hello... I was led here by\na handful of cr..",
+  "Nevermind. have you seen my friend Todd?",
+  "Stranger: Todd? you mean that dork and his\ndorky guitar?",
+  "...",
+  "Stranger:Yeah I saw him!\nHe came here to hurt my ears!",
+  "In fact you're hurting my ears!",
+  "Get out!"
+];
+
+const ToddsVesselText1 =[
+  "Todd: Hi dude!\nWhat are you doing over here?",
+  "You were looking for me??",
+  "Whadd'ya mean, what am I doing here? ;)",
+  "Ealier today someone said I sounded\nterrible",
+  "So I got on my ship and started\nlooking for a place with better accoustics",
+  "This place is awesome!\nHear that?? Sounds amazing.",
+  "You: Todd..",
+  "Todd: wat",
+  "You: There's no accoustics in space..",
+  "You've always sounded awesome",
+  "Todd: ....?",
+  "Todd: Dang!",
+  "Now that you're here, let's jam!"
+];
+
+const ToddsVesselText2 = [
+  "Todd: Hi dude!",
+  "Let's jam!"
+];
+
 // MUSIC
 const Edorian = [4,6,7,9,11,13,14];
 const FshPhrygi = [6,7,9,11,13,14,16];

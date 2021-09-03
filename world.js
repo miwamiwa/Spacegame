@@ -30,7 +30,7 @@ let setupCanvas=()=>{
   mainCanvas.width = 600;
   mainCanvas.height = 600;
   mCtx = getCtx(mainCanvas);
-  mCtx.font = font+"px Arial";
+  mCtx.font = "bold "+font+"px Arial";
 
   let b=document.body;
   b.appendChild(mainCanvas);

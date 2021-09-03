@@ -153,13 +153,9 @@ let planetInputs=()=>{
   // look through all features
   p.features.forEach(f=>{
     // if collider enabled
-    if(f.talker){
-      let d = dist({x:Dude.x,y:Dude.y+Dude.half},{x:f.x,y:f.y+f.half});
-      // if feature is in talk range,
-      // configure text interaction
-      if(d<f.talkrange)
-      availableText = f;
-    }
+    if(f.talker&&dist(Dude,{x:f.x,y:f.y+60})<f.talkrange){
+        availableText = f;
+      }
   });
 }
 
@@ -313,8 +309,6 @@ let showTopText=()=>{
   // if we're aboard the space chips
   else if(player.boarded){
     drawText(`You're aboard the greenmobile.
-    vx : ${flo(player.vx)}
-    vy : ${flo(player.vy)}
     speed : ${flo(playerCurrentSpeed)}
     bearing: ${flo(radians_to_degrees(player.bearing))}°
     throttle: ${flo(10*player.throttle)/10}`,TopText.x,TopText.y);

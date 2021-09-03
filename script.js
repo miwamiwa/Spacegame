@@ -4,8 +4,7 @@ let camera;
 let planets = [];
 let gamestate = "startscreen";
 let genplanets = [];
-// counter
-let intro = 0; // intro text counter
+
 
 
 // start gameon page load
@@ -20,6 +19,7 @@ window.onload =()=>{
 //
 // main game loop
 let run=()=>{
+
   mCtx.save();
   // background
   bg();
@@ -32,11 +32,15 @@ let run=()=>{
   else if(gamestate=="game")
   runGame();
 
-  // run "focused mode"
-  else if(gamestate=="focused")
-  focusedMode(200,middle.y);
-
   mCtx.restore();
+
+  if(gamestate=="focused"){
+    camera.update();
+    player.update();
+
+    gamestate="game";
+  }
+
 }
 
 // bg ()
@@ -48,18 +52,6 @@ let bg=()=>{
   mCtx.fillRect(0,0,mainCanvas.width,mainCanvas.height);
 }
 
-// focusedMode()
-//
-// draw only an empty background, some text and the player.
-
-let focusedMode=(x,y)=>{
-
-  camera.update();
-  player.update();
-
-  drawText(IntroText[intro],x,y);
-  drawText("press space to continue",x,y+14,grey);
-}
 
 
 // runStartScreen()

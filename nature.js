@@ -62,7 +62,7 @@ let createNewTreeType=()=>{
 
     // individual tree settings
     let y = canvas.height - 6;
-    let x = (i+1)*canvas.width/4 -3;
+    let x = canvas.width/2;
     // trunk length
     let tLen = flo(rand(tMin,tMax));
     // trunk deviation left-right

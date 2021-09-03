@@ -31,31 +31,11 @@ let keyDown=(e)=>{
   e = e.keyCode;
   setKey(e,true);
   if(e==32){
-    if(!inputs.space){
-      if(gamestate=="focused") SpacePressInFocusState();
-      else if(gamestate=="game") SpacePressInGameState();
-
-    }
-
+    if(!inputs.space&&gamestate=="game") SpacePressInGameState();
     inputs.space=true;
+    }
   }
-}
 
-// SpacePressInFocusState()
-//
-// continue text / game by pressing space
-// while game is in focus mode
-
-let SpacePressInFocusState =()=>{
-  // increment text
-  intro++;
-  // if text end reached, get back into Game state.
-  // GAME START
-  if(intro==IntroText.length){
-    mutebass = false;
-    gamestate="game";
-  }
-}
 
 
 // board()
@@ -77,7 +57,7 @@ let board=()=>{
 let SpacePressInGameState =()=>{
 
 
-  if(!player.landed) LandPlayer();
+  if(!player.landed && !availableText2) LandPlayer();
   // 1. BOARD VESSEL
 
   // if vessel is in range

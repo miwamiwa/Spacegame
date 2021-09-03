@@ -192,7 +192,7 @@ class Vessel extends AnimObject {
           mCtx.stroke();
 
           // draw text
-          mCtx.font="14px Arial"
+          mCtx.font="bold 14px Arial"
           SplitText("planet "+p.name+"\n"+visit+" ("+p.d2p+")",-35,0,col,14);
           mCtx.restore();
         }
