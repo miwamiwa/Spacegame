@@ -3,8 +3,11 @@ body{
   width:95vw;
   height:95vh;
   display:flex;
-  flex-direction:column;
-  justify-content:space-around;
+  font-family:arial;
+  color:white;
+  font-weight:bold;
+  flex-direction:column-reverse;
+  justify-content:center;
   align-items:center;
 }
 canvas{

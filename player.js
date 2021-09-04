@@ -15,7 +15,7 @@ let stopSpeed =0;
 let playerCurrentSpeed =0;
 let inventory = [];
 let inventoryString = "";
-
+let nP;
 
 // setupPlayer()
 //
@@ -107,15 +107,15 @@ let playerLanded=()=>{
   // move dude to planet
   Dude.visible = true;
   Dude.planetMode = true;
-  let p=player.nearestPlanet;
+
   let pos;
   let d=0;
-  p.addFeature(Dude,100);
+  nP.addFeature(Dude,100);
   while(d>100||d<65){
-    pos=p.findAvailableSpot(100,(p.r-25)/p.r);
+    pos=nP.findAvailableSpot(100,(nP.r-25)/nP.r);
 
     setV(Dude,pos);
-    d=dist(player,addV(p,Dude));
+    d=dist(player,addV(nP,Dude));
   }
 }
 
@@ -149,16 +149,15 @@ let planetInputs=()=>{
 
   // enable hopping ON vessel when in range
   // (actually happens in keyDown)
-  let p = player.nearestPlanet;
-  if(dist(player,addV(Dude,p))<HopDistance)
+  if(dist(player,addV(Dude,nP))<HopDistance)
   canEnter = true;
 
   // look through all features
-  p.features.forEach(f=>{
+  nP.features.forEach(f=>{
     // if collider enabled
-    if(f.talker&&dist(Dude,{x:f.x,y:f.y+60})<f.talkrange){
+    if(f.talker&&dist(Dude,xy(f.x,f.y+60))<f.talkrange)
         availableText = f;
-      }
+
   });
 }
 
@@ -207,14 +206,14 @@ let moveIt =(deltaX,deltaY)=>{
   if(CheckCollisionsOnPlanet(p)) return;
 
   // if collisions with planet edges also checks out
-  if(dist(p, zero) < player.nearestPlanet.r){
+  if(dist(p, zero) < nP.r){
     // then move player
     if(deltaX!=0) Dude.x += deltaX;
     else Dude.y += deltaY;
   }
 
   // re-sort planet features
-  player.nearestPlanet.sortFeatures();
+  nP.sortFeatures();
 }
 
 
@@ -230,7 +229,7 @@ let CheckCollisionsOnPlanet=(p)=>{
   availableText = undefined;
 
   // look through all features
-  player.nearestPlanet.features.forEach(f=>{
+  nP.features.forEach(f=>{
     // if collider enabled
     if(f.collider){
       let d = dist(p,f);
@@ -325,7 +324,7 @@ let showTopText=()=>{
 
   // if we're on a planet
   else
-  drawText(`Planet ${player.nearestPlanet.name}.`,TopText.x,TopText.y);
+  drawText(`Planet ${nP.name}.`,TopText.x,TopText.y);
 
 
 

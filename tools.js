@@ -21,6 +21,7 @@ let fill =(f)=> mCtx.fillStyle=f;
 // gradient()
 //
 // create a canvas ctx gradient
+/*
 let gradient=(x1,y1,r1,x2,y2,r2,c2,c1)=>{
 
   let g = mCtx.createRadialGradient(x1,y1,r1,x2,y2,r2);
@@ -28,17 +29,18 @@ let gradient=(x1,y1,r1,x2,y2,r2,c2,c1)=>{
   g.addColorStop(1, c2);
   return g;
 }
+*/
 
 let sq=(i)=>Math.pow(i,2);
 
 // vector operations
 
-let addV=(v,v2)=>{
-  return {x:v.x+v2.x,y:v.y+v2.y}
-}
+let addV=(v,v2)=>xy(v.x+v2.x,v.y+v2.y);
+let subV=(v,v2)=>xy(v.x-v2.x,v.y-v2.y);
 
-let subV=(v,v2)=>{
-  return {x:v.x-v2.x,y:v.y-v2.y}
+
+let xy=(x,y)=>{
+  return {x:x,y:y}
 }
 
 let setV=(v,v2)=>{
@@ -119,9 +121,8 @@ let displayShadow=(obj)=>{
 let angleFromDirection=(d)=>
   Math.acos( -d.y/ Math.sqrt(sq(d.x)+sq(d.y)) );
 
-let vxy=(i)=>{
-  return {x:i.vx,y:i.vy}
-}
+let vxy=(i)=> xy(i.vx,i.vy);
+
 
 // rand()
 //
@@ -167,10 +168,10 @@ let directionFromObjectToObject=(o1, o2)=>{
   let dx = o1.x - o2.x;
   let dy = o1.y - o2.y;
   let t = abs(dx) + abs(dy);
-  return {x:  dx/t, y:- dy/t};
+  return xy(dx/t,- dy/t);
 }
 
-let zero={x:0,y:0};
+let zero=xy(0,0);
 
 // abs()
 //

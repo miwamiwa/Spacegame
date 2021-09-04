@@ -66,7 +66,7 @@ let SpacePressInGameState =()=>{
     // update dude
     board();
 
-    player.nearestPlanet.removeDude();
+    nP.removeDude();
     // update camera target
     camera.targetIsVessel();
     // player controls vessel now

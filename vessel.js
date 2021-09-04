@@ -40,7 +40,7 @@ class Vessel extends AnimObject {
 
         let vxax = this.vx + this.throttle * Math.sin(this.bearing);
         let vyay = this.vy + this.throttle * Math.cos(this.bearing);
-        let d = dist(zero,{x:vxax,y:vyay});
+        let d = dist(zero,xy(vxax,vyay));
 
         // if we are below the speed limit, add the acceleration
         if(d<=SpeedLimit){
@@ -74,26 +74,25 @@ class Vessel extends AnimObject {
 
   applyGravity(){
 
-    if(this.nearestPlanet!=undefined){
+    if(nP){
 
-      let p = this.nearestPlanet;
-      let d =dist(this,p);
+      let d =dist(this,nP);
       // if we're beyond range of gravity (which == mass lol)
       // then nearest planet is undefined.
-      if(d >= p.mass) p=undefined;
+      if(d >= nP.mass) nP=undefined;
 
       else {
         // if in gravity range:
 
         // get gravity factor
-        let g = p.getGravityFor(this,d);
+        let g = nP.getGravityFor(this,d);
 
         // if landed, stop vehicle
         if(this.landed) this.stop();
 
         // if in flight, apply gravity
         else {
-          let dir = directionFromObjectToObject(p,this);
+          let dir = directionFromObjectToObject(nP,this);
           this.vx +=  g * dir.x;
           this.vy +=  g * dir.y;
         }
@@ -128,8 +127,7 @@ class Vessel extends AnimObject {
         let d = dist(this,p);
 
         // are we in gravity range of this planet?
-        if(d < p.mass)
-          this.nearestPlanet = p;
+        if(d < p.mass) nP = p;
         // calculate distance to planet
         p.d2p = flo(d);
 

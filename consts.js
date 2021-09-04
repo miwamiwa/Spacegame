@@ -56,18 +56,24 @@ const MinDistanceBetweenFeatures = 50;
 //https://www.fantasynamegenerators.com/planet_names.php
 const PlanetNames = [
   "Nuchearus",
-"Binvethea",
-"Eccurn",
-"Hinomia",
-"Haotov",
-"Peiyama",
-"Strutacarro",
-"Llenigawa",
-"Garvis 5",
-"Lloria ER2"
+  "Binvethea",
+  "Eccurn",
+  "Hinomia",
+  "Haotov",
+  "Peiyama",
+  "Strutacarro",
+  "Llenigawa",
+  "Garvis 5",
+  "Lloria ER2"
 ];
 
-const BerryNames=["red","blue","orange","yellow","black"];
+const BerryNames=[
+  "red",
+  "blue",
+  "orange",
+  "yellow",
+  "black"
+];
 
 
 // WORLD
@@ -108,7 +114,9 @@ const HomePlanetText = [
   "Oh hi mom!",
   "Mom: Hey son! Want a muffin?",
   "You: Yeah!",
-  "Mom: Go find berries or something, then!\n5 of any kind. Thanks!",
+  "Mom: Go find me something tasty then!\nBerries. Bring me 5 berries.",
+  "Mom: Or 5 of anything really.\nAs long as it's tasty.",
+  "Mom: Then we'll make muffins.",
   "You: Oh"
 ];
 
@@ -117,7 +125,7 @@ const luv="I <3 my couch";
 const HomeCouchText=[
   luv,
   "My friend Todd has the best couch",
-  "I should visit him, we haven't/njammed in a while"
+  "I should visit him, we haven't\njammed in a while"
 ];
 
 const HCouchText2 = [
@@ -125,14 +133,14 @@ const HCouchText2 = [
 ];
 
 const ToddsHomeText = [
-  "This is Todd's home\nThe jam space is downstairs",
-  "ring! ring!!",
+  "This is Todd's home.",
+  "Ring! Ring!!",
   "...",
   "Todd isn't there",
   "What's this? A package with a note",
-  "\"Sorry for the delay\nThis box should complete your recent order of\"",
+  "\"This box should complete\nyour recent order of\"",
   "\"875 bags of cheese crackers.\nThank you for your business\"",
-  "\"You are our favorite customer.\"",
+  "\"And sorry for the delay.\nYou are our favorite customer.\"",
   "No surprise here"
 ];
 
@@ -140,7 +148,8 @@ const CouchText2 = [
   "This is Todd's couch.\nBest couch ever!",
   "It's like sitting on a cloud.\nUnreal.",
   "Oh dang, a note",
-  "\"scurred off to one of the planets to the right.\nprolly gonna hit up all of em\""
+  "\"Gone to visit the planets east\nof here.\"",
+  "\"Leave any crackers at the door\""
 ];
 
 // text which appears during the part with crackers on 3 planets
@@ -173,14 +182,13 @@ const RandomHomeText1 =[
 const ToddsVesselText1 =[
   "Todd: Hi dude!\nWhat are you doing over here?",
   "You were looking for me??",
-  "Whadd'ya mean, what am I doing here? ;)",
   "Ealier today someone said I sounded\nterrible",
   "So I got on my ship and started\nlooking for a place with better accoustics",
   "This place is awesome!\nHear that?? Sounds amazing.",
   "You: Todd..",
   "Todd: wat",
-  "You: There's no accoustics in space..",
-  "You've always sounded awesome",
+  "You: There's no accoustics in space",
+  "You just sound great",
   "Todd: ....?",
   "Todd: Dang!",
   "Now that you're here, let's jam!"

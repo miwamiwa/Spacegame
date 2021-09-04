@@ -29,8 +29,7 @@ class AnimObject extends BasicObject {
     // since we are a child of the planet object
     if(this.planetMode){
       // update "z-index"
-      if(this.nearestPlanet)
-        this.nearestPlanet.sortFeatures();
+      if(nP) nP.sortFeatures();
       // draw & update sprite
       this.draw(this);
     }

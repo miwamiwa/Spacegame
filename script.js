@@ -34,13 +34,6 @@ let run=()=>{
 
   mCtx.restore();
 
-  if(gamestate=="focused"){
-    camera.update();
-    player.update();
-
-    gamestate="game";
-  }
-
 }
 
 // bg ()
@@ -61,6 +54,7 @@ let runStartScreen=(x,y)=>{
 
   drawText("space game",x,y);
   drawText("press space to start",x,y+14,grey);
+  //image({img:vessel_png},middle.x,middle.y,200);
 
   if(inputs.space) startGame();
 }
@@ -71,14 +65,18 @@ let runStartScreen=(x,y)=>{
 //
 //
 let startGame=()=>{
-  gamestate = "focused"
   //startSound();
   setupPlayer();
   setupStars();
   camera = new Camera(player);
   setupPlanets();
-  player.nearestPlanet = HomePlanet;
+  nP = HomePlanet;
   playerLanded()
+
+  camera.update();
+  player.update();
+
+  gamestate="game";
 }
 
 
@@ -109,11 +107,10 @@ let runGame=()=>{
   // quest tracking
   if(player.boarded && rightPlanetsEnabled && planetsIFoundCrackersOn.length>1)
     triggerCrackerInvestigation();
-
+    let x = Math.round(player.x/FarRange)
+    let y = Math.round(player.y/FarRange)
+    let index = x+","+y;
   // add random planets
-  let x = Math.round(player.x/FarRange);
-  let y = Math.round(player.y/FarRange);
-  let index = x+","+y;
   if(index!="0,0"&&index!="1,0"&&!genplanets.includes(index)){
     new Planet(x*FarRange+5*roughly(0),y*FarRange+5*roughly(0),true);
     genplanets.push(index);

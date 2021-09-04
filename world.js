@@ -12,7 +12,7 @@ let MysteryPlanet;
 let HelpOff = false; // display flight instructions
 let mainCanvas;
 let mCtx;
-let middle = {x:300,y:260};
+let middle = xy(300,260);
 let rightPlanetsEnabled = false;
 let crackersFound =0;
 let HomeObject;
@@ -199,10 +199,10 @@ let closeTextBox=()=> availableText2 = undefined;
 // what to do when player finds crackers
 let playerFoundCracker=()=>{
 
-  if(!planetsIFoundCrackersOn.includes(player.nearestPlanet)){
+  if(!planetsIFoundCrackersOn.includes(nP)){
     // display text
     nextCrackerText();
-    planetsIFoundCrackersOn.push(player.nearestPlanet);
+    planetsIFoundCrackersOn.push(nP);
   }
 
   // keep a score for funsies
@@ -213,7 +213,7 @@ let playerFoundCracker=()=>{
 // when crackers have been found on 2 planets
 let triggerCrackerInvestigation=()=>{
   //console.log("trigg")
-  if(!investigationTriggered&&dist(player,player.nearestPlanet)>2000){
+  if(!investigationTriggered&&(nP==undefined||dist(player,nP)>2000)){
     //console.log("trigger")
     continueInvestigation();
 

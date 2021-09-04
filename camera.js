@@ -8,7 +8,7 @@ class Camera {
 
     // lock on target
     if(!this.targetisdude) setV(this,player);
-    else setV(this,addV(player.nearestPlanet,Dude));
+    else setV(this,addV(nP,Dude));
 
     //set camera center
     setV(this.middle,subV(this,middle));

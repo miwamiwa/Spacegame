@@ -23,7 +23,6 @@ class Planet {
 
     // random hue
     this.hue =flo(rand(360));
-    this.grd =gradient(0,0, this.r, 0,0, this.r-90,"#0004","#0000");
 
     // random planet name
     if(name==undefined) name = RandomPlanetName();
@@ -63,7 +62,7 @@ class Planet {
       let r2 = rand(y%30);
       let fact = rand(0,10)
       for(let x=0; x<50; x++){
-        if(dist({x:x,y:y},{x:25,y:25})<25){
+        if(dist(xy(x,y),xy(25,25))<25){
           if(x<r||x>r2) ctx.fillStyle="#8bef";
           else ctx.fillStyle=`#${flo(rand(3,7))}8cf`;
           ctx.fillRect(x,y,1,1);
@@ -201,7 +200,7 @@ class Planet {
   // random position on the surface of this planet
 
   rSurf(range){
-    return {x:this.rPos() * range,y:this.rPos() * range};
+    return xy(this.rPos() * range,this.rPos() * range);
   }
 
   rInRange(r){
