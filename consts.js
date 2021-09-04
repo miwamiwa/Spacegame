@@ -170,8 +170,7 @@ const CrackerText3 = [
 
 const RandomHomeText1 =[
   "Someone's inside...",
-  "Uhm hello... I was led here by\na handful of cr..",
-  "Nevermind. have you seen my friend Todd?",
+  "Excuse me...\nHave you seen my friend Todd?",
   "Stranger: Todd? you mean that dork and his\ndorky guitar?",
   "...",
   "Stranger:Yeah I saw him!\nHe came here to hurt my ears!",
@@ -182,13 +181,16 @@ const RandomHomeText1 =[
 const ToddsVesselText1 =[
   "Todd: Hi dude!\nWhat are you doing over here?",
   "You were looking for me??",
-  "Ealier today someone said I sounded\nterrible",
-  "So I got on my ship and started\nlooking for a place with better accoustics",
-  "This place is awesome!\nHear that?? Sounds amazing.",
+  "Ealier today I was playing my guitar",
+  "Some dude flew by and said I sounded terrible!",
+  "So I got in my ship and started\nlooking",
+  "for a place with better accoustics",
+  "This place is great!\nHear that??",
+  "I sound way better here",
   "You: Todd..",
   "Todd: wat",
   "You: There's no accoustics in space",
-  "You just sound great",
+  "You always sound great",
   "Todd: ....?",
   "Todd: Dang!",
   "Now that you're here, let's jam!"

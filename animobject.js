@@ -21,9 +21,6 @@ class AnimObject extends BasicObject {
 
   // display current sprite & any children
   display(children){
-
-
-
     // if on planet (this is for Dude),
     // then skip the cam positioning stuff
     // since we are a child of the planet object
@@ -58,7 +55,7 @@ class AnimObject extends BasicObject {
 
     // update transform
     mCtx.save();
-    mCtx.translate(x ,y );
+    mCtx.translate(x,y);
     mCtx.rotate(this.bearing);
     // display any children:
     this.displayChildren(children);
