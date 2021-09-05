@@ -4,21 +4,16 @@ class StaticObject extends BasicObject {
 
   constructor(x,y,img,size,text,firstReadAction){
     // initialize object
-    super(x,y,size,img);
-    this.collider = true;
-    this.collidersize = size * 0.65;
-    this.talkrange = size * 0.8;
-    this.setTandA(text,firstReadAction);
+    super(x,y,size,img,text,firstReadAction);
+    this.setCollider();
+
   }
 
-  setTandA(t,a){
-    this.text=t;
-    this.firstReadAction=a;
-  }
+
 
   // for tree objects
   lootBerry(){
-    AddToInventory(this.berry);
+    AddToInventory({name:this.berry,type:"berry"});
     this.talker = undefined;
   }
 
@@ -45,8 +40,10 @@ class StaticObject extends BasicObject {
       if(dist(this,Dude)<34){
         // pick up item
         this.active = false;
-        if(this.id=="cheese")
-          playerFoundCracker();
+
+        // do something
+        //if(this.id=="cheese")
+        //  playerFoundCracker();
       }
     }
   }

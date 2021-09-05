@@ -1,6 +1,6 @@
 
 class Planet {
-  constructor(x,y,randomscenery,name, rad, mas){
+  constructor(x,y,randomscenery,name, rad, mas, minfruit){
 
     // mass and radius
     if(!rad){
@@ -31,7 +31,7 @@ class Planet {
 
     // add random scenery (==trees)
     if(randomscenery)
-    this.setupScenery();
+    this.setupScenery(minfruit);
 
     planets.push(this);
 
@@ -81,6 +81,7 @@ class Planet {
 
     this.features.push(obj);
     this.sortFeatures();
+    return obj;
   }
 
 
@@ -164,12 +165,14 @@ class Planet {
   //
   // make some trees
 
-  setupScenery(){
+  setupScenery(min){
 
     // generate a unique tree family for this planet
     // see nature.js
+    if(!min) min=3;
     this.treeFamily = createNewTreeType();
-    let treeCount = flo(rand(3,9));
+    let treeCount = flo(rand(min,min+6));
+
     let berry = RandomFromArray(BerryNames);
     for(let i=0; i<treeCount; i++){
 
@@ -212,7 +215,7 @@ class Planet {
   // addCheese()
   //
   // litter cheese crackers all over the place
-
+/*
   addCheese(){
     let count = flo(rand(6,12));
     for(let i=0; i<count; i++){
@@ -224,6 +227,7 @@ class Planet {
       this.features.push(c);
     }
   }
+*/
 
 
   // update()

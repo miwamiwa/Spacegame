@@ -1,11 +1,9 @@
 
 let canExit = false; // trigger exit vehicle prompt
-let canEnter = false; // are we in range of the ship?
-let canBoard = false;
-let talkedToMomOnce = false;
-let talkedToMysteryDudeOnce = false;
-let mysteryDudeGone = false;
-let muffinType;
+let canEnter = true; // are we in range of the ship?
+
+let talkedToMomOnce = true;
+
 let crashtext; // text displayed on crash
 let availableText;
 let availableText2;
@@ -53,47 +51,7 @@ let resetPlayerOnCrash=()=>{
 }
 
 
-// HandlePlayerInputs()
-//
-// handle key inputs on or off planet
-let HandlePlayerInputs=()=>{
 
-  if(gamestate=="game"){
-    canExit = false;
-    canEnter = false;
-
-    // if boarded
-    if(player.boarded)
-    vesselInputs();
-
-    // if not boarded
-    else planetInputs();
-  }
-}
-
-
-// vesselInputs()
-//
-//
-let vesselInputs=()=>{
-  if(autopilotActive) return;
-  // press w to toggle throttle
-  if(inputs.w) player.plusThrottle();
-  else player.minusThrottle();
-
-  // press a/d to rotate
-  if(inputs.a) player.rotate(PlayerRotateRate);
-  if(inputs.d) player.rotate(-PlayerRotateRate);
-
-  // when landed,
-  if(player.landed){
-    // enable help text
-    canExit = true;
-    // press e to exit vessel
-    if(inputs.e&&!player.crashed)
-    playerLanded();
-  }
-}
 
 // playerLanded()
 //
@@ -121,45 +79,7 @@ let playerLanded=()=>{
 
 
 
-// planetInputs()
-//
-// handle inputs for when player is on a planet
-let planetInputs=()=>{
 
-  // look out for animation changes
-  let running = player.running;
-  player.running = false;
-
-  // if inputs pressed, move player
-  if(inputs.d) moveX(1);
-  if(inputs.a) moveX(-1);
-  if(inputs.w) moveY(-1);
-  if(inputs.s) moveY(1);
-
-  // update animation
-  if(running!=player.running){
-    switch(player.running){
-      case false: Dude.setFrames(PlayerAnimation); break;
-      case "left": Dude.setFrames(PlayerWalkLeft); Dude.left=true; break;
-      case "right": Dude.setFrames(PlayerWalkLeft); Dude.left=false; break;
-      case "down": Dude.setFrames(PlayerWalkDown); break;
-      case "up": Dude.setFrames(PlayerWalkUp); break;
-    }
-  }
-
-  // enable hopping ON vessel when in range
-  // (actually happens in keyDown)
-  if(dist(player,addV(Dude,nP))<HopDistance)
-  canEnter = true;
-
-  // look through all features
-  nP.features.forEach(f=>{
-    // if collider enabled
-    if(f.talker&&dist(Dude,xy(f.x,f.y+60))<f.talkrange)
-        availableText = f;
-
-  });
-}
 
 
 // moveX()
@@ -214,6 +134,7 @@ let moveIt =(deltaX,deltaY)=>{
 
   // re-sort planet features
   nP.sortFeatures();
+  ActiveShop=undefined;
 }
 
 
@@ -277,7 +198,7 @@ let updatePlayerUi=()=>{
   if(canExit&&!player.crashed)
   drawText("press e to exit. hold w to launch.", x,y);
   // when able to board
-  if(canEnter&&canBoard&&talkedToMomOnce)
+  if(canBoard())
   drawText("press space to board");
   // when in flight
   if(!HelpOff&&player.boarded&&!player.landed){
@@ -289,6 +210,8 @@ let updatePlayerUi=()=>{
 
 
 }
+
+let canBoard=()=>canEnter&&talkedToMomOnce;
 
 // showCrackerCounter()
 //
@@ -357,9 +280,9 @@ let showQuestText=()=>{
   if(availableText2!=undefined){
     // obscure background during
     // "investigation" part
-    if(availableText2[textCounter]==InvestigationText[6]
-      ||availableText2[textCounter]==InvestigationText[8])
-      bg();
+    //if(availableText2[textCounter]==InvestigationText[6]
+    //  ||availableText2[textCounter]==InvestigationText[8])
+    //  bg();
 
       // display hint
       drawText("press space");
@@ -405,17 +328,7 @@ let showQuestText=()=>{
   }
 
 
-  let AddToInventory =(item)=>{
-    if(inventory[item]==undefined)
-    inventory[item] = 1;
-    else inventory[item] ++;
 
-    inventoryString = "inventory";
-    for(let i in inventory)
-    if(inventory[i]>0)
-    inventoryString += "\n"+i+": "+inventory[i];
-
-  }
 
   let autopilotActive = false;
   let autopilotPhase;

@@ -77,11 +77,9 @@ const BerryNames=[
 
 
 // WORLD
-const Planet1Distance = 1;
-const HomePlanetRadius = 250;
-const DistanceToTodd = 12000;
-const FarRange = 50000;
 
+const HomePlanetRadius = 550;
+const FarRange = 50000;
 
 // STARS
 const NumStars = 16;
@@ -95,111 +93,6 @@ const grey = "#eee8";
 const white = "#fffc";
 const bgFill = "#2a1f42";
 const black = "black";
-
-// TEXT
-const IntroText = [
-  "Ready?",
-  "Go!"
-];
-
-const FailTextList = [
-  "Ouch!",
-  "Don't scratch the car. -Mom.",
-  "It takes up to 3000 units of space to stop"
-];
-
-const HomePlanetText = [
-  "This is my home.\nI've always lived here!",
-  "Gooood old hooooomeee",
-  "Oh hi mom!",
-  "Mom: Hey son! Want a muffin?",
-  "You: Yeah!",
-  "Mom: Go find me something tasty then!\nBerries. Bring me 5 berries.",
-  "Mom: Or 5 of anything really.\nAs long as it's tasty.",
-  "Mom: Then we'll make muffins.",
-  "You: Oh"
-];
-
-const luv="I <3 my couch";
-
-const HomeCouchText=[
-  luv,
-  "My friend Todd has the best couch",
-  "I should visit him, we haven't\njammed in a while"
-];
-
-const HCouchText2 = [
-  luv
-];
-
-const ToddsHomeText = [
-  "This is Todd's home.",
-  "Ring! Ring!!",
-  "...",
-  "Todd isn't there",
-  "What's this? A package with a note",
-  "\"This box should complete\nyour recent order of\"",
-  "\"875 bags of cheese crackers.\nThank you for your business\"",
-  "\"And sorry for the delay.\nYou are our favorite customer.\"",
-  "No surprise here"
-];
-
-const CouchText2 = [
-  "This is Todd's couch.\nBest couch ever!",
-  "It's like sitting on a cloud.\nUnreal.",
-  "Oh dang, a note",
-  "\"Gone to visit the planets east\nof here.\"",
-  "\"Leave any crackers at the door\""
-];
-
-// text which appears during the part with crackers on 3 planets
-const CrackerText = [
-  "A cracker",
-  "Munch... munch...",
-  "Most definitely Todd's cracker"
-];
-
-const CrackerText2 = [
-  "More crackers.",
-  "But no Todd."
-];
-
-const CrackerText3 = [
-  "These crackers are literally\neverywhere!"
-];
-
-const RandomHomeText1 =[
-  "Someone's inside...",
-  "Excuse me...\nHave you seen my friend Todd?",
-  "Stranger: Todd? you mean that dork and his\ndorky guitar?",
-  "...",
-  "Stranger:Yeah I saw him!\nHe came here to hurt my ears!",
-  "In fact you're hurting my ears!",
-  "Get out!"
-];
-
-const ToddsVesselText1 =[
-  "Todd: Hi dude!\nWhat are you doing over here?",
-  "You were looking for me??",
-  "Ealier today I was playing my guitar",
-  "Some dude flew by and said I sounded terrible!",
-  "So I got in my ship and started\nlooking",
-  "for a place with better accoustics",
-  "This place is great!\nHear that??",
-  "I sound way better here",
-  "You: Todd..",
-  "Todd: wat",
-  "You: There's no accoustics in space",
-  "You always sound great",
-  "Todd: ....?",
-  "Todd: Dang!",
-  "Now that you're here, let's jam!"
-];
-
-const ToddsVesselText2 = [
-  "Todd: Hi dude!",
-  "Let's jam!"
-];
 
 // MUSIC
 const Edorian = [4,6,7,9,11,13,14];

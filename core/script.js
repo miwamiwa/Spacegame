@@ -65,6 +65,7 @@ let runStartScreen=(x,y)=>{
 //
 //
 let startGame=()=>{
+
   //startSound();
   setupPlayer();
   setupStars();
@@ -104,14 +105,14 @@ let runGame=()=>{
 
   SplitText(inventoryString, 5, 200);
 
-  // quest tracking
-  if(player.boarded && rightPlanetsEnabled && planetsIFoundCrackersOn.length>1)
-    triggerCrackerInvestigation();
-    let x = Math.round(player.x/FarRange)
-    let y = Math.round(player.y/FarRange)
-    let index = x+","+y;
+  if(ActiveShop)
+    RunShop();
+
   // add random planets
-  if(index!="0,0"&&index!="1,0"&&!genplanets.includes(index)){
+  let x = Math.round(player.x/FarRange)
+  let y = Math.round(player.y/FarRange)
+  let index = x+","+y;
+  if(index!="0,0"&&!genplanets.includes(index)){
     new Planet(x*FarRange+5*roughly(0),y*FarRange+5*roughly(0),true);
     genplanets.push(index);
   }

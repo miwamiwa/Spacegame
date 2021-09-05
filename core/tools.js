@@ -18,6 +18,17 @@ let HexToRgba =(hexinput)=>{
 
 let fill =(f)=> mCtx.fillStyle=f;
 
+
+let plural=(t)=>{
+  let i=t.length;
+  if(i>0){
+    i--;
+    if(t[i]=='y') t=t.substring(0,i)+"ies";
+    else t += "s";
+  }
+  return t;
+}
+
 // gradient()
 //
 // create a canvas ctx gradient
