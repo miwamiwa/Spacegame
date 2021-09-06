@@ -7,7 +7,7 @@ body{
   color:white;
   font-weight:bold;
   flex-direction:column-reverse;
-  justify-content:center;
+  justify-content:space-around;
   align-items:center;
 }
 canvas{

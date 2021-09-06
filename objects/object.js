@@ -25,10 +25,11 @@ class StaticObject extends BasicObject {
   display(){
     if(this.active){
       // display sprite
-      mCtx.save();
-      hue(this.hue);
-      image(this.img,this.x,this.y,this.half,this.size);
-      mCtx.restore();
+      transform(xy(this.x,this.y),()=>{
+        hue(this.hue);
+        image(this.img,0,0,this.half,this.size);
+      });
+      
 
       if(this.edible) this.interact();
     }

@@ -30,56 +30,102 @@ let soundStarted=false;
 let bars =0;
 
 // improv
-let currentNote=58
 let currentPattern;
-let currentOctave = 5;
-let note0 =0;
-let octave0 =5;
 
-let fullmel = [];
-
-let phrase1=[];
-let patcount =0;
-let melcount =0;
-let lastscale = [];
-
-let lastScaleDegree =-1;
-let mutemel = true;
+let mutemel = false;
 let muteimprov = false;
-let mutechords = true;
-let mutebass = true;
 let head =0;
 
 let bassOctave = 3; // 2 and 3 both nice
 let scale;
+
+let temperament;
+
+let lastnote = 60;
+let improBeat=[8,8,8,8,8,8,16,16,16,16]
 // chord settings
 
-
+let bar = 3800;
 // startsound()
 //
 // creates the audio context and starts the bgm
 
 let startSound=()=>{
-
+  //  return
   window.AudioContext = window.AudioContext || window.webkitAudioContext;
   aContext = new AudioContext();
   samprate = aContext.sampleRate;
   soundStarted=true;
-  setupMel();
 
   // start beat
-  setInterval(playbar,1200);
+  setTimeout(()=>{
+    if(nP)
+    bar = nP.barlength;
+    setTimeout(playbar,bar);
+  }, 500)
+
 }
 
 
-// setupMel()
-//
-// build the melody array
-let setupMel = () =>{
-  phrase1 = melodyA.concat(melodyA).concat(melodyB).concat(melodyC);
-  fullmel = phrase1.concat(melodyD).concat(phrase1).concat(melodyE)
-    .concat(melodyF).concat(melodyG).concat(melodyH).concat(melodyI);
+
+
+let getRhythm=(barlength,t)=>{
+  temperament = t;
+  let r = [];
+
+  let counter=0;
+  for(let i=0; i<improBeat.length; i++){
+    let c = t;
+    if(i%2==1) c = 0.4
+    if(rand()<c) r.push(counter);
+    counter += barlength/improBeat[i];
+  }
+
+  return r;
 }
+
+
+
+
+
+let getNotePattern=(rhythm,scalelist)=>{
+  let currentPattern;
+  let currentNote = flo(rand(7));
+  let patcount=0;
+  lastscale = scale;
+
+  let notes=[];
+  let octaves=[];
+
+  // for each note that will actually get played:
+  for(let i=0; i<rhythm.length; i++){
+    // define pattern if we need a new one
+    if(!currentPattern){
+      currentPattern = RandomFromArray(patterns);
+      patcount=0;
+    }
+    // this is next scale degree
+    let scaledegree = currentNote+currentPattern[patcount];
+    octaves.push((3+flo(scaledegree/8))*12);
+
+    while(scaledegree<0) scaledegree += 8;
+    notes.push(scaledegree%8);
+
+    // move to next note in the current pattern
+    patcount++;
+    // remove pattern if end reached
+    if(patcount==currentPattern.length-1){
+      currentPattern = undefined;
+      currentNote = scaledegree;
+    }
+  }
+  return {notes:notes,octaves:octaves}
+}
+
+
+
+
+
 
 
 // playBar()
@@ -89,130 +135,117 @@ let setupMel = () =>{
 
 let playbar = () =>{
   // get current scale
-  scale = scales[bars];
+
 
   // TRIGGER DRUMS
 
-  startBeat([600,400,200],playHats,0.99,1);
-  startBeat([400,200,600],playSnare,0.0,0.25);
-  // fluttery fx
-  startBeat([100,100,100],playCash,.1,.3)
 
-  // TRIGGER BASS
 
-  if(!mutebass)
-  startBassNotes([800,200,200],[0,flo(rand(2,4)),6],bassOctave,constSine5);
+  // bass drum
+  startBeat([4,2.7,17,17],playNoiseySynthog,1,1,false);
 
-  // TRIGGER MELODY
+  // snare
+  startBeat(
+    [4,2.7,8.2,16,16],
+    playSnare,0.88,1,true
+  );
 
-  let melPattern = [400,400,400];
-  if(bars%4==3) melPattern = [200,600,400]
-  startMelNotes(melPattern,5,noisey2);
 
-  // TRIGGER IMPROV LINE
+  // update chord contents
+  temperament = rand(0.2,0.5);
 
-  if(!muteimprov)
-  startImprovNotes([200,400,400,200], noisey2, rand((bars%4)/4+0.3));
+  if(nP){
+    chordfilter =nP.cFilter;
+    chorddetune = nP.cDetune;
+    percfilter=nP.filter;
+    // hats
+    startBeat(
+      [16,16,8,16,16,16,16,16,16,16,16,16,16],
+      playHats,0.92,1,true
+    );
 
-  // TRIGGER CHORDS
+    console.log("playing notes")
+    bar = nP.barlength;
+    scales = nP.scales;
+    if(bars>=nP.scales.length) bars =0;
 
-  if(!mutechords)
-  setTimeout(()=>{
-    chordNote(0);
-    chordNote(2);
-    chordNote(6);
-  }, flo(rand(1.5))*200)
+    scale = scales[bars];
+    // trigger notes
+    let counter =0;
+
+    for(let i=0; i<nP.riddim.length; i++){
+      if(counter<nP.barlength&&i>0)
+      setTimeout(()=>{
+        let pat = nP.pattern;
+        if(bars%2==1) pat = nP.pattern2;
+
+        let scaledegree = pat.notes[i]%scale.length;
+        // this is next note
+        let f = noteToFreq(pat.octaves[i] + scale[scaledegree]);
+        //console.log(scaledegree);
+        //console.log(scale.length)
+        //console.log(f)
+        if(!isNaN(f))
+        playNoiseySynth(f, nP.riddim[i]);
+      }, counter)
+      counter+=nP.riddim[i];
+
+    }
+
+  }
+  else {
+
+    chordfilter =20000;
+    chorddetune = 0.000006;
+    percfilter=3500;
+    scales = defaultScales;
+    if(bars>=defaultScales.length) bars =0;
+    scale = scales[bars];
+
+
+  }
+
+
+  setTimeout(playbar,bar);
+  //startBeat([8,8,4,4,8,8],playKik,0.3,0.5,false);
+
+
+
+
+
+  // bassy synth
+  startBeat(
+    [2,5.29,16,16,16],
+    perc,0.4,1
+  );
+
+// TRIGGER CHORDS
+
+chordNote(0);
+chordNote(2);
+
+
+
+  // update TIME:
+
 
   // increment bars
   bars++;
 
-  // if end of tune reached,
-  // reset it:
-  if(bars==scales.length){
+  // if end of tune reached
+  if(bars>=scales.length){
     bars=0;
     melcount =0;
     head++;
-    // play melody once every 3 repetitions
-    if(head%3==1) mutemel = false;
-    if(head%3==2) mutemel = true;
-
-    // chance to add some detune to melody synth
-    glideval = 0.000005 * (head+1) * rand(0.1,0.3);
   }
 }
+let chordfilter =400;
+let chorddetune = 0.000002;
+
 
 let chordNote=(i)=>
-  play(noteToFreq(flo(rand(4,6))*12+scale[i]), 0.1, 1.1, 0.3, 0.3, 4, constSine, 0.15, "lowpass", 4400, 1)
+play(noteToFreq(48+scale[i]), 0.1, 1.1, 0.5, 1.5, 6, constSine, 0.65, "highpass", chordfilter, 1, chorddetune)
 
-
-// startImprovNotes()
-//
-// generate next few notes to play for the improv line
-
-let startImprovNotes=(beat,sound,temperament)=>{
-  let counter =0;
-
-  // if scale changed, move the currentNote to the
-  // closest scale degree.
-
-  if(scale!=lastscale){
-    let data = findClosestNoteInScale(scale);
-    note0 = data.note; // remember scale degree
-    currentNote = data.octave*12+data.note;
-    if(currentNote<40) currentNote +=12
-    currentOctave = data.octave;
-  }
-
-  // for each note in the rhythm pattern,
-  // there is a chance of actually playing a note
-
-  let intervals = [];
-  for(let i=0; i<beat.length; i++){
-    if(rand()<temperament) intervals.push(counter);
-    counter += beat[i];
-  }
-
-  // remember current scale to check for changes later
-  lastscale = scale;
-
-  // for each note that will actually get played:
-  for(let i=0; i<intervals.length; i++){
-    setTimeout(()=>{
-
-      // define pattern if we need a new one
-      if(currentPattern==undefined){
-        currentPattern = Array.from(RandomFromArray(patterns));
-
-        // reverse pattern randomly but not if current note
-        // is kinda low. higher chance to reverse the higher up we are.
-        // at a certain point, reverse is certain.
-        if((!currentNote<68) &&
-        (currentNote>86||rand()< Math.min(0.7,currentNote / 64 - 0.2)))
-        currentPattern = currentPattern.reverse();
-        patcount=0;
-      }
-
-      // this is next scale degree
-      let scaledegree = (note0+currentPattern[patcount])%scale.length;
-      // this is next note
-      currentNote = currentOctave*12 + scale[scaledegree]
-
-      lastScaleDegree = scaledegree;
-
-      // check for any issues,
-      // then play note if all is good.
-      if(!isNaN(currentNote))
-        playNoiseySynth(noteToFreq(currentNote), intervals[i]);
-
-      // move to next note in the current pattern
-      patcount++;
-      // remove pattern if end reached
-      if(patcount==currentPattern.length-1) currentPattern = undefined;
-
-    },intervals[i]);
-
-  }
-}
 
 
 // findClosestNoteInScale()
@@ -236,7 +269,7 @@ let findClosestNoteInScale=(sca)=>{
     }
     octave++;
     // if too high, abort
-    if(octave==8) return {note:0,octave:defoctave}
+    if(octave==6) return {note:0,octave:defoctave}
   }
 
   return {note:0,octave:defoctave}
@@ -258,13 +291,13 @@ let startMelNotes=(beat,octave,sound)=>{
         if(fullmel[melcount]!=false){
 
           if(!mutemel)
-            playNoiseySynthog(noteToFreq(octave*12+fullmel[melcount]));
+          playNoiseySynthog(noteToFreq(octave*12+fullmel[melcount]));
         }
         // increment melody count
         melcount++;
       },counter);
     }
-    counter += beat[i]
+    counter += bar/beat[i]
   }
 }
 
@@ -277,7 +310,7 @@ let startBassNotes = (beat,notes,octave,sound)=>{
   let counter =0;
   for(let i=0; i<beat.length; i++){
     setTimeout(playWobbleBass,counter,noteToFreq(octave*12 + scale[notes[i]]))
-    counter += beat[i];
+    counter += bar/beat[i];
   }
 }
 
@@ -312,13 +345,13 @@ let play=(freq,a,d,s,r,cycles,func,vol,ftype,ffreq,fq,slide)=>{
 // and chance of playing each note.
 // used to play hats and snare.
 
-let startBeat =(beat,sound,min,max)=>{
-  let chance = rand(min,max);
+let startBeat =(beat,sound,min,max,mute1)=>{
+  let chance = rand(min,max) * temperament;
   let counter =0;
   for(let i=0; i<beat.length; i++){
-    if(rand()<chance)
+    if(!(i==0&&mute1)&&rand()<chance)
     setTimeout(sound,counter);
-    counter += beat[i];
+    counter += bar/beat[i];
   }
 }
 
@@ -398,71 +431,88 @@ let playSound=(arr,vol,filterT,filterF,filterG)=>{
 
 // playsnare()
 //
-let snarerelease=0.3;
+
 let playSnare=()=>
-  play( 10, 0.02,0.01,0.4,snarerelease , 4,noisey2,6,'highpass',1200,4);
-
-// playcash()
-// modified cash sound from original code,
-// more like a wierd percussive thing now
-let cash2timeout;
-let playCash=()=>{
-  perc();
-  if(rand()>.5){
-    clearTimeout(cash2timeout);
-    cash2timeout=setTimeout(()=>{
-      perc();
-    }, 260);
-  }
-}
-
-let perc=()=>play(noteToFreq(36+scales[bars-1][0]), 0.01,0.2,0.3,0.1, 5,constSineZ,2.1,'highpass',500,3);
-
-// play a ride / hi hat sound
-let playHats=()=>
-  play(40,0.01,0.01,0.35,0.6,40,noisey,24,'highpass',7400,2);
-
-// this is for playing the bass notes
-let playWobbleBass=(freq)=>
-  play(freq,.05,0.11,0.1,1.11, 4,constSine4,8.6,'lowpass',1600,20); // adjust filter freq value 200-1000 to get nice dub fx
-
-// function for playing the improv notes
-let playNoiseySynth=(freq, l)=>
-  play( freq,0.04,0.4,0.3,Math.max(l*0.006,0.3), 5,constSine4,1.5,'highpass',450,2);
-
-// glide value for playNoiseySynthog
-let glideval = 0.00001;
-
-// function for playing the melody notes
-let playNoiseySynthog=(freq)=>
-  play( freq,0.04,0.31,0.2,1.2, 1,constSine4,2.8,'highpass',650,14,+glideval);
+play( 10, // (freq)
+  0.015,0.01,0.4,rand(0.1,0.2), // adsr
+  2, // buffer cycles
+  noisey2, // sound
+  16, // vol
+  'highpass',1200,1); // filter
 
 
+  let playKik=()=>
+  play( 100, // (freq)
+    0.02,0.11,0.2,0.2, // adsr
+    10, // buffer cycles
+    noisey2, // sound
+    0.4, // vol
+    'highpass',210,4
+  ); // filter
 
-//  ****** MATH that generates sounds ********
 
-// sin of a value at index i in the sample buffer.
-let sine=(i,a,d)=>Math.sin(i/(a+d));
+  // playcash()
+  // modified cash sound from original code,
+  // more like a wierd percussive thing now
 
-// synth used in playhop2 and playcash
-let constSineZ=(i,d)=>
-constrain(rand(0.1)+0.8*sine(i,0.2*i,d), 0,0.60);
+  let percfilter=4500;
+  let perc=()=>play(noteToFreq(48+scales[bars-1][0]), 0.01,0.2,0.6,0.8, flo(rand(1,6)),constSineZ,3.1,'lowpass',percfilter,3);
 
-// synth used in hats
-let noisey=(i,d)=>rand(0.02);
+  // play a ride / hi hat sound
+  let playHats=()=>
+  play(40,0.01,0.01,0.25,rand(0.1,0.7),40,noisey,rand(18,24),'highpass',roughly(1000),2);
 
-// synth sound used in melody notes, improv notes and snare lol
-let noisey2=(i,d)=> rand(constrain(Math.round(sine(i,i,d)),0,0.130));
+  // this is for playing the bass notes
+  let playWobbleBass=(freq)=>
+  play(
+    freq,
+    .05,0.21,0.2,0.21,
+    8,constSine4,
+    9,
+    'lowpass',1200,2,
+    0.0001); // adjust filter freq value 200-1000 to get nice dub fx
 
-// synth used in chords
-let constSine=(i,d)=>
-constrain( sine(i,0,d),-0.8,0.8);
+    // function for playing the improv notes
+    let playNoiseySynth=(freq, l)=>
+    play( 2*freq,0.01,0.1,0.25,0.4, 5,constSine,2,'highpass',450,8);
 
-// used in thunder and bass
-let constSine5=(i,d)=>
-constrain(rand(0.2)*(sine(i,0,d) + sine(i,1000,d)),0,0.10);
+    // glide value for playNoiseySynthog
+    let glideval = 0.00001;
 
-// synth used in wobble bass and noisey synth and noiseysynth og
-let sine4fact=0.8;
-let constSine4=(i,d)=>
-constrain(rand(0.1,0.3)*sine4fact+0.3*(sine(i,0,d)+0.3*sine(i,2,d)),0,0.10);
+    // function for playing the melody notes
+    let playNoiseySynthog=(freq)=>
+    play( 800,
+      0.04,0.11,0.6,0.06,
+      2,constSine4,
+      18,
+      'lowpass',1250,
+      14,0.01);
+
+
+
+      //  ****** MATH that generates sounds ********
+
+      // sin of a value at index i in the sample buffer.
+      let sine=(i,a,d)=>Math.sin(i/(a+d));
+
+      // synth used in playhop2 and playcash
+      let constSineZ=(i,d)=>0.2*sine(i,i,d)+0.2*sine(2*i,i,d)+0.2*sine(4*i,i,d)
+
+      // synth used in hats
+      let noisey=(i,d)=>rand(0.02);
+
+      // synth sound used in melody notes, improv notes and snare lol
+      let noisey2=(i,d)=> rand(constrain(Math.round(sine(i,i,d)),0,0.130));
+
+      // synth used in chords
+      let constSine=(i,d)=>
+      constrain( sine(i,0,d),-0.2,0.2);
+
+      // used in thunder and bass
+      let constSine5=(i,d)=>
+      constrain(rand(0.2)*(sine(i,0,d) + sine(i,1000,d)),0,0.10);
+
+      // synth used in wobble bass and noisey synth and noiseysynth og
+      let sine4fact=0.8;
+      let constSine4=(i,d)=>
+      constrain(rand(0.1,0.2)+0.3*(sine(i,0,d)+0.3*sine(i,2,d)),0,0.10);

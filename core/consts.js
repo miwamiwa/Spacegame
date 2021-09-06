@@ -1,16 +1,41 @@
+const cash = "coin";
+
+const allCurrencies = [
+  cash,
+  "muffin",
+  "bead",
+  "berry"
+];
+
+const Greetings =[
+  "hello","hi!"
+];
+
 // IMAGE LOAD
 const c1 = 48; // start char for char/int conversion
+const poses =[
+  [player1_png,player2_png],
+  [walk_left_1_png,walk_left_2_png],
+  [walk_up_1_png,walk_up_2_png],
+  [walk_down_1_png,walk_down_2_png]
+]
+
+const allLanguages = [
+"Deotruin",
+"Shuecdun",
+"Uetnesh",
+"Onian",
+"Etlani",
+"Flonaonathi",
+"Uqoirtic"
+];
+
 
 // ANIMATION
 const VesselAnimation = [vessel_png,vessel2_png];
 const FlameAnimation = [fire1_png,fire2_png];
 const CrashAnimation = [crash1_png,crash2_png,crash3_png];
 const StarAnimation = [star1_png,star2_png];
-const PlayerAnimation = [player1_png,player2_png];
-const PlayerWalkLeft = [walk_left_1_png,walk_left_2_png];
-const PlayerWalkUp = [walk_up_1_png,walk_up_2_png];
-const PlayerWalkDown = [walk_down_1_png,walk_down_2_png];
-
 // TREE GENERATION
 const TreeCanvasW = 100;
 const TreeCanvasH = 100;
@@ -51,7 +76,7 @@ const TextBox = {x:100, y:100};
 const GravityConstant = 50;
 const PlanetMassMin = 800;
 const PlanetMassMax = 2000;
-const MinDistanceBetweenFeatures = 50;
+
 
 //https://www.fantasynamegenerators.com/planet_names.php
 const PlanetNames = [
@@ -79,7 +104,7 @@ const BerryNames=[
 // WORLD
 
 const HomePlanetRadius = 550;
-const FarRange = 50000;
+const FarRange = 36000;
 
 // STARS
 const NumStars = 16;
@@ -95,6 +120,7 @@ const bgFill = "#2a1f42";
 const black = "black";
 
 // MUSIC
+
 const Edorian = [4,6,7,9,11,13,14];
 const FshPhrygi = [6,7,9,11,13,14,16];
 const CLydian = [0,2,4,6,7,9,11];
@@ -109,40 +135,31 @@ const ALydian = [9,11,13,15,16,18,20];
 const G6 = [7,9,11,13,14,16,18];
 const AMixo = [9,11,13,15,16,18,19];
 
-const scales = [
-  Edorian,FshPhrygi,Edorian,FshPhrygi,
-  CLydian,CLydian,CLydian,CLydian,
-  ADorian,DMixo,GLydian,CLydian,
-  GLydian,CLydian,Fmin7flat5,BMixo,
-  Emaj7,FShDorian, Emaj7,FShDorian,
-  ALydian,ALydian,ALydian,ALydian,
-  ADorian,DMixo,GLydian,CLydian,
-  GLydian,CLydian,Fmin7flat5,BMixo,
-  Edorian,Edorian,Fmin7flat5,BMixo,
-  Edorian,Edorian,CLydian,CLydian,
-  CLydian,CLydian,AMixo,AMixo,
-  GLydian,CLydian,CLydian,DMixo,
-  G6,CLydian,G6,CLydian,
-  GLydian,CLydian,Fmin7flat5,BMixo
+let allScales = [
+  Edorian,
+  FshPhrygi,
+  CLydian,
+  ADorian,
+  DMixo,
+  GLydian
 ];
 
-const melodyA = [4, 11, 11, 6, 4, 4, -1, 4, 4, 6, 4, false];
-const melodyB = [4, 11, 9, 4, 6, 2, 2, 9, 7, 0, false, false];
-const melodyC = [-1, 0, 2, 4, 6, 7]
-const melodyD = [9, 11, 9, 3, false, false];
-const melodyE = [9, 10, 11, 12, false, false];
-const melodyF = [false, 11, 11, 11, false, 4, false, 9, 9, 9, false, 3];
-const melodyG = [false, 7, 7, 7, false, -1, 4, false, false]
-const melodyH = [false, false, 4, 4, 6, 4, 6, 4, 6, 7, 9, 7, 9, false, 7, 11, 12, 11, 12, false, false, false, false, false];
-const melodyI = [11, false, false, 7, false, false];
+const defaultScales = [
+  FshPhrygi, GLydian,
+  FshPhrygi, GLydian,
+  ADorian, GLydian,
+  Emaj7,Emaj7
+]
+
+let scales = [];
 
 const patterns = [
   [0,1,2,3],
   [0,1,0],
   [0,4,3,0,1],
-  [0,4,3],
-  [1,2,0]
+  [5,1,6],
+  [2,3,1]
 ];
 
 // default octave (improv)
-const defoctave = 6;
+const defoctave = 4;

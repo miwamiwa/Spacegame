@@ -4,7 +4,7 @@ class Planet {
 
     // mass and radius
     if(!rad){
-      rad=rand(250,380);
+      rad=rand(300,460);
       mas=rand(PlanetMassMin,PlanetMassMax)
     }
     this.r = rad;
@@ -15,6 +15,8 @@ class Planet {
     this.x = x;
     this.y = y;
 
+    this.currency=cash;
+    this.setLang("Onian");
     // children
     this.features = [];
 
@@ -30,37 +32,143 @@ class Planet {
 
 
     // add random scenery (==trees)
-    if(randomscenery)
     this.setupScenery(minfruit);
+
+    if(randomscenery)
+    this.populate();
 
     planets.push(this);
 
     this.make();
+
+    this.music();
   }
 
 
+  music(){
+    // setup music for this place
+
+    this.scales = [];
+    let scale1=RandomFromArray(allScales);
+    let scale2=RandomFromArray(allScales);
+    let scale3=RandomFromArray(allScales);
+
+    this.scales.push(scale1);
+    this.scales.push(scale1);
+    this.scales.push(scale2);
+    this.scales.push(scale1);
+    this.scales.push(scale2);
+    this.scales.push(scale3);
+
+    this.filter=flo(rand(500,2000))
+    this.cFilter=flo(rand(200,4000))
+    this.cDetune=rand(0.000001,0.000004);
+    this.barlength = flo(rand(2200,3200));
+
+    this.riddim = getRhythm(this.barlength, rand());
+    this.pattern = getNotePattern(this.riddim,this.scales);
+    if(rand()<0.5) this.pattern2 = this.pattern;
+    else this.pattern2 = getNotePattern(this.riddim,this.scales);
+  }
+
+
+  // populate()
+  //
+  //
+
+  populate(){
+
+    if(rand()<1){
+
+      // make a tribe
+      let numHomes=flo(rand(1,5));
+      let s = rand(30,70);
+      let vendor;
+      let trader;
+      let sage;
+
+      this.setLang(RandomFromArray(allLanguages));
+      this.reputation=0;
+      this.currency=RandomFromArray(allCurrencies);
+
+      for(let i=0; i<numHomes; i++){
+        let numPpl = flo(rand(1,4));
+        this.addFeature(new StaticObject(0,0,home_png,70), s+5);
+
+        for(let j=0; j<numPpl; j++){
+
+          let bob = this.addFeature(new AnimObject(0,0,s+flo(rand(-5,5)),RandomFromArray(poses)), s);
+          planetMode(bob,true);
+          let grain = this.language+" grain";
+          if(!vendor&&rand()<0.6){
+            console.log("added vendor")
+            vendor=bob;
+            bob.setTandA(["Buy my stuff"])
+            bob.shop = [sItem(grain,flo(rand(1,3)), "grain")];
+            if(rand()<0.4) bob.shop.push(sItem(RandomFromArray(BerryNames)+" metal",flo(rand(10,25)), "metal"));
+            if(rand()<0.4) bob.shop.push(sItem(this.language+" bead",flo(rand(2,5)), "bead"));
+            if(rand()<0.4) bob.shop.push(sItem(this.language+" "+RandomFromArray(BerryNames)+" spice",flo(rand(4,8)) ,"spice"));
+          }
+          else if(!trader&&rand()<0.6){
+            console.log("added trader")
+            trader=bob;
+            bob.gives= this.language+" bread";
+            bob.takes= grain;
+            bob.takenum= rand(3,5);
+            bob.tradeTxt=["I make bread.","Bring me "+bob.takenum+" grains."];
+          }
+
+          else if(!sage&&rand()<0.6){
+            console.log("added sage")
+            console.log(this.language)
+            sage=bob;
+            bob.knownLanguage=RandomFromArray(allLanguages);
+            bob.setTandA(["I am a sage","People here speak "+this.language],()=>{
+
+              textCounter=0;
+              availableText=undefined;
+
+              if(knownLanguages.includes(this.language)
+              &&!knownLanguages.includes(bob.knownLanguage)){
+
+                availableText2=["I can teach you "+bob.knownLanguage];
+                knownLanguages.push(bob.knownLanguage);
+              }
+              else if(!knownLanguages.includes(this.language)
+              &&knownLanguages.includes(bob.knownLanguage)){
+                availableText2=["I can teach you "+this.language];
+                knownLanguages.push(this.language);
+              }
+
+            });
+            console.log(bob.knownLanguage)
+          }
+          else bob.setTandA([RandomFromArray(Greetings)])
+        }
+      }
+    }
+  }
+
+
+  // make()
+  //
+  // make planet canvas
+
   make(){
-
-    let r = flo(rand(40,60));
-    let g = 255-r;
-    let b = flo(rand(20,120));
-
-    this.groundColor = rgba(r,g,b,1);
-    this.groundColor2 = rgba(r+20,g+20,b+20,1);
 
     this.planet=scanv();
     this.planet2=scanv();
 
     let ctx=getCtx(this.planet);
-    let ctx2=getCtx(this.planet2);
+    let ctx2=getCtx(this.planet2); // mask canvas
 
-    ctx2.fillStyle="black";
-    ctx.fillStyle="white"
+    ctx2.fillStyle=black;
 
     for(let y=0; y<50; y++){
       let r = rand(y%50);
       let r2 = rand(y%30);
-      let fact = rand(0,10)
+      let fact = rand(0,10);
+
       for(let x=0; x<50; x++){
         if(dist(xy(x,y),xy(25,25))<25){
           if(x<r||x>r2) ctx.fillStyle="#8bef";
@@ -72,8 +180,6 @@ class Planet {
         r2 += rand(-fact,fact)
       }
     }
-
-
   }
 
   addFeature(obj, r){
@@ -175,13 +281,10 @@ class Planet {
 
     let berry = RandomFromArray(BerryNames);
     for(let i=0; i<treeCount; i++){
-
-      // pick a random tree and position
-      let pick = RandomFromArray(this.treeFamily);
-      let pos = this.findAvailableSpot(MinDistanceBetweenFeatures);
-
       // create tree object
-      let tree = new StaticObject(pos.x,pos.y -90,{img:pick},200);
+      let tree = this.addFeature(
+        new StaticObject(0,0,{img:RandomFromArray(this.treeFamily)},200),50);
+
       tree.collider = false;
       tree.talker = true;
       tree.talkrange = 34;
@@ -189,8 +292,6 @@ class Planet {
       tree.setTandA(tree.berryText(),tree.lootBerry);
       tree.id="tree";
 
-      // add to features[]
-      this.features.push(tree);
     }
 
     // order features by y
@@ -210,6 +311,11 @@ class Planet {
     let p = this.rSurf(1);
     while(dist(zero,p)>r*this.r) p = this.rSurf(1);
     return p;
+  }
+
+  setLang(l){
+      this.language=l;
+      this.hue=allLanguages.indexOf(this.language)*30+rand(-2,2)
   }
 
   // addCheese()
@@ -239,34 +345,33 @@ class Planet {
     let pos = camera.position(this);
     if(camera.isOnScreen(pos,this.mass)){
 
-      mCtx.save();
-      hue(this.hue);
-      mCtx.translate(pos.x,pos.y);
-      // draw a circle to show range of gravity
-      drawCircle(0,0,this.mass,"#5593");
+      // back layer
 
-      mCtx.globalCompositeOperation = 'destination-out';
-      mCtx.drawImage(this.planet2,-this.r,-this.r,this.r*4,this.r*4);
-      mCtx.save();
-      mCtx.globalCompositeOperation = 'xor';
+      transform(pos,()=>{
+        hue(this.hue);
+        // draw atmosphere
+        drawCircle(0,0,this.mass,"#5593");
 
-      mCtx.drawImage(this.planet,-this.r,-this.r,this.r*4,this.r*4);
+        // draw mask
+        mCtx.globalCompositeOperation = 'destination-out';
+        mCtx.drawImage(this.planet2,-this.r,-this.r,this.r*4,this.r*4);
 
-      this.features.forEach(f=>displayShadow(f));
+        // draw things inside mask:
+        transform(zero,()=>{
+          // draw planet
+          mCtx.globalCompositeOperation = 'xor';
+          mCtx.drawImage(this.planet,-this.r,-this.r,this.r*4,this.r*4);
+          // draw shadows
+          this.features.forEach(f=>displayShadow(f));
+        });
+      });
 
+      // objects outside of mask (front layer)
 
-      mCtx.restore();
-
-      mCtx.restore();
-
-
-      // then draw all features
-      mCtx.save();
-      hue(this.hue);
-      mCtx.translate(pos.x,pos.y);
-      this.features.forEach(f=>f.display());
-      mCtx.restore();
-
+      transform(pos,()=>{
+        hue(this.hue);
+        this.features.forEach(f=>f.display());
+      });
 
 
     }

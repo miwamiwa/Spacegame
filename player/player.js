@@ -7,6 +7,8 @@ let talkedToMomOnce = true;
 let crashtext; // text displayed on crash
 let availableText;
 let availableText2;
+
+const woosh = 100;
 let Dude;
 let textCounter=0;
 let stopSpeed =0;
@@ -14,6 +16,7 @@ let playerCurrentSpeed =0;
 let inventory = [];
 let inventoryString = "";
 let nP;
+let knownLanguages=["known languages","Onian"];
 
 // setupPlayer()
 //
@@ -23,10 +26,11 @@ let setupPlayer=()=>{
   // space ship
   player = new Vessel(0,0,PlayerSize,VesselAnimation);
   // player character
-  Dude = new AnimObject(PlayerStartX,PlayerStartY,DudeSize,PlayerAnimation);
+  Dude = new AnimObject(PlayerStartX,PlayerStartY,DudeSize,poses[0]);
 
   // setup player
   player.radar = true;
+  Dude.hue=5;
   player.reading = false;
   player.animRate = 20;
   player.running = false;
@@ -69,8 +73,8 @@ let playerLanded=()=>{
   let pos;
   let d=0;
   nP.addFeature(Dude,100);
-  while(d>100||d<65){
-    pos=nP.findAvailableSpot(100,(nP.r-25)/nP.r);
+  while(d>160||d<55){
+    pos=nP.findAvailableSpot(80,(nP.r-25)/nP.r);
 
     setV(Dude,pos);
     d=dist(player,addV(nP,Dude));
@@ -116,10 +120,7 @@ let moveIt =(deltaX,deltaY)=>{
   if(gamestate=="focused") return;
 
   // calculate next position
-  let p = {
-    x: Dude.x + deltaX,
-    y: Dude.y + deltaY
-  };
+  let p = addV(Dude,xy(deltaX,deltaY));
 
   // if next position collides with something,
   // return before moving
@@ -201,13 +202,15 @@ let updatePlayerUi=()=>{
   if(canBoard())
   drawText("press space to board");
   // when in flight
+  /*
   if(!HelpOff&&player.boarded&&!player.landed){
     drawText("FLIGHT CONTROLS:", x,y-font)
     drawText("W to throttle. A and D to steer.", x,y)
     drawText("SPACE to stop", x,y+font)
   }
+  */
 
-
+  SplitText(knownLanguages.join("\n"), 10, 500);
 
 }
 
@@ -260,13 +263,13 @@ let showTopText=()=>{
 
 let showInteractionText=()=>{
   // if text available
-  if(availableText!=undefined){
+  if(availableText){
     // display hint
-    drawText("press space to interact");
-
+    drawText("press space");
+    //console.log("babomm")
     // display text
     if(player.reading)
-    showTextArray(availableText.text);
+    showTextArray(availableText.text,availableText.id!="tree");
   }
 }
 
@@ -296,12 +299,31 @@ let showQuestText=()=>{
   // split text into multiple lines,
   // and display text box
 
-  let showTextArray=(txtarr,x,y)=>{
+  let showTextArray=(txtarr,lang)=>{
+    console.log(lang)
     fill(black);
     mCtx.fillRect(TextBox.x,TextBox.y, 320, 40);
 
-    if(txtarr!=undefined)
-    SplitText(txtarr[textCounter],TextBox.x+5,TextBox.y+17);
+
+    if(txtarr){
+      let t = txtarr[textCounter];
+      if(lang) t = translate(t);
+      SplitText(t,TextBox.x+5,TextBox.y+17);
+    }
+
+  }
+
+  let translate=(t)=>{
+    //console.log("translate")
+    if(!knownLanguages.includes(nP.language)){
+      let str = "";
+      for(let i=0; i<t.length; i++){
+        let index = allLanguages.indexOf(nP.language)+2;
+        str += String.fromCharCode(t.charCodeAt(i)+index*100);
+      }
+      return str;
+    }
+    return t;
   }
 
   let SplitText=(text,x,y,c,f)=>{

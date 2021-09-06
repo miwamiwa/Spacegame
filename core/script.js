@@ -4,11 +4,12 @@ let camera;
 let planets = [];
 let gamestate = "startscreen";
 let genplanets = [];
-
+let lastavail;
 
 
 // start gameon page load
 window.onload =()=>{
+  startSound()
   loadImages();
   setupCanvas();
   setInterval(run,40);
@@ -78,6 +79,17 @@ let startGame=()=>{
   player.update();
 
   gamestate="game";
+
+  setInterval(()=>{
+    if(player.throttle>0)
+    play(40,
+      0.2,0.1,0.65,0.1,
+      10,noisey,
+      player.throttle*4,
+      'lowpass',100+player.throttle*1000,2);
+  }, woosh);
+
+
 }
 
 
@@ -105,6 +117,7 @@ let runGame=()=>{
 
   SplitText(inventoryString, 5, 200);
 
+
   if(ActiveShop)
     RunShop();
 
@@ -116,4 +129,6 @@ let runGame=()=>{
     new Planet(x*FarRange+5*roughly(0),y*FarRange+5*roughly(0),true);
     genplanets.push(index);
   }
+
+  if(availableText==undefined) doneAction=false;
 }

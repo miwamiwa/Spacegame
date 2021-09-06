@@ -9,6 +9,7 @@ let inputs = {
   l:false
 }
 let key;
+let doneAction = false;
 // keyUp()
 //
 // track keyup events
@@ -99,11 +100,11 @@ let planetInputs=()=>{
   // update animation
   if(running!=player.running){
     switch(player.running){
-      case false: Dude.setFrames(PlayerAnimation); break;
-      case "left": Dude.setFrames(PlayerWalkLeft); Dude.left=true; break;
-      case "right": Dude.setFrames(PlayerWalkLeft); Dude.left=false; break;
-      case "down": Dude.setFrames(PlayerWalkDown); break;
-      case "up": Dude.setFrames(PlayerWalkUp); break;
+      case false: Dude.setFrames(poses[0]); break;
+      case "left": Dude.setFrames(poses[1]); Dude.left=true; break;
+      case "right": Dude.setFrames(poses[1]); Dude.left=false; break;
+      case "down": Dude.setFrames(poses[3]); break;
+      case "up": Dude.setFrames(poses[2]); break;
     }
   }
 
@@ -187,6 +188,9 @@ let SpacePressInGameState =()=>{
     if(!player.reading){
       player.reading = true;
       if(availableText==Mom) UpdateMomText();
+      if(availableText==Grandpa) UpdateGPText();
+      else if(availableText.gives)
+        UpdateTraderText();
       textCounter =0;
     }
 
@@ -195,14 +199,25 @@ let SpacePressInGameState =()=>{
       textCounter++;
       // do action if last frame is reached and there is
       // a follow-up action available
+      if(!availableText.text){
+        textCounter=0;
+        player.reading=false;
+        return;
+      }
+
       if(
-        textCounter==availableText.text.length-1
+        textCounter>=availableText.text.length-1
         &&availableText.firstReadAction
       )
-      availableText.firstReadAction();
+
+      if(!doneAction){
+        availableText.firstReadAction();
+        doneAction=true;
+      }
+
       // remove text box
       if(textCounter==availableText.text.length){
-        if(availableText.shop) ShowShop(Shop.shop);
+        if(availableText.shop&&knownLanguages.includes(nP.language)) ShowShop(availableText.shop);
         availableText = undefined;
         player.reading = false;
       }

@@ -18,6 +18,14 @@ let HexToRgba =(hexinput)=>{
 
 let fill =(f)=> mCtx.fillStyle=f;
 
+let transform=(pos,f,r)=>{
+  mCtx.save();
+  mCtx.translate(pos.x,pos.y);
+  if(r) mCtx.rotate(r);
+  f();
+  mCtx.restore();
+}
+
 
 let plural=(t)=>{
   let i=t.length;

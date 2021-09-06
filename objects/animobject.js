@@ -54,16 +54,14 @@ class AnimObject extends BasicObject {
     if(!this.active) return;
 
     // update transform
-    mCtx.save();
-    mCtx.translate(x,y);
-    mCtx.rotate(this.bearing);
-    // display any children:
-    this.displayChildren(children);
-    // display sprite:
-    hue(this.hue);
-    if(!this.left) mCtx.scale(-1,1);
-    image(this.img,0,0,this.half,this.size);
-    mCtx.restore();
+    transform(xy(x,y),()=>{
+      this.displayChildren(children);
+      // display sprite:
+      hue(this.hue);
+      if(!this.left) mCtx.scale(-1,1);
+      image(this.img,0,0,this.half,this.size);
+
+    },this.bearing);
   }
 
   displayChildren(children){

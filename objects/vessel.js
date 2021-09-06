@@ -172,27 +172,26 @@ class Vessel extends AnimObject {
           // setup text
           if(p.visited){
             visit = " (visited)";
-            col= "green";
+            col= "#6e6";
           }
 
+          let a= 1;
+          if(p.d2p<100000) a = Math.max(1, 9-flo(p.d2p/15000));
+          col+=a
+
           // position
-          mCtx.save();
-          mCtx.translate(
-            middle.x+RaDist * -dir.x,
-            y + 30
-          );
+          transform(xy(middle.x+RaDist * -dir.x, y + 30),()=>{
+            // draw line
+            mCtx.beginPath();
+            mCtx.strokeStyle = "#eee";
+            mCtx.moveTo(-dir.x*20,dir.y*20);
+            mCtx.lineTo(-dir.x*50,dir.y*50);
+            mCtx.stroke();
 
-          // draw line
-          mCtx.beginPath();
-          mCtx.strokeStyle = "white";
-          mCtx.moveTo(-dir.x*20,dir.y*20);
-          mCtx.lineTo(-dir.x*50,dir.y*50);
-          mCtx.stroke();
-
-          // draw text
-          mCtx.font="bold 14px Arial"
-          SplitText("planet "+p.name+"\n"+visit+" ("+p.d2p+")",-35,0,col,14);
-          mCtx.restore();
+            // draw text
+            mCtx.font="bold 14px Arial"
+            SplitText("planet "+p.name+"\n"+visit+" ("+p.d2p+")",-35,0,col,14);
+          });
         }
       });
     }

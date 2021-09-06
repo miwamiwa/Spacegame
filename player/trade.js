@@ -4,7 +4,7 @@ let trade=(obj,type,ingred,num,blend)=>{
   let name=type;
 
 
-  if(h){
+  if(h&&knownLanguages.includes(nP.language)){
     if(blend) name=h.name+" "+type;
 
     obj.setTandA([ `Oh, you have ${plural(h.type)}\nGive me a moment..`,
