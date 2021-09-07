@@ -1,51 +1,26 @@
-// audio functions grabbed from my last js13k project
+// sound.js
 
-class Envelope{
+// core
+let aCtx;
+let samp;
+let sound=false;
 
-  constructor(a,d,s,r){
-    this.a=a;
-    this.d=d;
-    this.r=r;
-
-    this.s=s;
-    this.aS=a*samprate; // attack length in samples
-    this.dS=d*samprate; // decay length in samples
-    this.rS=r*samprate; // release length in samples
-    this.rT=this.aS+this.dS; // release time is attack + decay
-  }
-  // return envelope level at given time point
-  level(i){
-    // if during attack
-    if(i<this.aS) return i/this.aS;
-    // if during decay
-    else if(i<this.rT) return 1 - (1-this.s) * (i-this.aS)/this.dS;
-    // if during release
-    else return this.s*( 1 - (i-this.rT)/this.rS );
-  }
-}
-
-let aContext;
-let samprate;
-let soundStarted=false;
+// time
 let bars =0;
-
-// improv
-let currentPattern;
-
-let mutemel = false;
-let muteimprov = false;
 let head =0;
 
-let bassOctave = 3; // 2 and 3 both nice
+// improv
+let pat;
 let scale;
-
 let temperament;
-
 let lastnote = 60;
-let improBeat=[8,8,8,8,8,8,16,16,16,16]
-// chord settings
-
+let improBeat=[8,8,8,8,8,8,16,16,16,16];
 let bar = 3800;
+let chordfilter;
+let chorddetune;
+let percfilter=4500;
+
+
 // startsound()
 //
 // creates the audio context and starts the bgm
@@ -53,32 +28,31 @@ let bar = 3800;
 let startSound=()=>{
   //  return
   window.AudioContext = window.AudioContext || window.webkitAudioContext;
-  aContext = new AudioContext();
-  samprate = aContext.sampleRate;
-  soundStarted=true;
+  aCtx = new AudioContext();
+  samp = aCtx.sampleRate;
+  sound=true;
 
   // start beat
-  setTimeout(()=>{
-    if(nP)
-    bar = nP.barlength;
-    setTimeout(playbar,bar);
-  }, 500)
-
+  setTimeout(playbar,bar);
 }
 
 
+// getRhythm()
+//
+//
 
+let getRhythm=(b,t)=>{
 
-let getRhythm=(barlength,t)=>{
-  temperament = t;
   let r = [];
+  let c;
+  let count=0;
+  temperament = t;
 
-  let counter=0;
   for(let i=0; i<improBeat.length; i++){
-    let c = t;
+    c = t;
     if(i%2==1) c = 0.4
-    if(rand()<c) r.push(counter);
-    counter += barlength/improBeat[i];
+    if(rand()<c) r[i]=count;
+    count += b/improBeat[i];
   }
 
   return r;
@@ -86,40 +60,36 @@ let getRhythm=(barlength,t)=>{
 
 
 
-
+// getNotePattern()
+//
+//
 
 let getNotePattern=(rhythm,scalelist)=>{
-  let currentPattern;
-  let currentNote = flo(rand(7));
+  let pat = RandomFromArray(patterns);
+  let note = flo(rand(7));
   let patcount=0;
-  lastscale = scale;
-
-  let notes=[];
-  let octaves=[];
+  let deg;
+  let res ={notes:[],octaves:[]};
 
   // for each note that will actually get played:
   for(let i=0; i<rhythm.length; i++){
-    // define pattern if we need a new one
-    if(!currentPattern){
-      currentPattern = RandomFromArray(patterns);
-      patcount=0;
-    }
     // this is next scale degree
-    let scaledegree = currentNote+currentPattern[patcount];
-    octaves.push((3+flo(scaledegree/8))*12);
+    deg = note+pat[patcount];
+    res.octaves[i]=(3+flo(deg/8))*12;
 
-    while(scaledegree<0) scaledegree += 8;
-    notes.push(scaledegree%8);
+    while(deg<0) deg += 8;
+    res.notes[i]=deg%8;
 
     // move to next note in the current pattern
     patcount++;
     // remove pattern if end reached
-    if(patcount==currentPattern.length-1){
-      currentPattern = undefined;
-      currentNote = scaledegree;
+    if(patcount==pat.length-1){
+      pat = RandomFromArray(patterns);
+      note = deg;
+      patcount=0;
     }
   }
-  return {notes:notes,octaves:octaves}
+  return res;
 }
 
 
@@ -134,42 +104,32 @@ let getNotePattern=(rhythm,scalelist)=>{
 // trigger every note in this bar for each instrument
 
 let playbar = () =>{
-  // get current scale
-
-
-  // TRIGGER DRUMS
-
-
-
-  // bass drum
-  startBeat([4,2.7,17,17],playNoiseySynthog,1,1,false);
-
-  // snare
-  startBeat(
-    [4,2.7,8.2,16,16],
-    playSnare,0.88,1,true
-  );
-
 
   // update chord contents
   temperament = rand(0.2,0.5);
 
   if(nP){
+    bar = nP.barlength;
     chordfilter =nP.cFilter;
     chorddetune = nP.cDetune;
     percfilter=nP.filter;
+    scales = nP.scales;
+    if(bars>=nP.scales.length) bars =0;
+    scale = scales[bars];
+
     // hats
     startBeat(
       [16,16,8,16,16,16,16,16,16,16,16,16,16],
-      playHats,0.92,1,true
+      ()=>play(
+        40,
+        0.01,0.01,0.25,rand(0.1,0.7),
+        40,noisey,
+        rand(18,24),
+        'highpass',roughly(1000),2
+      ),0.92,1,true
     );
 
-    console.log("playing notes")
-    bar = nP.barlength;
-    scales = nP.scales;
-    if(bars>=nP.scales.length) bars =0;
 
-    scale = scales[bars];
     // trigger notes
     let counter =0;
 
@@ -179,19 +139,16 @@ let playbar = () =>{
         let pat = nP.pattern;
         if(bars%2==1) pat = nP.pattern2;
 
-        let scaledegree = pat.notes[i]%scale.length;
-        // this is next note
-        let f = noteToFreq(pat.octaves[i] + scale[scaledegree]);
-        //console.log(scaledegree);
-        //console.log(scale.length)
-        //console.log(f)
-        if(!isNaN(f))
-        playNoiseySynth(f, nP.riddim[i]);
-      }, counter)
+        play(
+          2*nToF(pat.octaves[i] + scale[pat.notes[i]%scale.length]),
+          0.01,0.1,0.25,0.4,
+          5,constSine,
+          2,
+          'highpass',450,8
+        );
+      }, counter);
       counter+=nP.riddim[i];
-
     }
-
   }
   else {
 
@@ -201,29 +158,49 @@ let playbar = () =>{
     scales = defaultScales;
     if(bars>=defaultScales.length) bars =0;
     scale = scales[bars];
-
-
   }
 
-
-  setTimeout(playbar,bar);
-  //startBeat([8,8,4,4,8,8],playKik,0.3,0.5,false);
-
-
-
-
-
-  // bassy synth
+  // bass drum
   startBeat(
-    [2,5.29,16,16,16],
-    perc,0.4,1
+    [4,2.7,17,17],
+    ()=>play(
+      800,
+      0.04,0.11,0.6,0.06,
+      2,constSine4,
+      18,
+      'lowpass',1250,
+      14,0.01
+    ),1,1,false
   );
 
-// TRIGGER CHORDS
+  // snare
+  startBeat(
+    [4,2.7,8.2,16,16],
+    ()=>play(
+    10, // (freq)
+    0.015,0.01,0.4,rand(0.1,0.2), // adsr
+    2, // buffer cycles
+    noisey2, // sound
+    16, // vol
+    'highpass',1200,1
+  ),0.88,1,true);
 
-chordNote(0);
-chordNote(2);
+  // bass
+  startBeat(
+    [2,5.29,16,16,16],
+    ()=>play(
+      nToF(48+scales[bars-1][0]),
+      0.01,0.2,0.6,0.8,
+      flo(rand(1,6)),constSineZ,
+      3.1,
+      'lowpass',percfilter,3
+    ),0.4,1);
 
+  chordNote(0);
+  chordNote(2);
+
+  // trigger next bar
+  setTimeout(playbar,bar);
 
 
   // update TIME:
@@ -239,111 +216,45 @@ chordNote(2);
     head++;
   }
 }
-let chordfilter =400;
-let chorddetune = 0.000002;
 
+
+
+//  ****** Sound generation ********
+//
+//
+
+// sin of a value at index i in the sample buffer.
+let sine=(i,a,d)=>Math.sin(i/(a+d));
+
+// synth used in playhop2 and playcash
+let constSineZ=(i,d)=>0.2*sine(i,i,d)+0.2*sine(2*i,i,d)+0.2*sine(4*i,i,d)
+
+// synth used in hats
+let noisey=(i,d)=>rand(0.02);
+
+// synth sound used in melody notes, improv notes and snare lol
+let noisey2=(i,d)=> rand(constrain(Math.round(sine(i,i,d)),0,0.130));
+
+// synth used in chords
+let constSine=(i,d)=>
+constrain( sine(i,0,d),-0.2,0.2);
+
+// synth used in wobble bass and noisey synth and noiseysynth og
+let constSine4=(i,d)=>
+constrain(rand(0.1,0.2)+0.3*(sine(i,0,d)+0.3*sine(i,2,d)),0,0.10);
+
+
+// chordNote()
+//
+// play the chord synth
 
 let chordNote=(i)=>
-play(noteToFreq(48+scale[i]), 0.1, 1.1, 0.5, 1.5, 6, constSine, 0.65, "highpass", chordfilter, 1, chorddetune)
-
-
-
-// findClosestNoteInScale()
-//
-//
-
-let findClosestNoteInScale=(sca)=>{
-  let octave = 4;
-  let note = currentNote;
-  let found =999;
-  let res = 99;
-  while(res>3){
-    for(let i=0; i<sca.length; i++){
-      let note2 = sca[i] + octave * 12;
-      res = abs(note2-note);
-      if(res<abs(found-note)) found = note2;
-
-      if(res<=2){
-        return {note:i,octave:octave}
-      }
-    }
-    octave++;
-    // if too high, abort
-    if(octave==6) return {note:0,octave:defoctave}
-  }
-
-  return {note:0,octave:defoctave}
-}
-
-
-// startMelnotes()
-//
-// Trigger melody notes for the current bar
-
-let startMelNotes=(beat,octave,sound)=>{
-  let counter =0;
-  // there's always 3
-  for(let i=0; i<3; i++){
-    if(melcount<fullmel.length){
-      // trigger individual notes
-      setTimeout(()=>{
-
-        if(fullmel[melcount]!=false){
-
-          if(!mutemel)
-          playNoiseySynthog(noteToFreq(octave*12+fullmel[melcount]));
-        }
-        // increment melody count
-        melcount++;
-      },counter);
-    }
-    counter += bar/beat[i]
-  }
-}
-
-
-// startBassNotes()
-//
-// trigger bass notes for a given bar
-
-let startBassNotes = (beat,notes,octave,sound)=>{
-  let counter =0;
-  for(let i=0; i<beat.length; i++){
-    setTimeout(playWobbleBass,counter,noteToFreq(octave*12 + scale[notes[i]]))
-    counter += bar/beat[i];
-  }
-}
-
-// noteToFreq()
-//
-// convert midi note number to frequency
-
-let noteToFreq=(note)=> (440 / 32) * (2 ** ((note - 9) / 12));
-
-// play()
-//
-// big bulky function that buffers and plays a synth note.
-// args: frequency (freq), envelope (a,d,s,r),
-// buffer length (a short sample is buffered and copied to fill
-// the entire note duration), sound-generating-function (func),
-// volume (vol), filter (ftype,ffreq,fq) and slide factor (optional, "slide")
-
-let play=(freq,a,d,s,r,cycles,func,vol,ftype,ffreq,fq,slide)=>{
-  playSound(preloadSound(
-    freq,
-    new Envelope(a,d,s,r),
-    cycles,func,slide
-  ),vol,ftype,ffreq,fq);
-}
-
-
+play(nToF(48+scale[i]), 0.1, 1.1, 0.5, 1.5, 6, constSine, 0.65, "highpass", chordfilter, 1, chorddetune)
 
 
 // startBeat()
 //
-// play the provided sound with the provided beat pattern,
-// and chance of playing each note.
-// used to play hats and snare.
+// play a beat pattern
 
 let startBeat =(beat,sound,min,max,mute1)=>{
   let chance = rand(min,max) * temperament;
@@ -355,42 +266,74 @@ let startBeat =(beat,sound,min,max,mute1)=>{
   }
 }
 
+
+
+
+
+
+// nToF()
+//
+// convert midi note number to frequency
+
+let nToF=(note)=> (440 / 32) * (2 ** ((note - 9) / 12));
+
+
+
+
+// play()
+//
+// play a synth note
+// args: frequency (freq), envelope (a,d,s,r),
+// buffer length (a short sample is buffered and copied to fill
+// the entire note duration), sound-generating-function (func),
+// volume (vol), filter (ftype,ffreq,fq) and slide factor (optional, "slide")
+
+let play=(f,a,d,s,r,c,fu,v,ft,ff,fq,sl)=>
+  playSound(preloadSound(
+    f,new Envelope(a,d,s,r),c,fu,sl
+  ),v,ft,ff,fq);
+
+
+
+
+
 // preloadSound()
 //
 // generate a sound buffer
 
-let preloadSound=(f,envelope,cycles,func,sliding)=>{
+let preloadSound=(f,env,cycles,func,sli)=>{
 
-  let result = [];
-  let prebuffer = [];
-  let length = samprate * ( envelope.a+envelope.d+envelope.r );
-  let period = samprate / f;
-  let preBuffL = flo(period)*cycles; // length of prebuffer in samples
-  let dividor = period / TWO_PI;
-
+  let res = [];
+  let pre = [];
+  let len = samp * ( env.a+env.d+env.r );
+  let per = samp / f;
+  let preL = flo(per)*cycles; // len of prebuffer in samples
+  let div = per / TWO_PI;
+  let i=0;
   // if this isn't a sliding sound:
 
-  if(sliding==undefined){
+  if(!sli){
     // prebuffer a given number of cycles
-    for(let i=0; i<preBuffL; i++)
-    prebuffer.push( func(i,dividor) );
+    for(i=0; i<preL; i++)
+    pre[i]= func(i,div);
 
-    // then repeat those over the full length of the note
-    for (let i = 0; i < length; i++)
-    result[i] = 0.4* envelope.level(i) * prebuffer[i%preBuffL];
+    // then repeat those over the full len of the note
+    for (i = 0; i < len; i++)
+    res[i] = 0.4* env.level(i) * pre[i%preL];
   }
 
   // if this is a sliding sound:
 
   // buffer the entire note
   else{
-    for (let i = 0; i < length; i++)
-    result[i] = 0.4* envelope.level(i) * func(i,dividor+i*sliding);
+    for (i = 0; i < len; i++)
+    res[i] = 0.4* env.level(i) * func(i,div+i*sli);
   }
 
 
-  return result;
+  return res;
 }
+
 
 // preloadsound()
 //
@@ -398,121 +341,26 @@ let preloadSound=(f,envelope,cycles,func,sliding)=>{
 // f: frequency,
 // cycles: how many cycles to prebuffer
 // envelope: envelope to apply, func: sound generating function
-// sliding: optional, factor by which to slide the note
+// sli: optional, factor by which to slide the note
 
 
 
-let playSound=(arr,vol,filterT,filterF,filterG)=>{
+let playSound=(arr,vol,fT,fF,fG)=>{
 
   let buf = new Float32Array(arr.length)
   for (var i = 0; i < arr.length; i++) buf[i] = vol*arr[i]
-  let buffer = aContext.createBuffer(1, buf.length, samprate)
+  let buffer = aCtx.createBuffer(1, buf.length, samp)
   buffer.copyToChannel(buf, 0)
-  let source = aContext.createBufferSource();
+  let source = aCtx.createBufferSource();
   source.buffer = buffer;
-  let filter = aContext.createBiquadFilter();
-  filter.type = filterT;
-  filter.frequency.value=filterF;
-  filter.gain.value = filterG;
+  let filter = aCtx.createBiquadFilter();
+  filter.type = fT;
+  filter.frequency.value=fF;
+  filter.gain.value = fG;
 
   source.connect(filter);
 
-  filter.connect(aContext.destination);
+  filter.connect(aCtx.destination);
   source.start(0);
 
-
 }
-
-
-
-// **** SOUNDS ******
-
-
-
-// playsnare()
-//
-
-let playSnare=()=>
-play( 10, // (freq)
-  0.015,0.01,0.4,rand(0.1,0.2), // adsr
-  2, // buffer cycles
-  noisey2, // sound
-  16, // vol
-  'highpass',1200,1); // filter
-
-
-  let playKik=()=>
-  play( 100, // (freq)
-    0.02,0.11,0.2,0.2, // adsr
-    10, // buffer cycles
-    noisey2, // sound
-    0.4, // vol
-    'highpass',210,4
-  ); // filter
-
-
-  // playcash()
-  // modified cash sound from original code,
-  // more like a wierd percussive thing now
-
-  let percfilter=4500;
-  let perc=()=>play(noteToFreq(48+scales[bars-1][0]), 0.01,0.2,0.6,0.8, flo(rand(1,6)),constSineZ,3.1,'lowpass',percfilter,3);
-
-  // play a ride / hi hat sound
-  let playHats=()=>
-  play(40,0.01,0.01,0.25,rand(0.1,0.7),40,noisey,rand(18,24),'highpass',roughly(1000),2);
-
-  // this is for playing the bass notes
-  let playWobbleBass=(freq)=>
-  play(
-    freq,
-    .05,0.21,0.2,0.21,
-    8,constSine4,
-    9,
-    'lowpass',1200,2,
-    0.0001); // adjust filter freq value 200-1000 to get nice dub fx
-
-    // function for playing the improv notes
-    let playNoiseySynth=(freq, l)=>
-    play( 2*freq,0.01,0.1,0.25,0.4, 5,constSine,2,'highpass',450,8);
-
-    // glide value for playNoiseySynthog
-    let glideval = 0.00001;
-
-    // function for playing the melody notes
-    let playNoiseySynthog=(freq)=>
-    play( 800,
-      0.04,0.11,0.6,0.06,
-      2,constSine4,
-      18,
-      'lowpass',1250,
-      14,0.01);
-
-
-
-      //  ****** MATH that generates sounds ********
-
-      // sin of a value at index i in the sample buffer.
-      let sine=(i,a,d)=>Math.sin(i/(a+d));
-
-      // synth used in playhop2 and playcash
-      let constSineZ=(i,d)=>0.2*sine(i,i,d)+0.2*sine(2*i,i,d)+0.2*sine(4*i,i,d)
-
-      // synth used in hats
-      let noisey=(i,d)=>rand(0.02);
-
-      // synth sound used in melody notes, improv notes and snare lol
-      let noisey2=(i,d)=> rand(constrain(Math.round(sine(i,i,d)),0,0.130));
-
-      // synth used in chords
-      let constSine=(i,d)=>
-      constrain( sine(i,0,d),-0.2,0.2);
-
-      // used in thunder and bass
-      let constSine5=(i,d)=>
-      constrain(rand(0.2)*(sine(i,0,d) + sine(i,1000,d)),0,0.10);
-
-      // synth used in wobble bass and noisey synth and noiseysynth og
-      let sine4fact=0.8;
-      let constSine4=(i,d)=>
-      constrain(rand(0.1,0.2)+0.3*(sine(i,0,d)+0.3*sine(i,2,d)),0,0.10);

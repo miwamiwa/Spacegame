@@ -8,7 +8,7 @@ let crashtext; // text displayed on crash
 let availableText;
 let availableText2;
 
-const woosh = 100;
+
 let Dude;
 let textCounter=0;
 let stopSpeed =0;

@@ -1,3 +1,23 @@
+const FailTextList = [
+  "Ouch!",
+  "Don't scratch the car. -Mom.",
+  "It takes up to 3000 units of space to stop"
+];
+
+const gpPart="gear #5b8gh9";
+
+const HomeText = ["This is my home.","I've always lived here!"]
+const MomText2 =["Son.","Go help your Grandpa."];
+const GrandpaText2 = ["Hi grandson"];
+const ShopText = ["Welcome to the shop"];
+const ShopItems = [
+  sItem(gpPart,50),
+  sItem("boosters",600),
+  sItem("parachute", 200),
+  sItem("radarPro9001",900)
+];
+const ShopRect={x:200,y:200}
+
 const cash = "coin";
 
 const allCurrencies = [
@@ -6,6 +26,8 @@ const allCurrencies = [
   "bead",
   "berry"
 ];
+
+const woosh = 100;
 
 const Greetings =[
   "hello","hi!"
@@ -86,10 +108,9 @@ const PlanetNames = [
   "Hinomia",
   "Haotov",
   "Peiyama",
-  "Strutacarro",
   "Llenigawa",
-  "Garvis 5",
-  "Lloria ER2"
+  "Garvis",
+  "Lloria"
 ];
 
 const BerryNames=[

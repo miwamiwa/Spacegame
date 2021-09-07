@@ -2,25 +2,7 @@ let sItem=(n,p,t)=>{
   if(!t) t=n;
   return {name:n,price:p,type:t};
 }
-const FailTextList = [
-  "Ouch!",
-  "Don't scratch the car. -Mom.",
-  "It takes up to 3000 units of space to stop"
-];
 
-const gpPart="gear #5b8gh9";
-
-const HomeText = ["This is my home.","I've always lived here!"]
-const MomText2 =["Son.","Go help your Grandpa."];
-const GrandpaText2 = ["Hi grandson"];
-const ShopText = ["Welcome to the shop"];
-const ShopItems = [
-  sItem(gpPart,50),
-  sItem("boosters",600),
-  sItem("parachute", 200),
-  sItem("radarPro9001",900)
-];
-const ShopRect={x:200,y:200}
 
 let shopText;
 let ActiveShop;

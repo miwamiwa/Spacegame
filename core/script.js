@@ -5,7 +5,7 @@ let planets = [];
 let gamestate = "startscreen";
 let genplanets = [];
 let lastavail;
-
+let scount=0;
 
 // start gameon page load
 window.onload =()=>{
@@ -53,10 +53,15 @@ let bg=()=>{
 //
 let runStartScreen=(x,y)=>{
 
-  drawText("space game",x,y);
-  drawText("press space to start",x,y+14,grey);
-  //image({img:vessel_png},middle.x,middle.y,200);
+  for(let i=0; i<9; i++){
+    hue(i*20);
+    image(fire1_png,80+i*50,y+80+Math.sin(i+scount)*20,50,100)
+    image(vessel_png,80+i*50,y,100,200);
+  }
 
+  drawText("press space to start",x+30,y+260);
+
+  scount+=.1;
   if(inputs.space) startGame();
 }
 
