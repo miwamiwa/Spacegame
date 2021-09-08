@@ -16,7 +16,15 @@ let HexToRgba =(hexinput)=>{
   ];
 }
 
+let range=(p,h,s)=>p>-h&&p<s+h;
+
 let fill =(f)=> mCtx.fillStyle=f;
+
+let frect=(p,w,h,f)=>{
+  fill(f);
+  mCtx.fillRect(p.x,p.y,w,h);
+}
+
 
 let transform=(pos,f,r)=>{
   mCtx.save();

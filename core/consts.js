@@ -6,16 +6,16 @@ const FailTextList = [
 
 const gpPart="gear #5b8gh9";
 
-const HomeText = ["This is my home.","I've always lived here!"]
-const MomText2 =["Son.","Go help your Grandpa."];
+const HomeText = ["This is my home.","Goood oleee hooooome"]
+const Son2Text =[
+  "Son II: Hi brother",
+  "Have fun out there",
+  "Me? Fly?",
+  "Pfft"
+];
 const GrandpaText2 = ["Hi grandson"];
 const ShopText = ["Welcome to the shop"];
-const ShopItems = [
-  sItem(gpPart,50),
-  sItem("boosters",600),
-  sItem("parachute", 200),
-  sItem("radarPro9001",900)
-];
+
 const ShopRect={x:200,y:200}
 
 const cash = "coin";
@@ -92,13 +92,15 @@ const RadarMax = 20000;
 // UI
 const TopText = {x: 4, y: 16};
 // text box default size
-const TextBox = {x:100, y:100};
+const TextBox = {x:150, y:100};
 
 // PLANETS
 const GravityConstant = 50;
 const PlanetMassMin = 800;
 const PlanetMassMax = 2000;
 
+
+let font = 15;
 
 //https://www.fantasynamegenerators.com/planet_names.php
 const PlanetNames = [
@@ -136,10 +138,10 @@ const TWO_PI = 2*Math.PI;
 
 // COLORS
 const grey = "#eee8";
-const white = "#fffc";
+const white = "#fff9";
 const bgFill = "#2a1f42";
 const black = "black";
-
+const tbFill = "#445a";
 // MUSIC
 
 const Edorian = [4,6,7,9,11,13,14];

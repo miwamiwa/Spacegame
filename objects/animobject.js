@@ -1,7 +1,7 @@
 class AnimObject extends BasicObject {
   constructor(x,y,size,frames,text,func){
     // position,rotation,scale
-    super(x,y,size,text,func);
+    super(x,y,size,frames[0],text,func);
     this.bearing =0;
     // animation
     this.animRate = 5;

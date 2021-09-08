@@ -15,14 +15,14 @@ class Camera {
   }
 
   // position object relative to camera target
-  position(input){
-    return subV(input,this.middle);
+  position(i){
+    return subV(i,this.middle);
   }
 
   // check if input object is visible
-  isOnScreen(pos,half){
-    if(pos.x>-half&&pos.x<mainCanvas.width+half){
-      if(pos.y>-half&&pos.y<mainCanvas.height+half)
+  isOnScreen(p,half){
+    if(range(p.x,half,mainCanvas.width)){
+      if(range(p.y,half,mainCanvas.height))
         return true;
     }
     return false;
