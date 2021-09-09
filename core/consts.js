@@ -95,14 +95,11 @@ const RadarMax = 20000;
 const TopText = {x: 4, y: 16};
 // text box default size
 const TextBox = {x:350, y:100};
+const font = 15;
 
 // PLANETS
 const GravityConstant = 50;
-const PlanetMassMin = 800;
-const PlanetMassMax = 2000;
 
-
-let font = 15;
 
 //https://www.fantasynamegenerators.com/planet_names.php
 const PlanetNames = [
@@ -128,7 +125,6 @@ const BerryNames=[
 
 // WORLD
 
-const HomePlanetRadius = 550;
 const FarRange = 36000;
 
 // STARS

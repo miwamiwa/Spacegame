@@ -66,7 +66,7 @@ let createNewTreeType=()=>{
     // trunk length
     let tLen = flo(rand(tMin,tMax));
     // trunk deviation left-right
-    let tDev = rand(4);
+    let tDev = rand(3);
 
     // construct tree
     for(let j=0; j<tLen; j++){

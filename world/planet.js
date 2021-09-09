@@ -1,78 +1,78 @@
 
 class Planet {
-  constructor(x,y,randomscenery,name, rad, mas, minfruit){
+  constructor(x,y,randomscenery,name, rad, minfruit){
 
     // mass and radius
-    if(!rad){
-      rad=rand(350,460);
-      mas=rand(PlanetMassMin,PlanetMassMax)
-    }
+    if(!rad) rad=rand(350,460);
     this.r = rad;
-    this.mass = mas;
+    this.mass = rand(800,2000);
 
     // position
     this.half =0; // for camera calculations
     this.x = x;
     this.y = y;
-
-    this.currency=cash;
-    this.setLang("Onian");
-    // children
-    this.features = [];
-
-    // distance to player
-    this.d2p =-1;
-
-    // random hue
-    this.hue =flo(rand(360));
-
-    this.make();
+    this.d2p =-1; // distance to player
 
     // random planet name
-    if(name==undefined) name = RandomPlanetName();
+    if(!name) name = RandomPlanetName();
     this.name = name;
-    this.counter=0;
 
-    // add random scenery (==trees)
+    // children
+    this.features = [];
+    this.hue =flo(rand(360));
+
+    // create planet image, water
+    this.make();
+
+    // add trees
     this.setupScenery(minfruit);
 
+    // add people
     if(randomscenery)
     this.populate();
 
-    planets.push(this);
+    // set local currency and language
+    this.currency=cash;
+    this.setLang("Onian");
 
-
-
+    // setup music
     this.music();
+
+    planets.push(this);
   }
 
-
+  // setup music for this planet
   music(){
-    // setup music for this place
 
-    this.scales = [];
-    let scale1=RandomFromArray(allScales);
-    let scale2=RandomFromArray(allScales);
-    let scale3=RandomFromArray(allScales);
+    // generate scales
+    let s1=RandomFromArray(allScales);
+    let s2=RandomFromArray(allScales);
+    let s = [];
 
-    this.scales[0]=scale1;
-    this.scales[1]=scale1;
-    this.scales[2]=scale2;
-    this.scales[3]=scale1;
-    this.scales[4]=scale2;
-    this.scales[5]=scale3;
+    s[0]=s1;
+    s[1]=s1;
+    s[2]=s2;
+    s[3]=s1;
+    s[4]=s2;
+    s[5]=RandomFromArray(allScales);
 
-    this.filter=flo(rand(500,2000))
-    this.cFilter=flo(rand(200,4000))
-    this.cDetune=rand(0.000001,0.000004);
-    this.barlength = flo(rand(2200,3200));
-    this.temperament = rand(0.1,1);
-    this.rainRate = flo(rand(1,20))
+    // general settings
+    this.m={
+      scales:s,
+      nL:rand(),
+      pF:flo(rand(500,2000)), // perc filter
+      cF:flo(rand(200,4000)), // chord filter
+      cDetune:rand(0.000001,0.000004), // chord detune
+      t:rand(0.1,1) // "temperament" (drum rate)
+    };
 
-    this.riddim = getRhythm(this.barlength/2, rand(.3,1));
-    this.pattern = getNotePattern(this.riddim,this.scales);
-    if(rand()<0.27) this.pattern2 = this.pattern;
-    else this.pattern2 = getNotePattern(this.riddim,this.scales);
+
+
+    getRhythm(this.m, flo(rand(2200,3200)), rand(.3,1));
+    this.m.pattern = getNotePattern(this.m);
+    if(rand()<0.17) this.m.pattern2 = this.m.pattern;
+    else if(rand()<0.17) this.m.pattern2 = reverse(this.m.pattern);
+    else this.m.pattern2 = getNotePattern(this.m);
   }
 
 
@@ -172,6 +172,9 @@ class Planet {
   // make planet canvas
 
   make(){
+
+    this.rainRate = flo(rand(1,20))
+    this.counter=0;
 
     this.planet=scanv();
     this.planet2=scanv();

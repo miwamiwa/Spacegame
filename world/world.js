@@ -17,7 +17,7 @@ let mCtx;
 let middle = xy(400,260);
 let rightPlanetsEnabled = false;
 let crackersFound =0;
-let scales = [];
+
 
 // setupcanvas()
 //
@@ -47,8 +47,8 @@ let setupCanvas=()=>{
 let setupPlanets=()=>{
 
   // create home planet
-  let p = addV(xy(0,HomePlanetRadius + 1),player);
-  HomePlanet = new Planet(p.x,p.y, false, "Home, sweet home", HomePlanetRadius, 1500, 7);
+  let p = addV(xy(0,551),player);
+  HomePlanet = new Planet(p.x,p.y, false, "Home, sweet home", 550, 7);
   HomePlanet.addFeature( new StaticObject(0,0,home_png, 100, HomeText), 100);
   Mom = HomePlanet.addFeature( new AnimObject(0,0,100,poses[0],MomText), 100);
   //Mom.hat=addHat(100);
@@ -58,7 +58,7 @@ let setupPlanets=()=>{
 
   // create grandpas's planet
   p=addV(xy(200,-12000),HomePlanet);
-  GrandpaPlanet = new Planet(p.x,p.y, false, "Grandpa's",410,1200);
+  GrandpaPlanet = new Planet(p.x,p.y, false, "Grandpa's", 410);
   GrandpaPlanet.addFeature(new StaticObject(80,0,home_png, 80));
   GrandpaPlanet.addFeature(new StaticObject(0,0,vessel_png, 100, ["Grandpa's ship"]),70);
   Grandpa = GrandpaPlanet.addFeature(new AnimObject(0,0,100,poses[0],GrandpaText), 100);
@@ -66,7 +66,7 @@ let setupPlanets=()=>{
 
   // create the mechanic's planet
   p=addV(xy(roughly(12000), 600),GrandpaPlanet);
-  MechanicPlanet = new Planet(p.x,p.y,false,"Timmy",340, 1200);
+  MechanicPlanet = new Planet(p.x,p.y,false,"Timmy", 340);
   Shop=MechanicPlanet.addFeature(new StaticObject(0,0,home_png, 140, ShopText), 100);
   Shop.hue=flo(rand(360));
   Shop.shop=ShopItems;

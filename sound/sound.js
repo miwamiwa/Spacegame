@@ -1,24 +1,26 @@
 // sound.js
+let spaceMusic={
+  barlength:3800,
+  pF:4500,
+  cF:20000,
+  cDetune:0.000006,
+  scales:defaultScales,
+  t:0.2
+};
 
 // core
 let aCtx;
 let samp;
 let sound=false;
+let mu; // current soundtrack settings
 
 // time
 let bars =0;
-let head =0;
 
 // improv
 let pat;
 let scale;
-let temperament;
-let lastnote = 60;
-let improBeat=[8,8,8,8,8,8,16,16,16,16];
-let bar = 3800;
-let chordfilter;
-let chorddetune;
-let percfilter=4500;
+
 
 
 // startsound()
@@ -33,63 +35,7 @@ let startSound=()=>{
   sound=true;
 
   // start beat
-  setTimeout(playbar,bar);
-}
-
-
-// getRhythm()
-//
-//
-
-let getRhythm=(b,t)=>{
-
-  let r = [];
-  let c;
-  let count=0;
-  temperament = t;
-
-  for(let i=0; i<improBeat.length; i++){
-    c = t;
-    if(i%2==1) c = 0.4
-    if(rand()<c) r.push(count);
-    count += b/improBeat[i];
-  }
-
-  return r;
-}
-
-
-
-// getNotePattern()
-//
-//
-
-let getNotePattern=(rhythm,scalelist)=>{
-  let pat = RandomFromArray(patterns);
-  let note = flo(rand(7));
-  let patcount=0;
-  let deg;
-  let res ={notes:[],octaves:[]};
-
-  // for each note that will actually get played:
-  for(let i=0; i<rhythm.length; i++){
-    // this is next scale degree
-    deg = note+pat[patcount];
-    res.octaves[i]=(3+flo(deg/8))*12;
-
-    while(deg<0) deg += 8;
-    res.notes[i]=deg%8;
-
-    // move to next note in the current pattern
-    patcount++;
-    // remove pattern if end reached
-    if(patcount==pat.length-1){
-      pat = RandomFromArray(patterns);
-      note = deg;
-      patcount=0;
-    }
-  }
-  return res;
+  playbar();
 }
 
 
@@ -97,26 +43,18 @@ let getNotePattern=(rhythm,scalelist)=>{
 
 
 
-
-// playBar()
+// playbar()
 //
 // called at an interval, each bar.
 // trigger every note in this bar for each instrument
 
 let playbar = () =>{
 
-  // update chord contents
-  temperament = rand(0.2,0.5);
+  // WHILE ON PLANET
 
   if(nP){
-    bar = nP.barlength;
-    chordfilter =nP.cFilter;
-    chorddetune = nP.cDetune;
-    percfilter=nP.filter;
-    scales = nP.scales;
-    temperament = nP.temperament;
-    if(bars>=nP.scales.length) bars =0;
-    scale = scales[bars];
+
+    setScale(nP.m);
 
     // hats
     startBeat(
@@ -131,34 +69,17 @@ let playbar = () =>{
     );
 
 
-    // trigger notes
-    let counter =0;
-    let pat = nP.pattern;
-    if(bars%2==1) pat = nP.pattern2;
+    // trigger melody notes
+    playImprov();
 
-    for(let i=0; i<nP.riddim.length; i++){
-      if(counter<nP.barlength)
-      setTimeout(()=>{
 
-        play(
-          2*nToF(pat.octaves[i] + scale[pat.notes[i]%scale.length]),
-          0.01,0.1,0.25,0.4,
-          5,constSine,
-          2,
-          'highpass',450,8
-        );
-      }, counter);
-      counter+=nP.riddim[i];
-    }
   }
-  else {
 
-    chordfilter =20000;
-    chorddetune = 0.000006;
-    percfilter=3500;
-    scales = defaultScales;
-    if(bars>=defaultScales.length) bars =0;
-    scale = scales[bars];
+  // WHILE IN SPACE
+
+  else {
+    spaceMusic.t = rand(0.2,0.5);
+    setScale(spaceMusic);
   }
 
   // bass drum
@@ -190,31 +111,43 @@ let playbar = () =>{
   startBeat(
     [2,5.29,16,16,16],
     ()=>play(
-      nToF(48+scales[bars-1][0]),
+      nToF(48+mu.scales[bars][0]),
       0.01,0.2,0.6,0.8,
       flo(rand(1,6)),constSineZ,
       3.1,
-      'lowpass',percfilter,3
+      'lowpass',mu.pF,3
     ),0.4,1);
 
   chordNote(0);
   chordNote(2);
 
   // trigger next bar
-  setTimeout(playbar,bar);
+  setTimeout(playbar,mu.barlength);
 
 
   // update TIME:
-
-
-  // increment bars
   bars++;
 
   // if end of tune reached
-  if(bars>=scales.length){
+  backToTop();
+}
+
+
+
+let setScale=(m)=>{
+  mu=m;
+  backToTop();
+  scale = m.scales[bars];
+}
+
+
+// backToTop()
+//
+// reset tune if over
+let backToTop=()=>{
+  if(bars>=mu.scales.length){
     bars=0;
     melcount =0;
-    head++;
   }
 }
 
@@ -249,8 +182,14 @@ constrain(rand(0.1,0.2)+0.3*(sine(i,0,d)+0.3*sine(i,2,d)),0,0.10);
 //
 // play the chord synth
 
-let chordNote=(i)=>
-play(nToF(48+scale[i]), 0.1, 1.1, 0.5, 1.5, 6, constSine, 0.65, "highpass", chordfilter, 1, chorddetune)
+let chordNote=(i)=>play(
+  nToF(48+scale[i]),
+  0.1, 1.1, 0.5, 1.5,
+  6, constSine,
+  0.65,
+  "highpass", mu.cF, 1,
+  mu.cDetune
+);
 
 
 // startBeat()
@@ -258,12 +197,12 @@ play(nToF(48+scale[i]), 0.1, 1.1, 0.5, 1.5, 6, constSine, 0.65, "highpass", chor
 // play a beat pattern
 
 let startBeat =(beat,sound,min,max,mute1)=>{
-  let chance = rand(min,max) * temperament;
-  let counter =0;
+  let chance = rand(min,max) * mu.t;
+  let c =0;
   for(let i=0; i<beat.length; i++){
     if(!(i==0&&mute1)&&rand()<chance)
-    setTimeout(sound,counter);
-    counter += bar/beat[i];
+    setTimeout(sound,c);
+    c += mu.barlength/beat[i];
   }
 }
 
@@ -354,14 +293,14 @@ let playSound=(arr,vol,fT,fF,fG)=>{
   buffer.copyToChannel(buf, 0)
   let source = aCtx.createBufferSource();
   source.buffer = buffer;
-  let filter = aCtx.createBiquadFilter();
-  filter.type = fT;
-  filter.frequency.value=fF;
-  filter.gain.value = fG;
+  let f = aCtx.createBiquadFilter();
+  f.type = fT;
+  f.frequency.value=fF;
+  f.gain.value = fG;
 
-  source.connect(filter);
+  source.connect(f);
 
-  filter.connect(aCtx.destination);
+  f.connect(aCtx.destination);
   source.start(0);
 
 }
