@@ -51,7 +51,7 @@ let getRhythm=(b,t)=>{
   for(let i=0; i<improBeat.length; i++){
     c = t;
     if(i%2==1) c = 0.4
-    if(rand()<c) r[i]=count;
+    if(rand()<c) r.push(count);
     count += b/improBeat[i];
   }
 
@@ -114,12 +114,13 @@ let playbar = () =>{
     chorddetune = nP.cDetune;
     percfilter=nP.filter;
     scales = nP.scales;
+    temperament = nP.temperament;
     if(bars>=nP.scales.length) bars =0;
     scale = scales[bars];
 
     // hats
     startBeat(
-      [16,16,8,16,16,16,16,16,16,16,16,16,16],
+      [16,16,8,16,16,16,16,16,16,16,16,16],
       ()=>play(
         40,
         0.01,0.01,0.25,rand(0.1,0.7),
@@ -132,12 +133,12 @@ let playbar = () =>{
 
     // trigger notes
     let counter =0;
+    let pat = nP.pattern;
+    if(bars%2==1) pat = nP.pattern2;
 
     for(let i=0; i<nP.riddim.length; i++){
-      if(counter<nP.barlength&&i>0)
+      if(counter<nP.barlength)
       setTimeout(()=>{
-        let pat = nP.pattern;
-        if(bars%2==1) pat = nP.pattern2;
 
         play(
           2*nToF(pat.octaves[i] + scale[pat.notes[i]%scale.length]),

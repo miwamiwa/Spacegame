@@ -110,7 +110,7 @@ let drawText=(txt,x,y,color)=>{
     x=middle.x-40;
     y=middle.y+39;
   }
-  fill(black);
+  fill("#3338");
   mCtx.fillText(txt,x-1,y+1)
   fill(color);
   mCtx.fillText(txt,x,y)

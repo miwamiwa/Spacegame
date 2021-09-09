@@ -4,7 +4,7 @@ class Planet {
 
     // mass and radius
     if(!rad){
-      rad=rand(300,460);
+      rad=rand(350,460);
       mas=rand(PlanetMassMin,PlanetMassMax)
     }
     this.r = rad;
@@ -66,12 +66,12 @@ class Planet {
     this.cFilter=flo(rand(200,4000))
     this.cDetune=rand(0.000001,0.000004);
     this.barlength = flo(rand(2200,3200));
-
+    this.temperament = rand(0.1,1);
     this.rainRate = flo(rand(1,20))
 
-    this.riddim = getRhythm(this.barlength, rand());
+    this.riddim = getRhythm(this.barlength/2, rand(.3,1));
     this.pattern = getNotePattern(this.riddim,this.scales);
-    if(rand()<0.5) this.pattern2 = this.pattern;
+    if(rand()<0.27) this.pattern2 = this.pattern;
     else this.pattern2 = getNotePattern(this.riddim,this.scales);
   }
 
