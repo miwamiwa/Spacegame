@@ -159,14 +159,14 @@ const AMixo = [9,11,13,15,16,18,19];
 
 let allScales = [
   Edorian,
-  FshPhrygi,
+  //FshPhrygi,
   CLydian,
   ADorian,
   DMixo,
   GLydian,
-  Fmin7flat5,
+  //Fmin7flat5,
   BMixo,
-  Emaj7,
+  //Emaj7,
   FShDorian,
   ALydian,
   G6,
