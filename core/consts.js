@@ -166,7 +166,14 @@ let allScales = [
   CLydian,
   ADorian,
   DMixo,
-  GLydian
+  GLydian,
+  Fmin7flat5,
+  BMixo,
+  Emaj7,
+  FShDorian,
+  ALydian,
+  G6,
+  AMixo
 ];
 
 const defaultScales = [

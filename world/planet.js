@@ -192,7 +192,7 @@ class Planet {
       let r = rand(y%50);
       let r2 = rand(y%30);
       let fact = rand(0,10);
-      if(rand()<0.5) this.water[y][0]=true;
+      let started=false;
 
       for(let x=0; x<50; x++){
 
@@ -200,6 +200,12 @@ class Planet {
         this.previous[y][x] = 0;
 
         if(dist(xy(x,y),xy(25,25))<25){
+
+          if(!started){
+            started=true;
+            if(rand()<0.5)
+            this.water[y][x]=true;
+          }
           if(x<r||x>r2) ctx.fillStyle="#8bef";
           else ctx.fillStyle=`#${flo(rand(3,7))}8cf`;
           ctx.fillRect(x,y,1,1);
@@ -240,9 +246,12 @@ class Planet {
   }
 
   makeWater(y,x,ctx){
-    this.water[x][y]=true;
-    ctx.fillStyle="#ca8f";
-    ctx.fillRect(x,y,1,1);
+    if(dist(xy(x,y),xy(25,25))<25){
+      this.water[x][y]=true;
+      ctx.fillStyle="#ca8f";
+      ctx.fillRect(x,y,1,1);
+    }
+
 
   }
 

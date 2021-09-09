@@ -24,7 +24,7 @@ window.onload =()=>{
 
 let startGame=()=>{
 
-  //startSound();
+  startSound();
   setupPlayer();
   setupStars();
   camera = new Camera(player);

@@ -153,33 +153,47 @@ class Vessel extends AnimObject {
   displayRadar(){
     if(this.radar && this.boarded){
       let ytaken = [];
-      let diff = 20;
+      let diff = 24;
       this.onradar.forEach(p=>{
         // don't update if too close to planet
         if(p.d2p >= p.r + RaDist){
 
-          // direction from obj to obj in vector form
+          let a= 1;
           let dir = directionFromObjectToObject(this,p);
+          // direction from obj to obj in vector form
+
           let visit = ""; // did we visit this place?
           let col; // text color (white by default)
           let y = diff*flo((middle.y+RaDist * dir.y)/diff);
-          let tries = 8;
-          while(ytaken.includes(y)&&tries>0){
-            y += diff;
-            tries--;
-          }
-
-
-          ytaken.push(y);
           // setup text
           if(p.visited){
             visit = " (visited)";
             col= "#6e6";
           }
 
-          let a= 1;
-          if(p.d2p<100000) a = Math.max(1, 9-flo(p.d2p/15000));
+          if(p.d2p<80000){
+            a = Math.max(1, 9-flo(p.d2p/10000));
+
+            let tries = 8;
+            while(ytaken.includes(y)&&tries>0){
+              y += diff;
+              tries--;
+            }
+            ytaken.push(y);
+
+          }
           col+=a
+
+
+
+
+
+
+
+
+
+
+
 
           // position
           transform(xy(middle.x+RaDist * -dir.x, y + 30),()=>{
