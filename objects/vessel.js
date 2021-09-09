@@ -121,6 +121,8 @@ class Vessel extends AnimObject {
   // find closest planet, and update list of planets on radar
   // while we're at it
   findNearestPlanet(){
+
+
     // no need to do this every frame
     if(this.counter % 2 ==0){
       this.onradar = [];
@@ -133,6 +135,7 @@ class Vessel extends AnimObject {
         // calculate distance to planet
         p.d2p = flo(d);
 
+        if(p.d2p<closestPlanet.d2p) closestPlanet=p;
         // update radar.
         if(this.radar){
           // add to radar list if in range
@@ -214,8 +217,8 @@ class Vessel extends AnimObject {
   }
 
   // accelerate
-  plusThrottle(){
   //  console.log("plus")
+  plusThrottle(){
     this.throttle = Math.min(this.throttle + PlayerAcceleration, AccelerationLimit);
   }
 

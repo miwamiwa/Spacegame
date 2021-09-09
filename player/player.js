@@ -42,6 +42,7 @@ let resetPlayerOnCrash=()=>{
       player.resetPos(PlayerStartX,PlayerStartY);
       // replace crash animation
       player.setFrames(VesselAnimation);
+      
       player.crashed = false;
       player.landed = false;
       board();

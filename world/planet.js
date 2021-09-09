@@ -28,8 +28,8 @@ class Planet {
     this.setupScenery(minfruit);
 
     // add people
-    if(randomscenery)
-    this.populate();
+    //if(randomscenery)
+    //this.populate();
 
     // set local currency and language
     this.currency=cash;
@@ -91,9 +91,9 @@ class Planet {
       let trader;
       let sage;
 
-      this.setLang(RandomFromArray(allLanguages));
+      //this.setLang(RandomFromArray(allLanguages));
       this.reputation=0;
-      this.currency=RandomFromArray(allCurrencies);
+      //this.currency=RandomFromArray(allCurrencies);
 
       for(let i=0; i<numHomes; i++){
         let numPpl = flo(rand(1,4));

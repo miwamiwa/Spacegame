@@ -7,10 +7,10 @@ let genplanets = [];
 let lastavail;
 let scount=0;
 let toddQuest = false;
+let closestPlanet;
 
 // start gameon page load
 window.onload =()=>{
-  //startSound()
   loadImages();
   setupCanvas();
   setInterval(run,40);
@@ -87,7 +87,7 @@ let runGame=()=>{
   updateAll(planets);
 
   HandlePlayerInputs();
-  updateAutopilot();
+
 
   player.update();
   resetPlayerOnCrash();
@@ -105,7 +105,10 @@ let runGame=()=>{
   let y = Math.round(player.y/FarRange)
   let index = x+","+y;
   if(index!="0,0"&&!genplanets.includes(index)){
-    new Planet(x*FarRange+9*roughly(0),y*FarRange+9*roughly(0),true);
+    let p=new Planet(x*FarRange+9*roughly(0),y*FarRange+9*roughly(0),true);
+    //let max = ;
+    p.setLang(allLanguages[Math.min(allLanguages.length,flo(rand((abs(x)+abs(y))/3)))]);
+    p.populate();
     genplanets.push(index);
   }
 
@@ -113,7 +116,7 @@ let runGame=()=>{
     doneAction=false;
     player.reading=false;
   }
-
+  updateAutopilot();
 //  if(player.landed) console.log("water: "+nP.posIsInWater(Dude))
 }
 

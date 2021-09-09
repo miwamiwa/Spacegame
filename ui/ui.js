@@ -24,13 +24,15 @@ let updatePlayerUi=()=>{
   if(canBoard())
   drawText("press space to board");
   // when in flight
-  /*
-  if(!HelpOff&&player.boarded&&!player.landed){
-  drawText("FLIGHT CONTROLS:", x,y-font)
-  drawText("W to throttle. A and D to steer.", x,y)
-  drawText("SPACE to stop", x,y+font)
-}
-*/
+
+  if(autopilotActive){
+    let t="autopilot active";
+    if(preventCrash) t="crash prevention active";
+    drawText(t,x-40,y-40,"tomato");
+  }
+
+
+
 
 drawText("Known languages: "+knownLanguages.join(", "), 10, 590);
 

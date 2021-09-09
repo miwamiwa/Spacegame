@@ -1,6 +1,7 @@
 let autopilotActive = false;
 let autopilotPhase;
 let slowframes;
+let preventCrash=false;
 
 
 
@@ -17,43 +18,116 @@ let StopPlayer =()=>{
 
 let updateAutopilot=()=>{
 
+  if(player.landed){
+    autopilotActive=false;
+    preventCrash=false;
+    return;
+  }
+
+  let aToPEdge = Math.atan(closestPlanet.r/dist(player,closestPlanet));
+  let aPVel = angleFromDirection(vxy(player));
+  let aToP = angleFromDirection(directionFromObjectToObject(player,closestPlanet))
+  if(player.x>closestPlanet.x) aToP *=-1;
+  if(player.vx>0) aPVel *=-1;
+
+  //if(player.vx>0) aPVel *=-1;
+  //if(player.vy>0) aPVel +=PI;
+  //console.log(aToPEdge,aPVel)
+  //while(!isNaN(aToP)&&aToP<0)aToP+TWO_PI
+  else  if(aPVel<0) aPVel += PI
+  if(player.x<closestPlanet.x&&aToP<0) aToP += PI
+// apvek = 390
+// atop = 0b
+//console.log(aPVel-aToP)
+  aPVel-=PI
+
+  let a = abs(aPVel-aToP)<abs(aToPEdge);
+
+  while(aPVel<0) aPVel += TWO_PI;
+  while(aToP<0) aToP += TWO_PI;
+
+  while(aPVel>TWO_PI) aPVel -= TWO_PI;
+  while(aToP>TWO_PI) aToP -= TWO_PI;
+
+  let b = abs(aPVel-aToP)<abs(aToPEdge);
+
+  console.log("collision course: "+b);
+
+  if(!autopilotActive&&b&&playerCurrentSpeed>player.crashThreshold
+    &&closestPlanet.d2p<75*(playerCurrentSpeed)){
+    console.log("crash prevention. autopilot active.")
+    preventCrash=true;
+    autopilotActive=true;
+  }
+
+
   if(autopilotActive){
-    switch(autopilotPhase){
 
-      case 0:
-      if(player.throttle>0) player.minusThrottle();
+
+    if(preventCrash){
+      console.log(b)
+      if(b){
+        player.rotate(PlayerRotateRate2);
+        player.plusThrottle();
+        console.log("turn")
+      }
       else {
-        autopilotPhase++;
-        slowframes = Math.sqrt(playerCurrentSpeed)*5.8;
-        player.targetbearing = angleFromDirection(vxy(player));
-        if(player.vx>0) player.targetbearing *=-1;
+        console.log("stop")
+        player.minusThrottle();
+        if(player.throttle==0){
+
+          preventCrash=false;
+
+          autopilotActive=false;
+          console.log("done")
+          StopPlayer();
+
+        }
       }
-      break;
 
-      case 1:
-      if (reachTargetRotation()){
-        autopilotPhase++;
-        player.bearing=player.targetbearing;
-      }
-      break;
-
-      case 2:
-      player.plusThrottle();
-      slowframes--;
-      if(slowframes<=0) autopilotPhase++;
-      break;
-
-      case 3:
-      if(player.throttle>0) player.minusThrottle();
-      else autopilotPhase++;
-      break;
-
-      case 4:
-      autopilotActive = false;
-      player.vx/=2;
-      player.vy/=2;
-      break;
     }
+
+
+
+    else {
+      switch(autopilotPhase){
+
+        case 0:
+        if(player.throttle>0) player.minusThrottle();
+        else {
+          autopilotPhase++;
+          slowframes = Math.sqrt(playerCurrentSpeed)*5.8;
+          player.targetbearing = angleFromDirection(vxy(player));
+          if(player.vx>0) player.targetbearing *=-1;
+        }
+        break;
+
+        case 1:
+        if (reachTargetRotation()){
+          autopilotPhase++;
+          player.bearing=player.targetbearing;
+        }
+        break;
+
+        case 2:
+        player.plusThrottle();
+        slowframes--;
+        if(slowframes<=0) autopilotPhase++;
+        break;
+
+        case 3:
+        if(player.throttle>0) player.minusThrottle();
+        else autopilotPhase++;
+        break;
+
+        case 4:
+        autopilotActive = false;
+        player.vx/=2;
+        player.vy/=2;
+        break;
+      }
+    }
+
   }
 }
 

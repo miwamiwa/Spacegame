@@ -49,12 +49,14 @@ let setupPlanets=()=>{
   // create home planet
   let p = addV(xy(0,551),player);
   HomePlanet = new Planet(p.x,p.y, false, "Home, sweet home", 550, 7);
+  closestPlanet=planets[0];
   HomePlanet.addFeature( new StaticObject(0,0,home_png, 100, HomeText), 100);
   Mom = HomePlanet.addFeature( new AnimObject(0,0,100,poses[0],MomText), 100);
   //Mom.hat=addHat(100);
   planetMode(Mom);
   Son2 = HomePlanet.addFeature( new AnimObject(0,0,40,poses[0],Son2Text), 50);
   planetMode(Son2);
+
 
   // create grandpas's planet
   p=addV(xy(200,-12000),HomePlanet);

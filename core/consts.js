@@ -1,7 +1,7 @@
 const FailTextList = [
   "Ouch!",
   "Don't scratch the car. -Mom.",
-  "It takes up to 3000 units of space to stop"
+  "It takes up to 4000 units of space to stop"
 ];
 
 const gpPart="gear #5b8gh9";
@@ -44,10 +44,11 @@ const poses =[
 ]
 
 const allLanguages = [
+  "Onian",
 "Deotruin",
 "Shuecdun",
 "Uetnesh",
-"Onian",
+
 "Etlani",
 "Flonaonathi",
 "Uqoirtic"
@@ -139,7 +140,7 @@ const grey = "#eee8";
 const white = "#fff9";
 const bgFill = "#2a1f42";
 const black = "black";
-const tbFill = "#445a";
+const tbFill = "#445c";
 // MUSIC
 
 const Edorian = [4,6,7,9,11,13,14];
