@@ -42,8 +42,12 @@ class AnimObject extends BasicObject {
   }
 
   draw(p,c){
+    if(this.hat)
+      this.hat.draw(addV(p,this.hat));
+
     this.drawMe(p.x,p.y,c);
     this.updateAnimation();
+
     this.counter++;
   }
 

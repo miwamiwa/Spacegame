@@ -14,10 +14,10 @@ let Son2;
 let HelpOff = true; // display flight instructions
 let mainCanvas;
 let mCtx;
-let middle = xy(300,260);
+let middle = xy(400,260);
 let rightPlanetsEnabled = false;
 let crackersFound =0;
-
+let scales = [];
 
 // setupcanvas()
 //
@@ -27,7 +27,7 @@ let crackersFound =0;
 let setupCanvas=()=>{
   // create canvas
   mainCanvas = canv();
-  mainCanvas.width = 600;
+  mainCanvas.width = 800;
   mainCanvas.height = 600;
   mCtx = getCtx(mainCanvas);
   mCtx.font = "bold "+font+"px Arial";
@@ -51,6 +51,7 @@ let setupPlanets=()=>{
   HomePlanet = new Planet(p.x,p.y, false, "Home, sweet home", HomePlanetRadius, 1500, 7);
   HomePlanet.addFeature( new StaticObject(0,0,home_png, 100, HomeText), 100);
   Mom = HomePlanet.addFeature( new AnimObject(0,0,100,poses[0],MomText), 100);
+  //Mom.hat=addHat(100);
   planetMode(Mom);
   Son2 = HomePlanet.addFeature( new AnimObject(0,0,40,poses[0],Son2Text), 50);
   planetMode(Son2);
@@ -69,6 +70,8 @@ let setupPlanets=()=>{
   Shop=MechanicPlanet.addFeature(new StaticObject(0,0,home_png, 140, ShopText), 100);
   Shop.hue=flo(rand(360));
   Shop.shop=ShopItems;
+
+
 }
 
 let planetMode=(obj,h)=>{
@@ -77,17 +80,15 @@ let planetMode=(obj,h)=>{
   obj.setCollider();
 }
 
-let grandpaQuestStarted=false;
+let gpQuest=false;
 let grandpaQuestStart=()=>{
-  if(!grandpaQuestStarted){
+  if(!gpQuest){
     for(let i=0; i<70; i++)
-    AddToInventory({name:cash,type:cash})
-
-    grandpaQuestStarted=true;
+    AddToInventory({name:cash,type:cash});
+    gpQuest=true;
   }
-
-
 }
+
 
 // closeTextBox()
 //

@@ -1,3 +1,5 @@
+let fixshop=false;
+
 // showshop()
 //
 //
@@ -7,6 +9,7 @@ let ShowShop=(shop)=>{
   for(let i=0;i<shop.length;i++)
   shopText += `${shop[i].name} ${shop[i].price} ${plural(nP.currency)} (press ${(i+1)})\n`;
   ActiveShop=shop;
+  fixshop=true;
 }
 
 // runshop()
@@ -20,7 +23,8 @@ let RunShop=()=>{
   for(let i=0; i<ActiveShop.length; i++)
   if(key==i+49&&ActiveShop) Buy(ActiveShop[i]);
 
-  if(inputs.space) ActiveShop=undefined;
+  if(inputs.space&&!fixshop) ActiveShop=undefined;
+  if(!inputs.space) fixshop=false;
 }
 
 

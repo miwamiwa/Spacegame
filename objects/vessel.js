@@ -15,7 +15,6 @@ class Vessel extends AnimObject {
     this.radar = false;
     this.crashed = false;
 
-
     this.stop();
 
   }
@@ -38,19 +37,22 @@ class Vessel extends AnimObject {
       // if accelerating, update velocity
       if(this.throttle > 0){
 
-        let vxax = this.vx + this.throttle * Math.sin(this.bearing);
-        let vyay = this.vy + this.throttle * Math.cos(this.bearing);
-        let d = dist(zero,xy(vxax,vyay));
+        let v = xy(
+          this.vx + this.throttle * Math.sin(this.bearing),
+          this.vy + this.throttle * Math.cos(this.bearing)
+        );
+
+        let d = dist(zero,v);
 
         // if we are below the speed limit, add the acceleration
         if(d<=SpeedLimit){
-          this.vx = vxax;
-          this.vy = vyay;
+          this.vx = v.x;
+          this.vy = v.y;
         }
         // if we are above the speed limit, gotta compress the speed
         else {
-          this.vx = vxax * SpeedLimit / d;
-          this.vy = vyay * SpeedLimit / d;
+          this.vx = v.x * SpeedLimit / d;
+          this.vy = v.y * SpeedLimit / d;
         }
 
       }
@@ -189,8 +191,8 @@ class Vessel extends AnimObject {
             mCtx.stroke();
 
             // draw text
-            mCtx.font="bold 14px Arial"
-            SplitText("planet "+p.name+"\n"+visit+" ("+p.d2p+")",-35,0,col,14);
+            mCtx.font="bold 12px Arial"
+            SplitText("planet "+p.name+"\n"+visit+" ("+p.d2p+")",-35,0,col,12);
           });
         }
       });

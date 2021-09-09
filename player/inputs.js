@@ -103,8 +103,8 @@ let planetInputs=()=>{
       case false: Dude.setFrames(poses[0]); break;
       case "left": Dude.setFrames(poses[1]); Dude.left=true; break;
       case "right": Dude.setFrames(poses[1]); Dude.left=false; break;
-      case "down": Dude.setFrames(poses[3]); break;
-      case "up": Dude.setFrames(poses[2]); break;
+      case "down": Dude.setFrames(poses[2]); break;
+      case "up": Dude.setFrames(poses[3]); break;
     }
   }
 

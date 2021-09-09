@@ -6,6 +6,7 @@ let gamestate = "startscreen";
 let genplanets = [];
 let lastavail;
 let scount=0;
+let toddQuest = false;
 
 // start gameon page load
 window.onload =()=>{
@@ -112,6 +113,8 @@ let runGame=()=>{
     doneAction=false;
     player.reading=false;
   }
+
+//  if(player.landed) console.log("water: "+nP.posIsInWater(Dude))
 }
 
 
@@ -123,11 +126,11 @@ let runStartScreen=(x,y)=>{
 
   for(let i=0; i<9; i++){
     hue(i*20);
-    image(fire1_png,80+i*50,y+90+Math.sin(i+scount)*5,50,100)
-    image(vessel_png,80+i*50,y,100,200);
+    image(fire1_png,180+i*50,y+90+Math.sin(i+scount)*5,50,100)
+    image(vessel_png,180+i*50,y,100,200);
   }
 
-  drawText("press space to start",x+30,y+260);
+  drawText("press space to start",x+130,y+260);
 
   scount+=.1;
   if(inputs.space) startGame();

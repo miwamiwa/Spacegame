@@ -117,6 +117,11 @@ let moveIt =(deltaX,deltaY)=>{
   let p = addV(Dude,xy(deltaX,deltaY));
   if(CheckCollisionsOnPlanet(p)) return;
 
+  if(nP.posIsInWater(p)){
+    //deltaX/=2;
+    //deltaY/=2;
+  }
+
   // if collisions with planet edges also checks out
   if(dist(p, zero) < nP.r){
     // then move player
@@ -156,6 +161,8 @@ let CheckCollisionsOnPlanet=(p)=>{
     }
   });
 
+  //if(nP.posIsInWater(p))
+  //  r=true;
   // reset text counter if in range of
   // a new talkable element
   if(lastAvailTxt!=availableText)

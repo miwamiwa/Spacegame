@@ -7,6 +7,7 @@ const FailTextList = [
 const gpPart="gear #5b8gh9";
 
 const HomeText = ["This is my home.","Goood oleee hooooome"]
+
 const Son2Text =[
   "Son II: Hi brother",
   "Have fun out there",
@@ -37,9 +38,9 @@ const Greetings =[
 const c1 = 48; // start char for char/int conversion
 const poses =[
   [player1_png,player2_png],
-  [walk_left_1_png,walk_left_2_png],
-  [walk_up_1_png,walk_up_2_png],
-  [walk_down_1_png,walk_down_2_png]
+  [walk_left_2_png,walk_left_1_png],
+  [walk_down_2_png,walk_down_1_png],
+  [walk_up_1_png,walk_up_2_png]
 ]
 
 const allLanguages = [
@@ -54,6 +55,7 @@ const allLanguages = [
 
 
 // ANIMATION
+const Hat = [chapo_png,chapo2_png];
 const VesselAnimation = [vessel_png,vessel2_png];
 const FlameAnimation = [fire1_png,fire2_png];
 const CrashAnimation = [crash1_png,crash2_png,crash3_png];
@@ -84,7 +86,7 @@ const VesselMass = 0.8;
 
 
 // RADAR
-const RaDist = 200;
+const RaDist = 250;
 const RadarMin = 200;
 const RadarMax = 20000;
 
@@ -92,7 +94,7 @@ const RadarMax = 20000;
 // UI
 const TopText = {x: 4, y: 16};
 // text box default size
-const TextBox = {x:150, y:100};
+const TextBox = {x:350, y:100};
 
 // PLANETS
 const GravityConstant = 50;
@@ -174,7 +176,7 @@ const defaultScales = [
   Emaj7,Emaj7
 ]
 
-let scales = [];
+
 
 const patterns = [
   [0,1,2,3],
