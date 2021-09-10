@@ -1,22 +1,20 @@
-// this is to count how many planets we explored
-// during cracker on 3 planets part
-let planetsIFoundCrackersOn = [];
-let investigationTriggered = false;
-let InvestigationText = [];
-let HomePlanet;
-let GrandpaPlanet;
-let Mom;
-let Grandpa;
-let MechanicPlanet;
-let Shop;
-let Son2;
-
-let HelpOff = true; // display flight instructions
+// canvas
 let mainCanvas;
 let mCtx;
 let middle = xy(400,260);
-let rightPlanetsEnabled = false;
-let crackersFound =0;
+
+// Planets
+let HomePlanet;
+let GrandpaPlanet;
+let MechanicPlanet;
+
+// npc
+let Mom;
+let Grandpa;
+let Shop;
+let Son2;
+
+
 
 
 // setupcanvas()
@@ -52,7 +50,6 @@ let setupPlanets=()=>{
   closestPlanet=planets[0];
   HomePlanet.addFeature( new StaticObject(0,0,home_png, 100, HomeText), 100);
   Mom = HomePlanet.addFeature( new AnimObject(0,0,100,poses[0],MomText), 100);
-  //Mom.hat=addHat(100);
   planetMode(Mom);
   Son2 = HomePlanet.addFeature( new AnimObject(0,0,40,poses[0],Son2Text), 50);
   planetMode(Son2);
@@ -69,25 +66,26 @@ let setupPlanets=()=>{
   // create the mechanic's planet
   p=addV(xy(roughly(12000), 600),GrandpaPlanet);
   MechanicPlanet = new Planet(p.x,p.y,false,"Timmy", 340);
-  Shop=MechanicPlanet.addFeature(new StaticObject(0,0,home_png, 140, ShopText, shopCheck), 100);
+  Shop=MechanicPlanet.addFeature(new StaticObject(0,0,home_png, 140, ShopText), 100);
   Shop.hue=flo(rand(360));
 
-
 }
 
-
-let shopCheck=()=>{
-  console.log("shoppin");
-  //availableText=undefined;
-  //trade(Shop,gpPart,cash,50,false);
-  //Shop.firstReadAction=undefined;
-}
+// planetMode()
+//
+// Setup an AnimObject to work as a
+// planet feature
 
 let planetMode=(obj,h)=>{
   obj.planetMode=true;
   if(!h) obj.hue=flo(rand(360));
   obj.setCollider();
 }
+
+
+// Grandpa's quest
+//
+//
 
 let gpQuest=false;
 let grandpaQuestStart=()=>{
@@ -97,9 +95,3 @@ let grandpaQuestStart=()=>{
     gpQuest=true;
   }
 }
-
-
-// closeTextBox()
-//
-// close text popup
-let closeTextBox=()=> availableText2 = undefined;

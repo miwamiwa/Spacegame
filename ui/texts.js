@@ -1,6 +1,4 @@
 
-let shopText;
-let ActiveShop;
 let GrandpaText = ["Hi grandson!","Help me with my ship will ya",`Go buy a ${gpPart} on planet Timmy.`];
 let MomText = ["Son","Are you hungry?","Bring me 5 fruits"];
 
@@ -36,21 +34,6 @@ let UpdateGPText=()=>{
   GrandpaText=GrandpaText2;
   else Grandpa.setTandA(GrandpaText,grandpaQuestStart);
 }
-
-
-
-
-//
-//
-//
-
-let UpdateTraderText=()=>{
-  let a = availableText;
-  if(!trade(a,a.gives,a.takes,a.takenum,false))
-  a.setTandA(a.tradeTxt)
-}
-
-
 
 
 // showTextArray()

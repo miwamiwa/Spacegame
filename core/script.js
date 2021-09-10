@@ -2,14 +2,16 @@
 let player;
 let camera;
 let planets = [];
-let gamestate = "startscreen";
 let genplanets = [];
-let lastavail;
-let scount=0;
-let toddQuest = false;
 let closestPlanet;
 
-// start gameon page load
+// current game screen
+let gamestate = "startscreen";
+// counter for start screen
+let scount=0;
+
+
+// start game on page load
 window.onload =()=>{
   loadImages();
   setupCanvas();
@@ -82,21 +84,15 @@ let runGame=()=>{
   playerCurrentSpeed = dist(zero,vxy(player));
 
   updateStars();
-
   player.displayRadar();
   updateAll(planets);
-
   HandlePlayerInputs();
-
 
   player.update();
   resetPlayerOnCrash();
-
   camera.update();
   updatePlayerUi();
-
   SplitText(inventoryString, 5, 200);
-
 
   // add random planets
   let x = Math.round(player.x/FarRange)
@@ -115,7 +111,6 @@ let runGame=()=>{
     player.reading=false;
   }
   updateAutopilot();
-//  if(player.landed) console.log("water: "+nP.posIsInWater(Dude))
 }
 
 

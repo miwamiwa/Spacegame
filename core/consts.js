@@ -1,3 +1,21 @@
+const poses =[
+  [player1_png,player2_png],
+  [walk_left_2_png,walk_left_1_png],
+  [walk_down_2_png,walk_down_1_png],
+  [walk_up_1_png,walk_up_2_png]
+]
+// ANIMATION
+const Hat = [chapo_png,chapo2_png];
+const VesselAnimation = [vessel_png,vessel2_png];
+const FlameAnimation = [fire1_png,fire2_png];
+const CrashAnimation = [crash1_png,crash2_png,crash3_png];
+const StarAnimation = [star1_png,star2_png];
+
+
+
+
+
+
 const FailTextList = [
   "Ouch!",
   "Don't scratch the car. -Mom.",
@@ -34,12 +52,7 @@ const NegGreetings =[
 
 // IMAGE LOAD
 const c1 = 48; // start char for char/int conversion
-const poses =[
-  [player1_png,player2_png],
-  [walk_left_2_png,walk_left_1_png],
-  [walk_down_2_png,walk_down_1_png],
-  [walk_up_1_png,walk_up_2_png]
-]
+
 
 const allLanguages = [
   "Onian",
@@ -53,12 +66,6 @@ const allLanguages = [
 ];
 
 
-// ANIMATION
-const Hat = [chapo_png,chapo2_png];
-const VesselAnimation = [vessel_png,vessel2_png];
-const FlameAnimation = [fire1_png,fire2_png];
-const CrashAnimation = [crash1_png,crash2_png,crash3_png];
-const StarAnimation = [star1_png,star2_png];
 // TREE GENERATION
 const TreeCanvasW = 100;
 const TreeCanvasH = 100;

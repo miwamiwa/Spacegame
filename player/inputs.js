@@ -175,7 +175,7 @@ let SpacePressInGameState =()=>{
     textCounter++;
     // close if end reached
     if(textCounter==availableText2.length)
-    closeTextBox();
+    availableText2 = undefined;
   }
 
   // 3. READ availableText TEXT BOX
@@ -190,8 +190,7 @@ let SpacePressInGameState =()=>{
       if(availableText==Mom) UpdateMomText();
       if(availableText==Grandpa) UpdateGPText();
       if(availableText==Shop) UpdateShopText();
-      else if(availableText.gives)
-        UpdateTraderText();
+      
       textCounter =0;
     }
 
