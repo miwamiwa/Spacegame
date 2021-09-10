@@ -11,7 +11,7 @@ let trade=(obj,type,ingred,num,blend)=>{
       if(j) spice=" "+j.name;
     }
     if(blend) name=h.name+spice+" "+type;
-
+    tradedOnce=true;
     obj.setTandA([ `Oh, you have ${plural(h.type)}\nGive me a moment..`,
       ".....", "All done!\nHere's a "+name], ()=>{
         inventory[h.name].num -= num;

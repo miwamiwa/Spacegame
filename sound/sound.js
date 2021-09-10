@@ -28,7 +28,6 @@ let scale;
 // creates the audio context and starts the bgm
 
 let startSound=()=>{
-  //  return
   window.AudioContext = window.AudioContext || window.webkitAudioContext;
   aCtx = new AudioContext();
   samp = aCtx.sampleRate;

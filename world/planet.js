@@ -75,10 +75,10 @@ class Planet {
 
   populate(){
 
-    if(ch(0.6)){
+    if(ch(0.47)){
 
       // make a tribe
-      let numHomes=randi(1,5);
+      let numHomes=randi(1,4);
       let s = rand(30,70);
       let sage;
 
@@ -87,7 +87,8 @@ class Planet {
       //this.currency=RandomFromArray(allCurrencies);
 
       for(let i=0; i<numHomes; i++){
-        let numPpl = randi(1,4);
+        let numPpl = randi(1,3);
+        if(ch(.15)) numPpl=randi(1,4);
         this.addFeature(new StaticObject(0,0,home_png,70), s+5);
 
         for(let j=0; j<numPpl; j++){
@@ -121,6 +122,9 @@ class Planet {
             this.totalBobs++;
 
             bob.setTandA(NegGreetings,()=>{
+
+              if(!know(this.language)) return;
+              
               let h = haveType(1,"muffin");
 
               //console.log(h)

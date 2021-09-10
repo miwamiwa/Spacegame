@@ -33,7 +33,7 @@ const Son2Text =[
   "Pfft"
 ];
 const GrandpaText2 = ["Hi grandson"];
-const ShopText = ["Welcome to the shop","Need parts?","Oh give me a second"];
+const ShopText = ["Welcome to the shop","Need parts?","zzz"];
 
 const ShopRect={x:200,y:200}
 

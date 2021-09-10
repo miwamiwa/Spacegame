@@ -1,6 +1,6 @@
 let canExit = false; // trigger exit vehicle prompt
-let canEnter = true; // are we in range of the ship?
-let talkedToMomOnce = true;
+let canEnter = false; // are we in range of the ship?
+let tradedOnce = false;
 let crashtext; // text displayed on crash
 let availableText;
 let availableText2;
@@ -172,4 +172,4 @@ let CheckCollisionsOnPlanet=(p)=>{
 }
 
 
-let canBoard=()=>canEnter&&talkedToMomOnce;
+let canBoard=()=>canEnter&&tradedOnce;

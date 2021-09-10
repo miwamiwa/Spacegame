@@ -26,7 +26,7 @@ window.onload =()=>{
 
 let startGame=()=>{
 
-  //startSound();
+  startSound();
   setupPlayer();
   setupStars();
   camera = new Camera(player);
@@ -101,7 +101,7 @@ let runGame=()=>{
   if(index!="0,0"&&!genplanets.includes(index)){
     let p=new Planet(x*FarRange+6*roughly(0),y*FarRange+6*roughly(0),true);
     //let max = ;
-    p.setLang(allLanguages[Math.min(allLanguages.length,flo(rand((abs(x)+abs(y))/3)))]);
+    p.setLang(allLanguages[Math.min(allLanguages.length,1+flo(rand((abs(x)+abs(y))/2.5)))]);
     p.populate();
     genplanets.push(index);
   }

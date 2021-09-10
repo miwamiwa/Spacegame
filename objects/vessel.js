@@ -174,7 +174,7 @@ class Vessel extends AnimObject {
             col= "#6e6";
           }
 
-          if(p.d2p<80000){
+          if(p.d2p<80000||p==HomePlanet){
             a = Math.max(1, 9-flo(p.d2p/10000));
 
             let tries = 8;
@@ -185,8 +185,8 @@ class Vessel extends AnimObject {
             ytaken.push(y);
 
           }
-          col+=a
-
+          if(p!=HomePlanet) col+=a
+          else col="#aae"
           // position
           transform(xy(middle.x+RaDist * -dir.x, y + 30),()=>{
             // draw line
