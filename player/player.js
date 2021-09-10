@@ -42,7 +42,7 @@ let resetPlayerOnCrash=()=>{
       player.resetPos(PlayerStartX,PlayerStartY);
       // replace crash animation
       player.setFrames(VesselAnimation);
-      
+
       player.crashed = false;
       player.landed = false;
       board();
@@ -132,7 +132,6 @@ let moveIt =(deltaX,deltaY)=>{
 
   // re-sort planet features
   nP.sortFeatures();
-  ActiveShop=undefined;
 }
 
 

@@ -1,15 +1,3 @@
-let sItem=(n,p,t)=>{
-  if(!t) t=n;
-  return {name:n,price:p,type:t};
-}
-
-let ShopItems = [
-  sItem(gpPart,50),
-  sItem("boosters",600),
-  sItem("parachute", 200),
-  sItem("radarPro9001",900)
-];
-
 
 let shopText;
 let ActiveShop;
@@ -27,6 +15,18 @@ let UpdateMomText=()=>{
   else Mom.setTandA(MomText);
 }
 
+
+// homeObjectText()
+//
+//
+
+let UpdateShopText=()=>{
+  // if we can make something, make it
+  if(trade(Shop,gpPart,cash,50,false)) return;
+  // otherwise just talk to mom
+  else Shop.setTandA(ShopText);
+}
+
 //
 //
 //
@@ -36,6 +36,8 @@ let UpdateGPText=()=>{
   GrandpaText=GrandpaText2;
   else Grandpa.setTandA(GrandpaText,grandpaQuestStart);
 }
+
+
 
 
 //

@@ -12,9 +12,16 @@ class Planet {
     this.x = x;
     this.y = y;
     this.d2p =-1; // distance to player
-
+    this.bobsMuffined=0
+    this.totalBobs=0;
+    this.prizeAwarded=false;
     // random planet name
-    if(!name) name = RandomPlanetName();
+    if(!name){
+      name = RandomFromArray(PlanetNames);
+      while(usedPlanetNames.includes(name))
+      name += flo(rand(100));
+      usedPlanetNames.push(name);
+    }
     this.name = name;
 
     // children
@@ -23,21 +30,16 @@ class Planet {
 
     // create planet image, water
     this.make();
-
     // add trees
     this.setupScenery(minfruit);
 
-    // add people
-    //if(randomscenery)
-    //this.populate();
-
     // set local currency and language
-    this.currency=cash;
+    //this.currency=cash;
     this.setLang("Onian");
 
     // setup music
     this.music();
-
+    // all done
     planets.push(this);
   }
 
@@ -45,20 +47,13 @@ class Planet {
   music(){
 
     // generate scales
-    let s1=RandomFromArray(allScales);
-    let s2=RandomFromArray(allScales);
-    let s = [];
-
-    s[0]=s1;
-    s[1]=s1;
-    s[2]=s2;
-    s[3]=s1;
-    s[4]=s2;
-    s[5]=RandomFromArray(allScales);
+    let sca=()=>RandomFromArray(allScales);
+    let s1=sca();
+    let s2=sca();
 
     // general settings
     this.m={
-      scales:s,
+      scales:[s1,s1,sca(),s1,s2,s2],
       nL:rand(),
       pF:flo(rand(500,2000)), // perc filter
       cF:flo(rand(200,4000)), // chord filter
@@ -66,13 +61,11 @@ class Planet {
       t:rand(0.1,1) // "temperament" (drum rate)
     };
 
-
-
     getRhythm(this.m, flo(rand(2200,3200)), rand(.3,1));
-    this.m.pattern = getNotePattern(this.m);
-    if(rand()<0.17) this.m.pattern2 = this.m.pattern;
-    else if(rand()<0.17) this.m.pattern2 = reverse(this.m.pattern);
-    else this.m.pattern2 = getNotePattern(this.m);
+    this.m.patt = getNotePattern(this.m);
+    if(rand()<0.17) this.m.patt2 = this.m.patt;
+    else if(rand()<0.17) this.m.patt2 = reverse(this.m.patt);
+    else this.m.patt2 = getNotePattern(this.m);
   }
 
 
@@ -82,13 +75,11 @@ class Planet {
 
   populate(){
 
-    if(rand()<0.6){
+    if(ch(0.6)){
 
       // make a tribe
-      let numHomes=flo(rand(1,5));
+      let numHomes=randi(1,5);
       let s = rand(30,70);
-      let vendor;
-      let trader;
       let sage;
 
       //this.setLang(RandomFromArray(allLanguages));
@@ -96,76 +87,105 @@ class Planet {
       //this.currency=RandomFromArray(allCurrencies);
 
       for(let i=0; i<numHomes; i++){
-        let numPpl = flo(rand(1,4));
+        let numPpl = randi(1,4);
         this.addFeature(new StaticObject(0,0,home_png,70), s+5);
 
         for(let j=0; j<numPpl; j++){
-          let size=s+flo(rand(-5,5));
-          let bob = this.addFeature(new AnimObject(0,0,size,poses[flo(rand(3))]), s);
-          planetMode(bob,true);
-          let grain = this.language+" grain";
-          if(!vendor&&rand()<0.6){
-            console.log("added vendor")
-            vendor=bob;
-            bob.setTandA(["Buy my stuff"]);
-            bob.hat=addHat(size);
-            bob.shop = [sItem(grain,flo(rand(1,3)), "grain")];
-            if(rand()<0.4) bob.shop.push(sItem(RandomFromArray(BerryNames)+" metal",flo(rand(10,25)), "metal"));
-            if(rand()<0.4) bob.shop.push(sItem(this.language+" bead",flo(rand(2,5)), "bead"));
-            if(rand()<0.4) bob.shop.push(sItem(this.language+" "+RandomFromArray(BerryNames)+" spice",flo(rand(4,8)) ,"spice"));
-          }
-          else if(!trader&&rand()<0.6){
-            console.log("added trader")
-            trader=bob;
-            bob.gives= this.language+" bread";
-            bob.takes= grain;
-            bob.takenum= rand(3,5);
-            bob.tradeTxt=["I make bread.","Bring me "+bob.takenum+" grains."];
-          }
 
-          else if(!sage&&rand()<0.6){
-            console.log("added sage")
-            console.log(this.language)
+          // create person
+          let size=s+randi(-5,5);
+          let bob = this.addFeature(new AnimObject(0,0,size,poses[0]), s);
+          planetMode(bob,true);
+          bob.muffin=false;
+
+          if(numHomes==1&&numPpl==1){
+
             sage=bob;
             bob.knownLanguage=RandomFromArray(allLanguages);
-            bob.setTandA(["I am a sage","People here speak "+this.language],()=>{
+            bob.hat=addHat(size);
+            bob.setTandA(
+              ["I am a sage","..."],
+              ()=>{
 
               textCounter=0;
               availableText=undefined;
+              let k=know(this.language);
+              let k2=know(bob.knownLanguage);
 
-              if(knownLanguages.includes(this.language)
-              &&!knownLanguages.includes(bob.knownLanguage)){
-
-                availableText2=["I can teach you "+bob.knownLanguage];
-                knownLanguages.push(bob.knownLanguage);
-              }
-              else if(!knownLanguages.includes(this.language)
-              &&knownLanguages.includes(bob.knownLanguage)){
-                availableText2=["I can teach you "+this.language];
-                knownLanguages.push(this.language);
-              }
-
+              if(k&&!k2) teach(bob.knownLanguage);
+              else if(!k&&k2) teach(this.language);
             });
-            console.log(bob.knownLanguage)
           }
-          else bob.setTandA([RandomFromArray(Greetings)])
+          // default dude
+          else{
+            this.totalBobs++;
+
+            bob.setTandA(NegGreetings,()=>{
+              let h = haveType(1,"muffin");
+
+              //console.log(h)
+              if(!bob.muffin){
+
+
+                if(h){
+
+                  bob.setFrames(poses[randi(1,4)]);
+                  bob.muffin=true;
+                  inventory[h.name].num -= 1;
+                  RefreshInventory();
+                  this.bobsMuffined++;
+
+                  bob.setTandA(["Oh!\nA muffin! For me?","Thank you!"],()=>{
+                    bob.setTandA([RandomFromArray(Greetings)],()=>{
+                      if(this.bobsMuffined==this.totalBobs){
+                        console.log("ALL THE MUFFINS");
+                        if(!this.prizeAwarded){
+                          this.prizeAwarded=true;
+                          let spice=this.language+" "+rBerry()+" spice";
+                          textCounter=0;
+                          availableText=undefined;
+                          availableText2=[
+                            "Everyone on this planet\nloves you!",
+                            "You deserve a prize",
+                            "Obtained a "+spice+" spice",
+                            ""
+                          ];
+                          AddToInventory({name:spice,type:"spice"});
+                        }
+                      }
+                    });
+                    //availableText=undefined;
+
+                  });
+                  textCounter=0;
+                  doneAction=false;
+                }
+                //else bob.setTandA[RandomFromArray(NegGreetings)];
+
+              }
+              //else bob.setTandA([RandomFromArray(Greetings)]);
+            });
+          }
         }
       }
     }
   }
 
-  posIsInWater(p){
-    let x = flo(50*(p.x + this.r)/(2*this.r));
-    let y = flo(50*(p.y + this.r)/(2*this.r));
 
-    if(this.water[y+1][x]){
-      //console.log(y,x)
-      this.previous[x][y+1] = 180;
-      return true;
-    }
-    else return false;
+
+
+  posIsInWater(p){
+    let x = this.toScale(p.y);
+    let y = this.toScale(p.x);
+    let w = this.water[y+1][x];
+
+    if(w) this.previous[y][x+1] = 180;
+    return w;
   }
 
+  toScale(i){
+    return flo(50*(i + this.r)/(2*this.r));
+  }
 
   // make()
   //
@@ -173,14 +193,15 @@ class Planet {
 
   make(){
 
-    this.rainRate = flo(rand(1,20))
+    this.rainRate = randi(1,20);
     this.counter=0;
 
     this.planet=scanv();
     this.planet2=scanv();
     this.water = [];
-    this.previous = [];
     this.current = [];
+    this.previous = [];
+
 
     let ctx=getCtx(this.planet);
     let ctx2=getCtx(this.planet2); // mask canvas
@@ -189,10 +210,10 @@ class Planet {
 
     for(let y=0; y<50; y++){
       this.water[y]=[];
-      this.current[y] = [];
-      this.previous[y] = [];
+      this.current[y]=[];
+      this.previous[y]=[];
 
-      let r = rand(y%50);
+      let r = rand(y);
       let r2 = rand(y%30);
       let fact = rand(0,10);
       let started=false;
@@ -206,24 +227,22 @@ class Planet {
 
           if(!started){
             started=true;
-            if(rand()<0.5)
-            this.water[y][x]=true;
+            if(ch(0.5)) this.water[y][x]=true;
           }
-          if(x<r||x>r2) ctx.fillStyle="#8bef";
-          else ctx.fillStyle=`#${flo(rand(3,7))}8cf`;
+
+          let f=`#${randi(3,7)}8cf`;
+          if(x<r||x>r2) f="#8bef";
+
+          ctx.fillStyle=f;
           ctx.fillRect(x,y,1,1);
           ctx2.fillRect(x,y,1,1);
 
-
-          if(x>0&&y>0){
-            if(
-              rand()<0.005||
-              (this.water[y][x-1]&&rand()<0.7)
-              ||(this.water[y-1][x]&&rand()<0.3)
-            ){
-              this.makeWater(x,y,ctx);
-            }
-          }
+          if(
+            x>0&&y>0&&ch(.005)
+            ||(this.water[y][x-1]&&ch(.7))
+            ||(this.water[y-1][x]&&ch(.3))
+            )
+              this.makeWater(y,x);
         }
 
         r2 += rand(-fact,fact)
@@ -231,31 +250,28 @@ class Planet {
     }
 
 
-    for(let i=0; i<50; i++){
-      for(let j=0; j<50; j++){
+    for(let i=0; i<49; i++){
+      for(let j=0; j<49; j++){
         if(this.water[i][j]){
-          if(i>0&&rand()<0.4) this.makeWater(i-1,j,ctx);
-          if(j>0&&rand()<0.4) this.makeWater(i,j-1,ctx);
-          if(i<49&&rand()<0.4) this.makeWater(i+1,j,ctx);
-          if(j<49&&rand()<0.4) this.makeWater(i,j+1,ctx);
+          if(ch(.4)) this.makeWater(i-1,j);
+          if(ch(.4)) this.makeWater(i,j-1);
+          if(ch(.4)) this.makeWater(i+1,j);
+          if(ch(.4)) this.makeWater(i,j+1);
         }
       }
     }
 
     this.outMin = 120;
     this.outMax = 225;
-    //this.previous[25][25] = 150;
-
   }
 
-  makeWater(y,x,ctx){
+
+  makeWater(x,y,ctx){
     if(dist(xy(x,y),xy(25,25))<25){
       this.water[x][y]=true;
-      ctx.fillStyle="#ca8f";
-      ctx.fillRect(x,y,1,1);
+      this.ctx.fillStyle="#ca8f";
+      this.ctx.fillRect(x,y,1,1);
     }
-
-
   }
 
   addFeature(obj, r){
@@ -326,7 +342,7 @@ class Planet {
       if(!i)i=0.5;
       pos = this.rInRange(i);
       let clear = true;
-      if(this.posIsInWater(pos)) continue;
+      //if(this.posIsInWater(pos)) continue;
 
       for(let j=0; j<this.features.length; j++){
         let distance = dist(pos,this.features[j]);
@@ -354,7 +370,7 @@ class Planet {
     // see nature.js
     if(!min) min=3;
     this.treeFamily = createNewTreeType();
-    let treeCount = flo(rand(min,min+6));
+    let treeCount = randi(min,min+6);
 
     let berry = RandomFromArray(BerryNames);
     for(let i=0; i<treeCount; i++){
@@ -427,7 +443,10 @@ update(){
     transform(pos,()=>{
       hue(this.hue);
       // draw atmosphere
-      drawCircle(0,0,this.mass,"#5593");
+      fill("#5593");
+      mCtx.beginPath();
+      circ(0,0,this.mass);
+      mCtx.fill();
 
       // draw mask
       mCtx.globalCompositeOperation = 'destination-out';
@@ -464,14 +483,14 @@ update(){
         for(let j=1; j<49; j++)
         {
 
-            this.current[i][j] =
-            ( this.previous[i - 1][j]
-              + this.previous[i + 1][j]
-              + this.previous[i][j - 1]
-              + this.previous[i][j + 1] ) / 2 - this.current[i][j];
+          this.current[i][j] =
+          ( this.previous[i - 1][j]
+            + this.previous[i + 1][j]
+            + this.previous[i][j - 1]
+            + this.previous[i][j + 1] ) / 2 - this.current[i][j];
 
-              this.current[i][j] = (this.current[i][j] * 0.7);
-          if(this.water[i][j]){
+            this.current[i][j] = (this.current[i][j] * 0.7);
+            if(this.water[i][j]){
               dataCount = 4*(j*50+i);
               color = flo(this.outMin+(this.outMax-this.outMin)*( this.current[i][j] )/255);
               color = flo(255 - color*0.5);
@@ -479,63 +498,63 @@ update(){
               newFrame[dataCount+1] = color*0.9;
               newFrame[dataCount+2] = color*0.9;
               newFrame[dataCount+3] = 255;
+            }
+          }
+        }
+
+        this.ctx.putImageData(imageData, 0, 0);
+        let temp = [];
+
+        for(let i=0; i<50; i++){
+          temp[i] = [];
+
+          for(let j=0; j<50; j++){
+            temp[i][j] = this.previous[i][j];
+            this.previous[i][j] = this.current[i][j];
+            this.current[i][j] = temp[i][j];
           }
         }
       }
 
-      this.ctx.putImageData(imageData, 0, 0);
-      let temp = [];
+      this.counter++;
+    }
+  }
 
-      for(let i=0; i<50; i++){
-        temp[i] = [];
+  getGravityFor(input,d){
+    // d is the distance from the input object to the center of this planet
 
-        for(let j=0; j<50; j++){
-          temp[i][j] = this.previous[i][j];
-          this.previous[i][j] = this.current[i][j];
-          this.current[i][j] = temp[i][j];
-        }
+    // if this is true, we are touching the surface
+    if(d<this.r){
+      let vel = dist(zero,vxy(input));
+
+      // crash if going too fast
+      if(vel>input.crashThreshold && !input.crashed)
+      input.crash();
+
+      if(!input.crashed)
+      this.visited = true;
+
+      input.landed = true;
+    }
+    else{
+      input.landed = false;
+      return GravityConstant * (this.mass * input.mass) / sq(d); // gmm/r^2
+    }
+
+
+    // otherwise gravity is 0
+    return 0;
+  }
+
+  // removeDude()
+  //
+  // remove dude from child objects
+  removeDude(){
+    for(let i=this.features.length-1; i>=0; i--){
+      if(this.features[i]==Dude){
+        this.features.splice(i,1);
+        break;
       }
     }
-
-    this.counter++;
   }
-}
-
-getGravityFor(input,d){
-  // d is the distance from the input object to the center of this planet
-
-  // if this is true, we are touching the surface
-  if(d<this.r){
-    let vel = dist(zero,vxy(input));
-
-    // crash if going too fast
-    if(vel>input.crashThreshold && !input.crashed)
-    input.crash();
-
-    if(!input.crashed)
-    this.visited = true;
-
-    input.landed = true;
-  }
-  else{
-    input.landed = false;
-    return GravityConstant * (this.mass * input.mass) / sq(d); // gmm/r^2
-  }
-
-
-  // otherwise gravity is 0
-  return 0;
-}
-
-// removeDude()
-//
-// remove dude from child objects
-removeDude(){
-  for(let i=this.features.length-1; i>=0; i--){
-    if(this.features[i]==Dude){
-      this.features.splice(i,1);
-      break;
-    }
-  }
-}
 }

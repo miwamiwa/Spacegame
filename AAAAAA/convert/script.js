@@ -94,7 +94,6 @@ function ConvertImage(input, filename){
     ctx.drawImage(img,0,0);
     let data = ctx.getImageData(0,0,w,h).data;
 
-
     let buffer = 0;
     let lastindex = 0;
     let result = "";

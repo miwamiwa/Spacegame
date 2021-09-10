@@ -69,11 +69,18 @@ let setupPlanets=()=>{
   // create the mechanic's planet
   p=addV(xy(roughly(12000), 600),GrandpaPlanet);
   MechanicPlanet = new Planet(p.x,p.y,false,"Timmy", 340);
-  Shop=MechanicPlanet.addFeature(new StaticObject(0,0,home_png, 140, ShopText), 100);
+  Shop=MechanicPlanet.addFeature(new StaticObject(0,0,home_png, 140, ShopText, shopCheck), 100);
   Shop.hue=flo(rand(360));
-  Shop.shop=ShopItems;
 
 
+}
+
+
+let shopCheck=()=>{
+  console.log("shoppin");
+  //availableText=undefined;
+  //trade(Shop,gpPart,cash,50,false);
+  //Shop.firstReadAction=undefined;
 }
 
 let planetMode=(obj,h)=>{

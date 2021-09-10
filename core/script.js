@@ -24,7 +24,7 @@ window.onload =()=>{
 
 let startGame=()=>{
 
-  startSound();
+  //startSound();
   setupPlayer();
   setupStars();
   camera = new Camera(player);
@@ -97,15 +97,13 @@ let runGame=()=>{
 
   SplitText(inventoryString, 5, 200);
 
-  if(ActiveShop)
-    RunShop();
 
   // add random planets
   let x = Math.round(player.x/FarRange)
   let y = Math.round(player.y/FarRange)
   let index = x+","+y;
   if(index!="0,0"&&!genplanets.includes(index)){
-    let p=new Planet(x*FarRange+9*roughly(0),y*FarRange+9*roughly(0),true);
+    let p=new Planet(x*FarRange+6*roughly(0),y*FarRange+6*roughly(0),true);
     //let max = ;
     p.setLang(allLanguages[Math.min(allLanguages.length,flo(rand((abs(x)+abs(y))/3)))]);
     p.populate();

@@ -9,6 +9,13 @@ let AddToInventory =(item)=>{
   inventory[item.name] = {num:1,type:item.type,name:item.name};
   else inventory[item.name].num ++;
 
+  RefreshInventory();
+
+
+}
+
+
+let RefreshInventory=()=>{
   inventoryString = "inventory";
   for(let i in inventory){
     //console.log(inventory[i]);
@@ -16,8 +23,6 @@ let AddToInventory =(item)=>{
     if(inventory[i].num>0)
     inventoryString += "\n"+inventory[i].name+": "+inventory[i].num;
   }
-
-
 }
 
 

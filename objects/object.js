@@ -6,13 +6,14 @@ class StaticObject extends BasicObject {
     // initialize object
     super(x,y,size,img,text,firstReadAction);
     this.setCollider();
-
+    this.berries=randi(1,4);
   }
 
 
 
   // for tree objects
   lootBerry(){
+    for(let i=0; i<this.berries; i++)
     AddToInventory({name:this.berry,type:"berry"});
     this.talker = undefined;
   }
@@ -29,12 +30,12 @@ class StaticObject extends BasicObject {
         hue(this.hue);
         image(this.img,0,0,this.half,this.size);
       });
-      
+
 
       if(this.edible) this.interact();
     }
   }
-
+/*
   interact(){
     if(!player.boarded){
       // if in range
@@ -48,4 +49,5 @@ class StaticObject extends BasicObject {
       }
     }
   }
+  */
 }

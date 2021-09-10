@@ -189,6 +189,7 @@ let SpacePressInGameState =()=>{
       player.reading = true;
       if(availableText==Mom) UpdateMomText();
       if(availableText==Grandpa) UpdateGPText();
+      if(availableText==Shop) UpdateShopText();
       else if(availableText.gives)
         UpdateTraderText();
       textCounter =0;
@@ -211,18 +212,17 @@ let SpacePressInGameState =()=>{
       )
 
       if(!doneAction){
-        availableText.firstReadAction();
         doneAction=true;
+        availableText.firstReadAction();
+
       }
 
       // remove text box
       if(textCounter==availableText.text.length){
-        if(availableText.shop&&knownLanguages.includes(nP.language)) ShowShop(availableText.shop);
+        //if(availableText.shop&&knownLanguages.includes(nP.language)) ShowShop(availableText.shop);
         availableText = undefined;
         player.reading = false;
       }
-
-
     }
   }
 }

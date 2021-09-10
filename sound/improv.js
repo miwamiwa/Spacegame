@@ -2,23 +2,19 @@ let improBeat=[8,8,8,8,8,8,16,16,16,16];
 
 
 let playImprov=()=>{
-//  let c =0;
-  let pat = nP.m.pattern;
-  if(bars%2==1) pat = nP.m.pattern2;
+  let pat = nP.m.patt;
+  if(bars%2==1) pat = nP.m.patt2;
 
   for(let i=0; i<nP.m.rythme.length; i++){
-  //  if(c<nP.m.barlength){
-      setTimeout(()=>{
-        play(
-          2*nToF(pat.octaves[i] + scale[pat.notes[i]%scale.length]),
-          0.01,0.1,0.22,nP.m.nL,
-          5,constSine,
-          2,
-          'highpass',450,8
-        );
-      }, nP.m.rythme[i]);
-      //c+=;
-    //}
+    setTimeout(()=>{
+      play(
+        2*nToF(pat.octaves[i] + scale[pat.notes[i]%scale.length]),
+        0.01,0.1,0.22,nP.m.nL,
+        5,constSine,
+        2,
+        'highpass',450,8
+      );
+    }, nP.m.rythme[i]);
   }
 }
 
@@ -29,7 +25,7 @@ let playImprov=()=>{
 let getRhythm=(m,b,t)=>{
 
   m.barlength=b;
-  if(rand()<0.4) b/=2;
+  if(rand()<0.4&&b>3000) b/=2;
 
   let r = [];
   let c;
@@ -73,7 +69,7 @@ let getNotePattern=(m)=>{
     if(patcount==pat.length-1){
       pat = RandomFromArray(patterns);
       note = deg;
-      patcount=0;
+      patcount=1;
     }
   }
 

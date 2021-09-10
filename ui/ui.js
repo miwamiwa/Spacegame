@@ -28,7 +28,7 @@ let updatePlayerUi=()=>{
   if(autopilotActive){
     let t="autopilot active";
     if(preventCrash) t="crash prevention active";
-    drawText(t,x-40,y-40,"tomato");
+    drawText(t,x-40,y-40,"#daad");
   }
 
 
@@ -53,8 +53,7 @@ let showTopText=()=>{
   else if(player.boarded){
     drawText(`You're aboard the greenmobile.
     speed : ${flo(playerCurrentSpeed)}
-    bearing: ${flo(radians_to_degrees(player.bearing))}°
-    throttle: ${flo(10*player.throttle)/10}`,TopText.x,TopText.y);
+    bearing: ${flo(radians_to_degrees(player.bearing))}°`,TopText.x,TopText.y);
 
     //console.log(player.crashThreshold,playerCurrentSpeed)
     if(playerCurrentSpeed>player.crashThreshold)
@@ -95,11 +94,6 @@ let showInteractionText=()=>{
 let showQuestText=()=>{
   // if text available
   if(availableText2!=undefined){
-    // obscure background during
-    // "investigation" part
-    //if(availableText2[textCounter]==InvestigationText[6]
-    //  ||availableText2[textCounter]==InvestigationText[8])
-    //  bg();
 
     // display hint
     drawText("press space");

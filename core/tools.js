@@ -76,16 +76,6 @@ let setV=(v,v2)=>{
   v.y=v2.y;
 }
 
-// drawCircle()
-//
-// draw a circle on the canvas
-let drawCircle=(x,y,r,f)=>{
-  fill(f);
-  mCtx.beginPath();
-  circ(x,y,r);
-  mCtx.fill();
-}
-
 let circ =(x,y,r)=>
   mCtx.ellipse(x,y,r,r, 0,0, TWO_PI);
 
@@ -201,10 +191,20 @@ let directionFromObjectToObject=(o1, o2)=>{
 
 let zero=xy(0,0);
 
+let ch=(i)=>rand()<i;
+let randi=(i,j)=>flo(rand(i,j));
 // abs()
 //
 // returns abs value
 let abs=(i)=> Math.abs(i);
+
+let teach=(l)=>{
+  availableText2=["I can teach you "+l];
+  knownLanguages.push(l);
+}
+
+let know=(l)=>knownLanguages.includes(l);
+
 
 // RandomFromArray()
 //
@@ -214,17 +214,7 @@ let RandomFromArray=(array)=> array[flo(rand(array.length))]
 
 let usedPlanetNames = [];
 
-// RandomPlanetName()
-//
-// get a random planet name,
-// add a random number if it's a name we already used.
-let RandomPlanetName=()=>{
-  name = RandomFromArray(PlanetNames);
-  while(usedPlanetNames.includes(name))
-  name += flo(rand(10));
-  usedPlanetNames.push(name);
-  return name;
-}
+let rBerry =()=>RandomFromArray(BerryNames);
 
 let constrain=(input,min,max)=> Math.min(Math.max(input, min), max);
 /*

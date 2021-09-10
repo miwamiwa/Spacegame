@@ -187,17 +187,6 @@ class Vessel extends AnimObject {
           }
           col+=a
 
-
-
-
-
-
-
-
-
-
-
-
           // position
           transform(xy(middle.x+RaDist * -dir.x, y + 30),()=>{
             // draw line

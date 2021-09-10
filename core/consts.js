@@ -15,23 +15,21 @@ const Son2Text =[
   "Pfft"
 ];
 const GrandpaText2 = ["Hi grandson"];
-const ShopText = ["Welcome to the shop"];
+const ShopText = ["Welcome to the shop","Need parts?","Oh give me a second"];
 
 const ShopRect={x:200,y:200}
 
 const cash = "coin";
 
-const allCurrencies = [
-  cash,
-  "muffin",
-  "bead",
-  "berry"
-];
 
 const woosh = 100;
 
 const Greetings =[
-  "hello","hi!"
+  "hello","hi!","<3"
+];
+
+const NegGreetings =[
+  "pff","mmhmm"
 ];
 
 // IMAGE LOAD

@@ -3,8 +3,6 @@ let autopilotPhase;
 let slowframes;
 let preventCrash=false;
 
-
-
 let StopPlayer =()=>{
   if(!autopilotActive){
     player.targetbearing=undefined;
@@ -13,8 +11,6 @@ let StopPlayer =()=>{
     autopilotActive = true;
   }
 }
-
-
 
 let updateAutopilot=()=>{
 
@@ -30,32 +26,23 @@ let updateAutopilot=()=>{
   if(player.x>closestPlanet.x) aToP *=-1;
   if(player.vx>0) aPVel *=-1;
 
-  //if(player.vx>0) aPVel *=-1;
-  //if(player.vy>0) aPVel +=PI;
-  //console.log(aToPEdge,aPVel)
-  //while(!isNaN(aToP)&&aToP<0)aToP+TWO_PI
   else  if(aPVel<0) aPVel += PI
   if(player.x<closestPlanet.x&&aToP<0) aToP += PI
-// apvek = 390
-// atop = 0b
-//console.log(aPVel-aToP)
+
   aPVel-=PI
-
-  let a = abs(aPVel-aToP)<abs(aToPEdge);
-
   while(aPVel<0) aPVel += TWO_PI;
   while(aToP<0) aToP += TWO_PI;
-
   while(aPVel>TWO_PI) aPVel -= TWO_PI;
   while(aToP>TWO_PI) aToP -= TWO_PI;
-
   let b = abs(aPVel-aToP)<abs(aToPEdge);
+  //console.log("collision course: "+b);
 
-  console.log("collision course: "+b);
-
-  if(!autopilotActive&&b&&playerCurrentSpeed>player.crashThreshold
-    &&closestPlanet.d2p<75*(playerCurrentSpeed)){
-    console.log("crash prevention. autopilot active.")
+  if(
+    !autopilotActive
+    &&b
+    &&playerCurrentSpeed>player.crashThreshold
+    &&closestPlanet.d2p<75*(playerCurrentSpeed)
+  ){
     preventCrash=true;
     autopilotActive=true;
   }
@@ -65,29 +52,19 @@ let updateAutopilot=()=>{
 
 
     if(preventCrash){
-      console.log(b)
       if(b){
         player.rotate(PlayerRotateRate2);
         player.plusThrottle();
-        console.log("turn")
       }
       else {
-        console.log("stop")
         player.minusThrottle();
         if(player.throttle==0){
-
           preventCrash=false;
-
           autopilotActive=false;
-          console.log("done")
           StopPlayer();
-
         }
       }
-
     }
-
-
 
     else {
       switch(autopilotPhase){
