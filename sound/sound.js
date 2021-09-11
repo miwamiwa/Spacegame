@@ -62,7 +62,7 @@ let playbar = () =>{
         40,
         0.01,0.01,0.25,rand(0.1,0.7),
         40,noisey,
-        rand(18,24),
+        rand(12,19),
         'highpass',roughly(1000),2
       ),0.92,1,true
     );
@@ -71,6 +71,9 @@ let playbar = () =>{
     // trigger melody notes
     playImprov();
 
+    chordNote(0);
+    chordNote(2);
+    chordNote(scale.length-1);
 
   }
 
@@ -88,7 +91,7 @@ let playbar = () =>{
       800,
       0.04,0.11,0.6,0.06,
       2,constSine4,
-      18,
+      14,
       'lowpass',1250,
       14,0.01
     ),1,1,false
@@ -102,7 +105,7 @@ let playbar = () =>{
     0.015,0.01,0.4,rand(0.1,0.2), // adsr
     2, // buffer cycles
     noisey2, // sound
-    16, // vol
+    6, // vol
     'highpass',1200,1
   ),0.88,1,true);
 
@@ -111,14 +114,13 @@ let playbar = () =>{
     [2,5.29,16,16,16],
     ()=>play(
       nToF(48+mu.scales[bars][0]),
-      0.01,0.2,0.6,0.8,
+      0.1,0.2,0.6,0.8,
       flo(rand(1,6)),constSineZ,
-      3.1,
+      2.1,
       'lowpass',mu.pF,3
     ),0.4,1);
 
-  chordNote(0);
-  chordNote(2);
+
 
   // trigger next bar
   setTimeout(playbar,mu.barlength);
@@ -159,6 +161,9 @@ let backToTop=()=>{
 // sin of a value at index i in the sample buffer.
 let sine=(i,a,d)=>Math.sin(i/(a+d));
 
+let constSine2=(i,d)=>
+constrain( sine(i,0,d)+sine(i*0.975,0,d)+rand(.1,.3),-0.1,0.1);
+
 // synth used in playhop2 and playcash
 let constSineZ=(i,d)=>0.2*sine(i,i,d)+0.2*sine(2*i,i,d)+0.2*sine(4*i,i,d)
 
@@ -170,7 +175,9 @@ let noisey2=(i,d)=> rand(constrain(Math.round(sine(i,i,d)),0,0.130));
 
 // synth used in chords
 let constSine=(i,d)=>
-constrain( sine(i,0,d),-0.2,0.2);
+constrain( sine(i,0,d),-0.1,0.1);
+
+
 
 // synth used in wobble bass and noisey synth and noiseysynth og
 let constSine4=(i,d)=>
@@ -181,14 +188,18 @@ constrain(rand(0.1,0.2)+0.3*(sine(i,0,d)+0.3*sine(i,2,d)),0,0.10);
 //
 // play the chord synth
 
-let chordNote=(i)=>play(
+let chordNote=(i)=>{
+  let s=constSine;
+  if(nP&&nP.m.cType==1) s=constSine2;
+  play(
   nToF(48+scale[i]),
   0.1, 1.1, 0.5, 1.5,
-  6, constSine,
-  0.65,
-  "highpass", mu.cF, 1,
+  6, s,
+  0.85,
+  "lowpass", mu.cF, 1,
   mu.cDetune
 );
+}
 
 
 // startBeat()
@@ -196,7 +207,7 @@ let chordNote=(i)=>play(
 // play a beat pattern
 
 let startBeat =(beat,sound,min,max,mute1)=>{
-  let chance = rand(min,max) * mu.t;
+  let chance = .8*rand(min,max) * mu.t;
   let c =0;
   for(let i=0; i<beat.length; i++){
     if(!(i==0&&mute1)&&rand()<chance)

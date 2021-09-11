@@ -47,7 +47,14 @@ class Planet {
   music(){
 
     // generate scales
-    let sca=()=>RandomFromArray(allScales);
+    let pick=randi(0,3);
+    let sSet = scales1;
+    if(pick==1) sSet = scales2;
+    if(pick==2) sSet = scales3;
+
+    console.log("planet "+this.name+". scale set "+pick);
+
+    let sca=()=>RandomFromArray(sSet);
     let s1=sca();
     let s2=sca();
 
@@ -55,17 +62,27 @@ class Planet {
     this.m={
       scales:[s1,s1,sca(),s1,s2,s2],
       nL:rand(),
-      pF:flo(rand(500,2000)), // perc filter
-      cF:flo(rand(200,4000)), // chord filter
-      cDetune:rand(0.000001,0.000004), // chord detune
+      cType:randi(2),
+      pF:flo(rand(500,1750)), // perc filter
+      cF:flo(rand(100,2750)), // chord filter
+      cDetune:rand(0.000001,0.0000055), // chord detune
       t:rand(0.1,1) // "temperament" (drum rate)
     };
 
-    getRhythm(this.m, flo(rand(2200,3200)), rand(.3,1));
+    if(ch(0.4)){
+      this.m.scales[6]=sca();
+      this.m.scales[7]=sca();
+    }
+
+    getRhythm(this.m, flo(rand(4200,5600)), rand(.3,1));
     this.m.patt = getNotePattern(this.m);
-    if(rand()<0.17) this.m.patt2 = this.m.patt;
-    else if(rand()<0.17) this.m.patt2 = reverse(this.m.patt);
+    if(rand()<0.09) this.m.patt2 = this.m.patt;
+    else if(rand()<0.26) this.m.patt2 = reverse(this.m.patt);
     else this.m.patt2 = getNotePattern(this.m);
+
+    this.m.patt3 = getNotePattern(this.m);
+
+    console.log(this.m)
   }
 
 
@@ -124,7 +141,7 @@ class Planet {
             bob.setTandA(NegGreetings,()=>{
 
               if(!know(this.language)) return;
-              
+
               let h = haveType(1,"muffin");
 
               //console.log(h)
