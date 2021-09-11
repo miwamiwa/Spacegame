@@ -24,8 +24,8 @@ let playImprov=()=>{
         nToF(12+pat.octaves[i] + scale[pat.notes[i]%scale.length]),
         0.01,0.13,0.22,l,
         5,constSine2,
-        1.8-0.005*pat.octaves[i],
-        'highpass',350,8
+        1.6-0.0001*sq(pat.octaves[i]),
+        'lowpass',6350,2
       );
     }, c);
 

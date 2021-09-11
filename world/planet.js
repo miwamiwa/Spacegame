@@ -63,7 +63,7 @@ class Planet {
       scales:[s1,s1,sca(),s1,s2,s2],
       nL:rand(),
       cType:randi(2),
-      pF:flo(rand(500,1750)), // perc filter
+      pF:flo(rand(300,1050)), // perc (bass) filter
       cF:flo(rand(100,2750)), // chord filter
       cDetune:rand(0.000001,0.0000055), // chord detune
       t:rand(0.1,1) // "temperament" (drum rate)
