@@ -190,9 +190,10 @@ constrain(rand(0.1,0.2)+0.3*(sine(i,0,d)+0.3*sine(i,2,d)),0,0.10);
 
 let chordNote=(i)=>{
   let s=constSine;
+  let o=randi(-1,1)*12;
   if(nP&&nP.m.cType==1) s=constSine2;
   play(
-  nToF(48+scale[i]),
+  nToF(48+o+scale[i]),
   0.1, 1.1, 0.5, 1.5,
   6, s,
   0.85,

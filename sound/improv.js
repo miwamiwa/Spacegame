@@ -12,7 +12,7 @@ let playImprov=()=>{
 
   for(let i=0; i<nP.m.rythme.length; i++){
     let j=nP.m.rythme[i]-nP.m.rythme[i-1];
-    if(i<0&&ch(.2)) c+=j
+    if(i<0&&ch(.1)) c+=j
     else c = nP.m.rythme[i];
 
     if(ch(0.2)&&i>0)
@@ -40,7 +40,7 @@ let playImprov=()=>{
 let getRhythm=(m,b,t)=>{
 
   m.barlength=b;
-  if(ch(0.6)&&b>3000) b/=2;
+  if(ch(0.6)&&b>4000) b/=2;
 
   let r = [];
   let c;

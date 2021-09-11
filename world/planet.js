@@ -74,7 +74,7 @@ class Planet {
       this.m.scales[7]=sca();
     }
 
-    getRhythm(this.m, flo(rand(4200,5600)), rand(.3,1));
+    getRhythm(this.m, flo(rand(2800,5600)), rand(.3,1));
     this.m.patt = getNotePattern(this.m);
     if(rand()<0.09) this.m.patt2 = this.m.patt;
     else if(rand()<0.26) this.m.patt2 = reverse(this.m.patt);
@@ -429,7 +429,7 @@ class Planet {
 
     setLang(l){
       this.language=l;
-      this.hue=allLanguages.indexOf(this.language)*30+rand(-2,2)
+      this.hue=allLanguages.indexOf(this.language)*30+rand(-1,1)
     }
 
     // addCheese()
