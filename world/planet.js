@@ -46,22 +46,10 @@ class Planet {
   // setup music for this planet
   music(){
 
-    // generate scales
-    //let pick=randi(0,3);
-    //let sSet = scales1;
-    //if(pick==1) sSet = scales2;
-    //if(pick==2) sSet = scales3;
-
-    //console.log("planet "+this.name+". scale set "+pick);
-
-    //let sca=()=>RandomFromArray(sSet);
-    //let s1=sca();
-    //let s2=sca();
     let tune = [];
-    let homekey=randi(12);
     let feel=randi(4);
-    let k= newkey(homekey,feel);
-    let k2=newkey(homekey+1+2*randi(3),feel);
+    let k= newkey(randi(12),feel);
+    let k2=newkey(k.root+1+2*randi(3),feel);
 
     let l=randi(2,5)
     for(let i=0; i<l; i++)
@@ -75,23 +63,21 @@ class Planet {
       scales:tune,
       nL:rand(0.5),
       cType:randi(2),
-      pF:flo(rand(280,450)), // perc (bass) filter
-      cF:flo(rand(200,850)), // chord filter
+      pF:randi(280,450), // perc (bass) filter
+      cF:randi(200,1125), // chord filter
       cDetune:rand(0.0000001,0.0000035), // chord detune
       t:rand(0.1,1) // "temperament" (drum rate)
     };
 
-    this.m.barlength=flo(rand(3200,6600));
-
-
+    this.m.barlength=randi(3200,6600);
     getRhythm(this.m,this.m.barlength, rand(.3,1));
     this.m.patt = getNotePattern(this.m);
-  //  this.m.patt = getNotePattern(this.m);
-    if(rand()<0.09) this.m.patt2 = this.m.patt;
-    else if(rand()<0.26) this.m.patt2 = reverse(this.m.patt);
+
+    if(ch(.09)) this.m.patt2 = this.m.patt;
+    else if(ch(.26)) this.m.patt2 = reverse(this.m.patt);
     else this.m.patt2 = getNotePattern(this.m);
 
-    console.log(this.m)
+    // console.log(this.m)
   }
 
 
@@ -107,10 +93,7 @@ class Planet {
       let numHomes=randi(1,4);
       let s = rand(30,70);
       let sage;
-
-      //this.setLang(RandomFromArray(allLanguages));
       this.reputation=0;
-      //this.currency=RandomFromArray(allCurrencies);
 
       for(let i=0; i<numHomes; i++){
         let numPpl = randi(1,3);
@@ -161,14 +144,14 @@ class Planet {
 
                   bob.setFrames(poses[randi(1,4)]);
                   bob.muffin=true;
-                  inventory[h.name].num -= 1;
+                  inventory[h.name].num --;
                   RefreshInventory();
                   this.bobsMuffined++;
 
                   bob.setTandA(["Oh!\nA muffin! For me?","Thank you!"],()=>{
                     bob.setTandA([RandomFromArray(Greetings)],()=>{
                       if(this.bobsMuffined==this.totalBobs){
-                        console.log("ALL THE MUFFINS");
+                        //console.log("ALL THE MUFFINS");
                         if(!this.prizeAwarded){
                           this.prizeAwarded=true;
                           let spice=this.language+" "+rBerry()+" spice";
@@ -177,23 +160,17 @@ class Planet {
                           availableText2=[
                             "Everyone on this planet\nloves you!",
                             "You deserve a prize",
-                            "Obtained a "+spice+" spice",
-                            ""
+                            "Obtained a "+spice
                           ];
                           AddToInventory({name:spice,type:"spice"});
                         }
                       }
                     });
-                    //availableText=undefined;
-
                   });
                   textCounter=0;
                   doneAction=false;
                 }
-                //else bob.setTandA[RandomFromArray(NegGreetings)];
-
               }
-              //else bob.setTandA([RandomFromArray(Greetings)]);
             });
           }
         }

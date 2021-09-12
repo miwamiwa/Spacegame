@@ -62,7 +62,7 @@ let playbar = () =>{
         40,
         .01,.01,.25,rand(.1,.7),
         40,noisey,
-        rand(12,19),
+        rand(8,14),
         'highpass',roughly(1000),2
       ),.92,1,true
     );
@@ -96,7 +96,7 @@ let playbar = () =>{
       800,
       0.04,0.11,0.6,0.06,
       2,constSine4,
-      10,
+      6,
       'lowpass',650,
       14,0.01
     ),1,1,false
@@ -110,7 +110,7 @@ let playbar = () =>{
     0.015,0.01,0.4,rand(0.1,0.2), // adsr
     2, // buffer cycles
     noisey2, // sound
-    6, // vol
+    3.5, // vol
     'highpass',1200,1
   ),0.88,1,true);
 
@@ -121,7 +121,7 @@ let playbar = () =>{
       nToF(36+mu.scales[bars][0]),
       0.1,0.2,0.6,0.8,
       flo(rand(1,6)),constSineZ,
-      2.1,
+      2.36,
       'lowpass',mu.pF,3
     ),0.4,1);
 
@@ -194,15 +194,16 @@ constrain(rand(0.1,0.2)+0.3*(sine(i,0,d)+0.3*sine(i,2,d)),0,0.10);
 // play the chord synth
 
 let chordNote=(i)=>{
+  if(!nP) return;
   let s=constSine;
   let o=randi(-1,1)*12;
-  if(nP&&nP.m.cType==1) s=constSine2;
+  if(nP.m.cType==1) s=constSine2;
   play(
   nToF(48+o+scale[i]),
   1.4, 1.5, 0.6, nP.m.barlength/3000,
   6, s,
   0.85,
-  "lowpass", mu.cF, 1,
+  "lowpass", rand(0.9,1,1)*mu.cF, 1,
   mu.cDetune
 );
 }

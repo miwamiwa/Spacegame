@@ -11,14 +11,15 @@ if(ch(.8)&&bars%2==1) pat=nP.m.patt2;
 
 
   for(let i=0; i<nP.m.rythme.length; i++){
-
+    if(i==0&&ch(0.18)) break;
 
     setTimeout(()=>{
+      if(!nP) return;
       play(
         1*nToF(pat.octaves[i] + scale[pat.notes[i]%scale.length]),
-        nP.m.nL/2,0.1,0.12,3*nP.m.nL,
+        nP.m.nL/2,0.1,0.12,5*nP.m.nL,
         5,constSine2,
-        1.8,
+        1.7,
         'lowpass',1450,8
       );
     }, nP.m.rythme[i]);

@@ -6,7 +6,7 @@ let createNewTreeType=()=>{
   let trees = [];
 
   // tree family settings
-  let Hue = flo(rand(360));
+  let Hue = randi(360);
 
   // trunk length
   let tMin = rand(2, 8);
@@ -16,7 +16,7 @@ let createNewTreeType=()=>{
   let bMin = rand(2,5);
   let bMax = rand(2,4);
   // branch spacing
-  let bSpa = flo(rand(2,6));
+  let bSpa = randi(2,6);
   // branch chance
   let bCha = rand();
   // point branch up or down
@@ -25,7 +25,7 @@ let createNewTreeType=()=>{
   let lCha = rand();
 
   let branch=(x,y,scale,ctx)=>{
-    if(rand()<bCha){
+    if(ch(bCha)){
       let x2 = -6;
       let y2 = 0;
       let branchlength = rand(bMin,bMax);
@@ -39,7 +39,7 @@ let createNewTreeType=()=>{
         ctx.drawImage(branchbit_png.img,x2,y2,6,6);
 
         // chance to add leaf
-        if(rand()<lCha)
+        if(ch(lCha))
           ctx.drawImage(leaf1_png.img, x2, y2+4, 6, 6);
 
         // move to next branch part
@@ -64,7 +64,7 @@ let createNewTreeType=()=>{
     let y = canvas.height - 6;
     let x = canvas.width/2;
     // trunk length
-    let tLen = flo(rand(tMin,tMax));
+    let tLen = randi(tMin,tMax);
     // trunk deviation left-right
     let tDev = rand(3);
 
