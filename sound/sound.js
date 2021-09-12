@@ -196,14 +196,18 @@ constrain(rand(0.1,0.2)+0.3*(sine(i,0,d)+0.3*sine(i,2,d)),0,0.10);
 let chordNote=(i)=>{
   if(!nP) return;
   let s=constSine;
+  let filt=0.8;
   let o=randi(-1,1)*12;
-  if(nP.m.cType==1) s=constSine2;
+  if(nP.m.cType==1){
+    filt=1;
+    s=constSine2;
+  }
   play(
   nToF(48+o+scale[i]),
   1.4, 1.5, 0.6, nP.m.barlength/3000,
   6, s,
   0.85,
-  "lowpass", rand(0.9,1,1)*mu.cF, 1,
+  "lowpass", filt*rand(0.9,1,1)*mu.cF, 1,
   mu.cDetune
 );
 }

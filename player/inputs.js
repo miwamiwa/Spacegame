@@ -190,7 +190,7 @@ let SpacePressInGameState =()=>{
       if(availableText==Mom) UpdateMomText();
       if(availableText==Grandpa) UpdateGPText();
       if(availableText==Shop) UpdateShopText();
-      
+
       textCounter =0;
     }
 
@@ -217,7 +217,7 @@ let SpacePressInGameState =()=>{
       }
 
       // remove text box
-      if(textCounter==availableText.text.length){
+      if(!availableText||textCounter==availableText.text.length){
         //if(availableText.shop&&knownLanguages.includes(nP.language)) ShowShop(availableText.shop);
         availableText = undefined;
         player.reading = false;
