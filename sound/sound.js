@@ -57,20 +57,25 @@ let playbar = () =>{
 
     // hats
     startBeat(
-      [16,16,8,16,16,16,16,16,16,16,16,16],
+      [4,4,4,4],
       ()=>play(
         40,
-        0.01,0.01,0.25,rand(0.1,0.7),
+        .01,.01,.25,rand(.1,.7),
         40,noisey,
         rand(12,19),
         'highpass',roughly(1000),2
-      ),0.92,1,true
+      ),.92,1,true
     );
 
 
     // trigger melody notes
     playImprov();
 
+    setTimeout(()=>{
+      chordNote(0);
+      chordNote(2);
+      chordNote(scale.length-1);
+    },mu.barlength/2)
     chordNote(0);
     chordNote(2);
     chordNote(scale.length-1);
@@ -86,13 +91,13 @@ let playbar = () =>{
 
   // bass drum
   startBeat(
-    [4,2.7,17,17],
+    [4,4,4,4],
     ()=>play(
       800,
       0.04,0.11,0.6,0.06,
       2,constSine4,
-      14,
-      'lowpass',1250,
+      10,
+      'lowpass',650,
       14,0.01
     ),1,1,false
   );
@@ -113,7 +118,7 @@ let playbar = () =>{
   startBeat(
     [2,5.29,16,16,16],
     ()=>play(
-      nToF(48+mu.scales[bars][0]),
+      nToF(36+mu.scales[bars][0]),
       0.1,0.2,0.6,0.8,
       flo(rand(1,6)),constSineZ,
       2.1,
@@ -194,7 +199,7 @@ let chordNote=(i)=>{
   if(nP&&nP.m.cType==1) s=constSine2;
   play(
   nToF(48+o+scale[i]),
-  0.1, 1.1, 0.5, 1.5,
+  1.4, 1.5, 0.6, nP.m.barlength/3000,
   6, s,
   0.85,
   "lowpass", mu.cF, 1,

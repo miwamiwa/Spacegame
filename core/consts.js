@@ -146,74 +146,17 @@ const white = "#fff9";
 const bgFill = "#2a1f42";
 const black = "black";
 const tbFill = "#445c";
-// MUSIC
-
-const Edorian = [4,7,9,11,14];
-const FshPhrygi = [6,9,11,13,14,16];
-const CLydian = [0,2,4,7,9,11];
-const ADorian = [9,11,13,16,19];
-const DMixo = [2,4,6,9,12];
-const GLydian = [7,9,11,14,16,18];
-const Fmin7flat5 = [6,9,12,14,16];
-const BMixo = [11,13,15,18,21];
-const Emaj7 = [4,6,8,11,13,15];
-const FShDorian = [6,9,11,13,16];
-const ALydian = [9,11,13,16,18,20];
-const G6 = [7,9,11,14,16,18];
-const AMixo = [9,11,13,16,19];
-
-let scales1 = [
-  Edorian,
-  FshPhrygi,
-  AMixo,
-  BMixo,
-  G6
-];
-
-let scales2 = [
-  CLydian,
-  GLydian,
-  DMixo,
-  ADorian
-];
-
-let scales3 = [
-  BMixo,
-  ALydian,
-  FShDorian,
-  Emaj7
-];
-
-let allScales = [
-  Edorian,
-  //FshPhrygi,
-  CLydian,
-  ADorian,
-  DMixo,
-  GLydian,
-  //Fmin7flat5,
-  BMixo,
-  //Emaj7,
-  FShDorian,
-  ALydian,
-  G6,
-  AMixo
-];
 
 const defaultScales = [
-  FshPhrygi, GLydian,
-  FshPhrygi, GLydian,
-  ADorian, GLydian,
-  Emaj7,Emaj7
+  [0,1,3,4,6,7,9,10]
 ]
-
-
 
 const patterns = [
   [0,1,2,3],
   [0,1,0],
   [1,2,1,3],
-  [0,4,3,2,1],
+  [1,3,5,3,1],
+  [4,3,2,1],
   //[5,1,6],
   [2,3,1],
   [0,2,4]

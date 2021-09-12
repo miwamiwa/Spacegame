@@ -16,6 +16,8 @@ window.onload =()=>{
   loadImages();
   setupCanvas();
   setInterval(run,40);
+
+  //makeTune();
 }
 
 
@@ -48,6 +50,9 @@ let startGame=()=>{
       player.throttle*4,
       'lowpass',100+player.throttle*1000,2);
   }, woosh);
+
+
+
 }
 
 

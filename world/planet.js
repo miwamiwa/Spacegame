@@ -47,40 +47,49 @@ class Planet {
   music(){
 
     // generate scales
-    let pick=randi(0,3);
-    let sSet = scales1;
-    if(pick==1) sSet = scales2;
-    if(pick==2) sSet = scales3;
+    //let pick=randi(0,3);
+    //let sSet = scales1;
+    //if(pick==1) sSet = scales2;
+    //if(pick==2) sSet = scales3;
 
-    console.log("planet "+this.name+". scale set "+pick);
+    //console.log("planet "+this.name+". scale set "+pick);
 
-    let sca=()=>RandomFromArray(sSet);
-    let s1=sca();
-    let s2=sca();
+    //let sca=()=>RandomFromArray(sSet);
+    //let s1=sca();
+    //let s2=sca();
+    let tune = [];
+    let homekey=randi(12);
+    let feel=randi(4);
+    let k= newkey(homekey,feel);
+    let k2=newkey(homekey+1+2*randi(3),feel);
 
+    let l=randi(2,5)
+    for(let i=0; i<l; i++)
+      tune.push(nOf((i*6)%7,k).scale);
+
+    l=randi(2,5);
+    for(let i=l-1; i>=0; i--)
+      tune.push(nOf((i*3)%7,k2).scale);
     // general settings
     this.m={
-      scales:[s1,s1,sca(),s1,s2,s2],
-      nL:rand(),
+      scales:tune,
+      nL:rand(0.5),
       cType:randi(2),
-      pF:flo(rand(300,1050)), // perc (bass) filter
-      cF:flo(rand(100,2750)), // chord filter
-      cDetune:rand(0.000001,0.0000055), // chord detune
+      pF:flo(rand(280,450)), // perc (bass) filter
+      cF:flo(rand(200,850)), // chord filter
+      cDetune:rand(0.0000001,0.0000035), // chord detune
       t:rand(0.1,1) // "temperament" (drum rate)
     };
 
-    if(ch(0.4)){
-      this.m.scales[6]=sca();
-      this.m.scales[7]=sca();
-    }
+    this.m.barlength=flo(rand(3200,6600));
 
-    getRhythm(this.m, flo(rand(2800,5600)), rand(.3,1));
+
+    getRhythm(this.m,this.m.barlength, rand(.3,1));
     this.m.patt = getNotePattern(this.m);
+  //  this.m.patt = getNotePattern(this.m);
     if(rand()<0.09) this.m.patt2 = this.m.patt;
     else if(rand()<0.26) this.m.patt2 = reverse(this.m.patt);
     else this.m.patt2 = getNotePattern(this.m);
-
-    this.m.patt3 = getNotePattern(this.m);
 
     console.log(this.m)
   }
