@@ -90,7 +90,7 @@ class Planet {
     if(ch(0.47)){
 
       // make a tribe
-      let numHomes=randi(1,4);
+      let numHomes=randi(1,3);
       let s = rand(30,70);
       let sage;
       this.reputation=0;
@@ -112,7 +112,7 @@ class Planet {
 
             sage=bob;
             bob.knownLanguage=RandomFromArray(allLanguages);
-            bob.hat=addHat(size);
+            bob.hat=new AnimObject(0,-size*0.4,size*0.2,Hat);
             bob.setTandA(
               ["I am a sage","..."],
               ()=>{

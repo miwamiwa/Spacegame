@@ -1,8 +1,4 @@
-// tools.js
-// where generally useful functions go
-// so as to avoid cluttering script.js
 
-let addHat=(s)=>new AnimObject(0,-s*0.4,s*0.2,Hat);
 
 // convert Hex color to an array of rgba values
 let HexToRgba =(hexinput)=>{

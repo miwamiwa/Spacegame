@@ -6,8 +6,6 @@ let updatePlayerUi=()=>{
 
   // top of the screen
   showTopText();
-  // bottom
-  //showCrackerCounter();
 
   // interaction text box and hints
   showInteractionText();
@@ -15,27 +13,21 @@ let updatePlayerUi=()=>{
   showQuestText();
 
   // show other hints:
-  let x= middle.x +60;
-  let y=middle.y -40;
+  let t = "";
+  let c;
+
   // when boarded and on ground
-  if(canExit&&!player.crashed)
-  drawText("press e to exit. hold w to launch.", x,y);
-  // when able to board
-  if(canBoard())
-  drawText("press space to board");
-  // when in flight
+  if(canExit&&!player.crashed) t="press e to exit. hold w to launch.";
+  if(canBoard()) t="press space to board";
 
   if(autopilotActive){
-    let t="autopilot active";
+    t="autopilot active";
     if(preventCrash) t="crash prevention active";
-    drawText(t,x-40,y-40,"#daad");
+    c="#daad";
   }
 
-
-
-
-drawText("Known languages: "+knownLanguages.join(", "), 10, 590);
-
+  drawText(t,middle.x+20,middle.y-80,c);
+  drawText("Known languages: "+knownLanguages.join(", "), 10, 590);
 }
 
 

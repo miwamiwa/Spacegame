@@ -32,7 +32,7 @@ if(ch(.8)&&bars%2==1) pat=nP.m.patt2;
 
 let getRhythm=(m,b,t)=>{
 
-  if(rand()<0.4&&b>3000) b/=2;
+  if(ch(.4)&&b>3000) b/=2;
 
   let r = [];
   let c;
@@ -41,7 +41,7 @@ let getRhythm=(m,b,t)=>{
   for(let i=0; i<improBeat.length; i++){
     c = t;
     if(i%2==1) c = 0.4
-    if(rand()<c) r.push(count);
+    if(ch(c)) r.push(count);
     count += b/improBeat[i];
   }
 
@@ -56,7 +56,7 @@ let getRhythm=(m,b,t)=>{
 
 let getNotePattern=(m)=>{
   let pat = RandomFromArray(patterns);
-  let note = flo(rand(7));
+  let note = randi(7);
   let patcount=0;
   let deg;
   let res ={notes:[],octaves:[]};
@@ -80,7 +80,7 @@ let getNotePattern=(m)=>{
     }
   }
 
-  if(rand()<0.3) res = reverse(res);
+  if(ch(.3)) res = reverse(res);
   return res;
 }
 

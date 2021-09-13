@@ -12,6 +12,15 @@ let StopPlayer =()=>{
   }
 }
 
+let correct=(a)=>{
+  while(a<0)a+=TWO_PI;
+  return a%TWO_PI;
+}
+
+let minus=(a1,a2)=>
+  Math.min(correct(a1,a2),correct(a2,a1));
+
+
 let updateAutopilot=()=>{
 
   if(player.landed){
@@ -25,8 +34,14 @@ let updateAutopilot=()=>{
   let aToP = angleFromDirection(directionFromObjectToObject(player,closestPlanet))
   if(player.x>closestPlanet.x) aToP *=-1;
   if(player.vx>0) aPVel *=-1;
+  //aPVel -=PI;
+//  let b = minus(correct(aPVel),correct(aToP))<correct(aToPEdge);
+//  if(minus(correct(aPVel),correct(aToP))<correct(aToPEdge))
+//    console.log("Baboom")
 
-  else  if(aPVel<0) aPVel += PI
+  //console.log(correct(aPVel),correct(aToP),correct(aToPEdge),minus(correct(aPVel),correct(aToP)))
+
+  //else  if(aPVel<0) aPVel += PI
   if(player.x<closestPlanet.x&&aToP<0) aToP += PI
 
   aPVel-=PI
@@ -55,6 +70,7 @@ let updateAutopilot=()=>{
       if(b){
         player.rotate(PlayerRotateRate2);
         player.plusThrottle();
+        
       }
       else {
         player.minusThrottle();

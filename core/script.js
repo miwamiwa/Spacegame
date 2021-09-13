@@ -16,8 +16,6 @@ window.onload =()=>{
   loadImages();
   setupCanvas();
   setInterval(run,40);
-
-  //makeTune();
 }
 
 
@@ -50,9 +48,6 @@ let startGame=()=>{
       player.throttle*4,
       'lowpass',100+player.throttle*1000,2);
   }, woosh);
-
-
-
 }
 
 
@@ -106,7 +101,7 @@ let runGame=()=>{
   if(index!="0,0"&&!genplanets.includes(index)){
     let p=new Planet(x*FarRange+6*roughly(0),y*FarRange+6*roughly(0),true);
     //let max = ;
-    p.setLang(allLanguages[Math.min(allLanguages.length,1+flo(rand((abs(x)+abs(y))/2.5)))]);
+    p.setLang(allLanguages[Math.min(allLanguages.length,flo(0.3+rand((abs(x)+abs(y))/2.5)))]);
     p.populate();
     genplanets.push(index);
   }

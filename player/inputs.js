@@ -89,6 +89,8 @@ let planetInputs=()=>{
 
   // look out for animation changes
   let running = player.running;
+  let p =0;
+
   player.running = false;
 
   // if inputs pressed, move player
@@ -100,12 +102,12 @@ let planetInputs=()=>{
   // update animation
   if(running!=player.running){
     switch(player.running){
-      case false: Dude.setFrames(poses[0]); break;
-      case "left": Dude.setFrames(poses[1]); Dude.left=true; break;
-      case "right": Dude.setFrames(poses[1]); Dude.left=false; break;
-      case "down": Dude.setFrames(poses[2]); break;
-      case "up": Dude.setFrames(poses[3]); break;
+      case "left": p=1; Dude.left=true; break;
+      case "right": p=1; Dude.left=false; break;
+      case "down": p=2; break;
+      case "up": p=3; break;
     }
+    Dude.setFrames(poses[p]);
   }
 
   // enable hopping ON vessel when in range
@@ -155,13 +157,9 @@ let SpacePressInGameState =()=>{
   if(canBoard()){
     // update dude
     board();
-
     nP.removeDude();
     // update camera target
     camera.targetIsVessel();
-    // player controls vessel now
-
-    // close active text box
     availableText2 = undefined;
   }
 
@@ -197,8 +195,7 @@ let SpacePressInGameState =()=>{
     // show next phrase:
     else {
       textCounter++;
-      // do action if last frame is reached and there is
-      // a follow-up action available
+
       if(!availableText.text){
         textCounter=0;
         player.reading=false;
@@ -207,18 +204,14 @@ let SpacePressInGameState =()=>{
 
       if(
         textCounter>=availableText.text.length-1
-        &&availableText.firstReadAction
-      )
-
-      if(!doneAction){
+        &&availableText.firstReadAction&&!doneAction
+      ){
         doneAction=true;
         availableText.firstReadAction();
-
       }
 
       // remove text box
       if(!availableText||textCounter==availableText.text.length){
-        //if(availableText.shop&&knownLanguages.includes(nP.language)) ShowShop(availableText.shop);
         availableText = undefined;
         player.reading = false;
       }

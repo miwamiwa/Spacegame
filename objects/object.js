@@ -19,7 +19,7 @@ class StaticObject extends BasicObject {
   }
 
   berryText(){
-    return ["this tree has "+this.berry.replace("berry","")+"berries.","You picked a "+this.berry+"."]
+    return ["this tree has "+this.berry.replace("berry","")+"berries.","You picked "+this.berries+" "+plural(this.berry)+"."]
   }
 
 
