@@ -9,7 +9,7 @@ let createNewTreeType=()=>{
   let Hue = randi(360);
 
   // trunk length
-  let tMin = rand(2, 8);
+  let tMin = rand(5, 10);
   let tMax = tMin + rand(1, 8);
 
   // branch length

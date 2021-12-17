@@ -144,13 +144,23 @@ let vxy=(i)=> xy(i.vx,i.vy);
 let rand =(min,max)=>{
   // 0 args: from 0 to 1
   if(min==undefined&&max==undefined)
-  return Math.random();
+  return random();
+  //return Math.random();
+
   // 1 arg: from 0 to arg1
   else if(max==undefined)
   return rand()*min;
   // 2 args: from arg1 to arg2
   else return min + rand() * (max-min);
 }
+
+
+let random=()=> {
+    var x = Math.sin(RandomSeed++) * 10000;
+    return x - Math.floor(x);
+}
+
+
 
 
 let roughly=(i)=>rand(i-1000,i+1000);

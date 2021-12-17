@@ -5,6 +5,7 @@ let planets = [];
 let genplanets = [];
 let closestPlanet;
 
+let RandomSeed = 0;
 // current game screen
 let gamestate = "startscreen";
 // counter for start screen

@@ -346,7 +346,7 @@ class Planet {
 
     // keep picking positions until one with no overlaps is found
     while(!found){
-      if(!i)i=0.5;
+      if(!i)i=0.9;
       pos = this.rInRange(i);
       let clear = true;
       //if(this.posIsInWater(pos)) continue;
@@ -375,15 +375,23 @@ class Planet {
 
     // generate a unique tree family for this planet
     // see nature.js
-    if(!min) min=3;
+
+
+    // generate a family of trees
     this.treeFamily = createNewTreeType();
+
+    // generate number of trees
+    min=26;
     let treeCount = randi(min,min+6);
 
+    // pick a random berry
     let berry = RandomFromArray(BerryNames);
+
     for(let i=0; i<treeCount; i++){
+
       // create tree object
       let tree = this.addFeature(
-        new StaticObject(0,0,{img:RandomFromArray(this.treeFamily)},200),50);
+        new StaticObject(0,0,{img:RandomFromArray(this.treeFamily)},200),10);
 
         tree.collider = false;
         tree.talker = true;
@@ -391,7 +399,6 @@ class Planet {
         tree.berry = berry+" berry";
         tree.setTandA(tree.berryText(),tree.lootBerry);
         tree.id="tree";
-
       }
 
       // order features by y
