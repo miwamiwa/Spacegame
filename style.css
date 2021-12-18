@@ -2,13 +2,9 @@ body{
   background-color:#213d;
   width:95vw;
   height:95vh;
-  display:flex;
   font-family:arial;
   color:white;
   font-weight:bold;
-  flex-direction:column-reverse;
-  justify-content:space-around;
-  align-items:center;
 }
 canvas{
   width:800px;

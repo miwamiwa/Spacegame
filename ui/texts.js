@@ -2,13 +2,27 @@
 let GrandpaText = ["Hi grandson!","Help me with my ship will ya",`Go buy a ${gpPart} on planet Timmy.`];
 let MomText = ["Son","Are you hungry?","Bring me 5 fruits"];
 
+let WorkshopText = ["Workshop!"];
+
+
+let updateWorkshopText=()=>{
+  let stuff = [];
+  stuff[0] = ["wood sword","weapon","stick",2];
+  stuff[1] = ["ladder","utility","stick",16];
+
+  if(!tradeWindow.open)
+    tradeWindow.open = true;
+
+  tradeWindow.contents = stuff;
+}
+
 // homeObjectText()
 //
 //
 
 let UpdateMomText=()=>{
   // if we can make something, make it
-  if(trade(Mom,"muffin","berry",5,true)) return;
+  if(trade(Mom,"muffin","food","berry",5,true)) return;
   // otherwise just talk to mom
   else Mom.setTandA(MomText);
 }
@@ -20,18 +34,18 @@ let UpdateMomText=()=>{
 
 let UpdateShopText=()=>{
   // if we can make something, make it
-  if(trade(Shop,gpPart,cash,50,false)) return;
-  // otherwise just talk to mom
+  if(trade(Shop,gpPart,gpPart,cash,50,false)) return;
+  // otherwise just talk
   else Shop.setTandA(ShopText);
 }
+
 
 //
 //
 //
 
 let UpdateGPText=()=>{
-  if(trade(Grandpa,"surprizze",gpPart,1,false))
-  GrandpaText=GrandpaText2;
+  if(trade(Grandpa,"surprizze","surprizze",gpPart,1,false)) GrandpaText=GrandpaText2;
   else Grandpa.setTandA(GrandpaText,grandpaQuestStart);
 }
 

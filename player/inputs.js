@@ -6,8 +6,22 @@ let inputs = {
   b:false, // 66
   space:false, //32
   e:false,
-  l:false
+  l:false,
+  i:false,
+  numbers:[
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ]
 }
+
 let key;
 let doneAction = false;
 // keyUp()
@@ -15,14 +29,23 @@ let doneAction = false;
 // track keyup events
 
 let keyUp=(e)=>{
+  e.preventDefault();
   e = e.keyCode;
   setKey(e,false);
   if(e==32) inputs.space = false;
 }
 
 let setKey=(e,b)=>{
-  for(let i in inputs)
-  if(i.toUpperCase().charCodeAt(0)==e) inputs[i]=b;
+
+  if(e<=57&&e>=48){
+    let num = e - 48;
+    inputs.numbers[num] = b;
+  }
+
+  else{
+    for(let i in inputs)
+    if(i.toUpperCase().charCodeAt(0)==e) inputs[i]=b;
+  }
 }
 
 // keydown()
@@ -30,12 +53,40 @@ let setKey=(e,b)=>{
 // track key down events
 
 let keyDown=(e)=>{
+  e.preventDefault();
   key = e.keyCode;
   setKey(key,true);
   if(key==32){
     if(!inputs.space&&gamestate=="game") SpacePressInGameState();
     inputs.space=true;
   }
+
+  if(key==73) toggleInventoryOptions();
+
+  if(inventoryOptions.shown){
+    if(inputs.w){
+      inventoryOptions.selection = Math.max(inventoryOptions.selection-1, 0);
+      RefreshInventory();
+    }
+    else if(inputs.s){
+      inventoryOptions.selection = Math.min(inventoryOptions.selection+1, Object.keys(inventory).length-1);
+      RefreshInventory();
+    }
+    else if (inputs.e){
+      if(isEquipable(inventoryOptions.item)) EquipItem(inventoryOptions.item);
+      else if(isUseable(inventoryOptions.item)) UseItem(inventoryOptions.item);
+    }
+    return;
+  }
+}
+
+
+// toggleInventoryOptions()
+//
+//
+let toggleInventoryOptions = ()=>{
+  inventoryOptions.shown=!inventoryOptions.shown;
+  RefreshInventory();
 }
 
 
@@ -47,6 +98,10 @@ let HandlePlayerInputs=()=>{
   if(gamestate=="game"){
     canExit = false;
     canEnter = false;
+
+    if(inventoryOptions.shown) return;
+
+    if(tradeWindow.open) handleTradeWindowInputs();
 
     // if boarded
     if(player.boarded)
@@ -139,6 +194,14 @@ let board=()=>{
   Dude.visible = false;
   player.boarded = true;
   Dude.planetMode=undefined;
+
+  if(haveType(1,"surprizze")){
+    console.log("ey")
+    inventory["surprizze"].num --;
+    SpeedLimit = speedLimit2;
+    popupText(["well gramps that's a nice surprise!","Gramps: your ship is twice as fast now","Don't get hurt... And don't tell your mom!"]);
+    RefreshInventory();
+  }
 }
 
 // SpacePressInGameState()
@@ -148,6 +211,10 @@ let board=()=>{
 
 let SpacePressInGameState =()=>{
 
+  if(tradeWindow.open){
+    tradeWindow.open=false;
+    return;
+  }
 
   if(!player.landed && !availableText2) StopPlayer();
   // 1. BOARD VESSEL
@@ -160,7 +227,7 @@ let SpacePressInGameState =()=>{
     nP.removeDude();
     // update camera target
     camera.targetIsVessel();
-    availableText2 = undefined;
+    //availableText2 = undefined;
   }
 
 
@@ -185,9 +252,9 @@ let SpacePressInGameState =()=>{
     // display text box:
     if(!player.reading){
       player.reading = true;
-      if(availableText==Mom) UpdateMomText();
-      if(availableText==Grandpa) UpdateGPText();
-      if(availableText==Shop) UpdateShopText();
+
+      if(availableText.DialogUpdate!=undefined)
+        availableText.DialogUpdate();
 
       textCounter =0;
     }

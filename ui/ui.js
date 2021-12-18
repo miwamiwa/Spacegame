@@ -1,3 +1,9 @@
+let popupText=(input)=>{
+  textCounter=0;
+  availableText=undefined;
+  availableText2=input;
+}
+
 // updatePlayerUi()
 //
 // called in rungame()
@@ -28,6 +34,8 @@ let updatePlayerUi=()=>{
 
   drawText(t,middle.x+20,middle.y-80,c);
   drawText("Known languages: "+knownLanguages.join(", "), 10, 590);
+
+  if(tradeWindow.open) displayCraftWindow();
 }
 
 

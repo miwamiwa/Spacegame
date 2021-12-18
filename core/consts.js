@@ -76,7 +76,7 @@ const PlayerDeceleration = 0.2; // rate at which player.throttle recedes to 0.
 const PlayerRotateRate = 0.14;
 const PlayerRotateRate2 = 0.24;
 const AccelerationLimit = 3;
-const SpeedLimit = 60;
+
 const PlayerWalkVelocity = 4;
 
 const PlayerStartX = 50;

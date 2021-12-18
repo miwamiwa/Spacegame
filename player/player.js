@@ -12,6 +12,9 @@ let inventoryString = "";
 let nP;
 let knownLanguages=["Onian"];
 
+let SpeedLimit = 60;
+let speedLimit2 = 100;
+
 // setupPlayer()
 //
 // create player and spaceship on load

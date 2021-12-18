@@ -95,11 +95,13 @@ class Planet {
       let sage;
       this.reputation=0;
 
+      // add homes
       for(let i=0; i<numHomes; i++){
         let numPpl = randi(1,3);
         if(ch(.15)) numPpl=randi(1,4);
         this.addFeature(new StaticObject(0,0,home_png,70), s+5);
 
+        // for each home add person
         for(let j=0; j<numPpl; j++){
 
           // create person
@@ -111,7 +113,12 @@ class Planet {
           if(numHomes==1&&numPpl==1){
 
             sage=bob;
+
             bob.knownLanguage=RandomFromArray(allLanguages);
+
+            while(bob.knownLanguage==this.language)
+            bob.knownLanguage=RandomFromArray(allLanguages);
+
             bob.hat=new AnimObject(0,-size*0.4,size*0.2,Hat);
             bob.setTandA(
               ["I am a sage","..."],
@@ -155,13 +162,11 @@ class Planet {
                         if(!this.prizeAwarded){
                           this.prizeAwarded=true;
                           let spice=this.language+" "+rBerry()+" spice";
-                          textCounter=0;
-                          availableText=undefined;
-                          availableText2=[
+                          popupText([
                             "Everyone on this planet\nloves you!",
                             "You deserve a prize",
                             "Obtained a "+spice
-                          ];
+                          ]);
                           AddToInventory({name:spice,type:"spice"});
                         }
                       }
@@ -542,8 +547,10 @@ update(){
       let vel = dist(zero,vxy(input));
 
       // crash if going too fast
-      if(vel>input.crashThreshold && !input.crashed)
-      input.crash();
+      if(CrashEnabled&&vel>input.crashThreshold && !input.crashed){
+        input.crash();
+      }
+
 
       if(!input.crashed)
       this.visited = true;

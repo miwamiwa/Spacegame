@@ -5,6 +5,8 @@ let planets = [];
 let genplanets = [];
 let closestPlanet;
 
+let CrashEnabled = false;
+
 let RandomSeed = 0;
 // current game screen
 let gamestate = "startscreen";
@@ -93,7 +95,8 @@ let runGame=()=>{
   resetPlayerOnCrash();
   camera.update();
   updatePlayerUi();
-  SplitText(inventoryString, 5, 200);
+
+  displayInventory();
 
   // add random planets
   let x = Math.round(player.x/FarRange)
