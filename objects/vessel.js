@@ -44,6 +44,17 @@ class Vessel extends AnimObject {
 
         let d = dist(zero,v);
 
+        if(grampQuest&&d>speedLimit1){
+          if(haveType(1,"surprizze")){
+            console.log("ey")
+            grampQuest=false;
+            inventory["surprizze"].num --;
+            SpeedLimit = speedLimit2;
+            popupText(["well gramps that's a nice surprise!","Gramps: your ship is twice as fast now","Don't get hurt... And don't tell your mom!"]);
+            RefreshInventory();
+          }
+        }
+
         // if we are below the speed limit, add the acceleration
         if(d<=SpeedLimit){
           this.vx = v.x;

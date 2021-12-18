@@ -194,14 +194,6 @@ let board=()=>{
   Dude.visible = false;
   player.boarded = true;
   Dude.planetMode=undefined;
-
-  if(haveType(1,"surprizze")){
-    console.log("ey")
-    inventory["surprizze"].num --;
-    SpeedLimit = speedLimit2;
-    popupText(["well gramps that's a nice surprise!","Gramps: your ship is twice as fast now","Don't get hurt... And don't tell your mom!"]);
-    RefreshInventory();
-  }
 }
 
 // SpacePressInGameState()

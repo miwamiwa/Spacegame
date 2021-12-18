@@ -53,11 +53,11 @@ class Planet {
 
     let l=randi(2,5)
     for(let i=0; i<l; i++)
-      tune.push(nOf((i*6)%7,k).scale);
+    tune.push(nOf((i*6)%7,k).scale);
 
     l=randi(2,5);
     for(let i=l-1; i>=0; i--)
-      tune.push(nOf((i*3)%7,k2).scale);
+    tune.push(nOf((i*3)%7,k2).scale);
     // general settings
     this.m={
       scales:tune,
@@ -124,279 +124,286 @@ class Planet {
               ["I am a sage","..."],
               ()=>{
 
-              textCounter=0;
-              availableText=undefined;
-              let k=know(this.language);
-              let k2=know(bob.knownLanguage);
+                textCounter=0;
+                availableText=undefined;
+                let k=know(this.language);
+                let k2=know(bob.knownLanguage);
 
-              if(k&&!k2) teach(bob.knownLanguage);
-              else if(!k&&k2) teach(this.language);
-            });
-          }
-          // default dude
-          else{
-            this.totalBobs++;
+                if(k&&!k2) teach(bob.knownLanguage);
+                else if(!k&&k2) teach(this.language);
+              });
+            }
+            // default dude
+            else{
+              this.totalBobs++;
 
-            bob.setTandA(NegGreetings,()=>{
+              bob.setTandA(NegGreetings,()=>{
 
-              if(!know(this.language)) return;
+                if(!know(this.language)) return;
 
-              let h = haveType(1,"muffin");
+                let h = haveType(1,"muffin");
 
-              //console.log(h)
-              if(!bob.muffin){
+                //console.log(h)
+                if(!bob.muffin){
 
 
-                if(h){
+                  if(h){
 
-                  bob.setFrames(poses[randi(1,4)]);
-                  bob.muffin=true;
-                  inventory[h.name].num --;
-                  RefreshInventory();
-                  this.bobsMuffined++;
+                    bob.setFrames(poses[randi(1,4)]);
+                    bob.muffin=true;
+                    inventory[h.name].num --;
+                    RefreshInventory();
+                    this.bobsMuffined++;
 
-                  bob.setTandA(["Oh!\nA muffin! For me?","Thank you!"],()=>{
-                    bob.setTandA([RandomFromArray(Greetings)],()=>{
-                      if(this.bobsMuffined==this.totalBobs){
-                        //console.log("ALL THE MUFFINS");
-                        if(!this.prizeAwarded){
-                          this.prizeAwarded=true;
-                          let spice=this.language+" "+rBerry()+" spice";
-                          popupText([
-                            "Everyone on this planet\nloves you!",
-                            "You deserve a prize",
-                            "Obtained a "+spice
-                          ]);
-                          AddToInventory({name:spice,type:"spice"});
+                    bob.setTandA(["Oh!\nA muffin! For me?","Thank you!"],()=>{
+                      bob.setTandA([RandomFromArray(Greetings)],()=>{
+                        if(this.bobsMuffined==this.totalBobs){
+                          //console.log("ALL THE MUFFINS");
+                          if(!this.prizeAwarded){
+                            this.prizeAwarded=true;
+                            let spice=this.language+" "+rBerry()+" spice";
+                            popupText([
+                              "Everyone on this planet\nloves you!",
+                              "You deserve a prize",
+                              "Obtained a "+spice
+                            ]);
+                            AddToInventory({name:spice,type:"spice"});
+                          }
                         }
-                      }
+                      });
                     });
-                  });
-                  textCounter=0;
-                  doneAction=false;
+                    textCounter=0;
+                    doneAction=false;
+                  }
                 }
-              }
-            });
+              });
+            }
           }
         }
       }
     }
-  }
 
 
 
 
-  posIsInWater(p){
-    let x = this.toScale(p.y);
-    let y = this.toScale(p.x);
-    let w = this.water[y+1][x];
+    posIsInWater(p){
+      let x = this.toScale(p.y);
+      let y = this.toScale(p.x);
+      let w = this.water[y+1][x];
 
-    if(w) this.previous[y][x+1] = 180;
-    return w;
-  }
+      if(w) this.previous[y][x+1] = 180;
+      return w;
+    }
 
-  toScale(i){
-    return flo(50*(i + this.r)/(2*this.r));
-  }
+    toScale(i){
+      return flo(50*(i + this.r)/(2*this.r));
+    }
 
-  // make()
-  //
-  // make planet canvas
+    // make()
+    //
+    // make planet canvas
 
-  make(){
+    make(){
 
-    this.rainRate = randi(1,20);
-    this.counter=0;
+      this.rainRate = randi(1,20);
+      this.counter=0;
 
-    this.planet=scanv();
-    this.planet2=scanv();
-    this.water = [];
-    this.current = [];
-    this.previous = [];
+      this.planet=scanv();
+      this.planet2=scanv();
+      this.water = [];
+      this.current = [];
+      this.previous = [];
 
 
-    let ctx=getCtx(this.planet);
-    let ctx2=getCtx(this.planet2); // mask canvas
-    this.ctx=ctx;
-    ctx2.fillStyle=black;
+      let ctx=getCtx(this.planet);
+      let ctx2=getCtx(this.planet2); // mask canvas
+      this.ctx=ctx;
+      ctx2.fillStyle=black;
 
-    for(let y=0; y<50; y++){
-      this.water[y]=[];
-      this.current[y]=[];
-      this.previous[y]=[];
+      for(let y=0; y<50; y++){
+        this.water[y]=[];
+        this.current[y]=[];
+        this.previous[y]=[];
 
-      let r = rand(y);
-      let r2 = rand(y%30);
-      let fact = rand(0,10);
-      let started=false;
+        let r = rand(y);
+        let r2 = rand(y%30);
+        let fact = rand(0,10);
+        let started=false;
 
-      for(let x=0; x<50; x++){
+        for(let x=0; x<50; x++){
 
-        this.current[y][x] = 0;
-        this.previous[y][x] = 0;
+          this.current[y][x] = 0;
+          this.previous[y][x] = 0;
 
-        if(dist(xy(x,y),xy(25,25))<25){
+          if(dist(xy(x,y),xy(25,25))<25){
 
-          if(!started){
-            started=true;
-            if(ch(0.5)) this.water[y][x]=true;
-          }
+            if(!started){
+              started=true;
+              if(ch(0.5)) this.water[y][x]=true;
+            }
 
-          let f=`#${randi(3,7)}8cf`;
-          if(x<r||x>r2) f="#8bef";
+            let f=`#${randi(3,7)}8cf`;
+            if(x<r||x>r2) f="#8bef";
 
-          ctx.fillStyle=f;
-          ctx.fillRect(x,y,1,1);
-          ctx2.fillRect(x,y,1,1);
+            ctx.fillStyle=f;
+            ctx.fillRect(x,y,1,1);
+            ctx2.fillRect(x,y,1,1);
 
-          if(
-            x>0&&y>0&&ch(.005)
-            ||(this.water[y][x-1]&&ch(.7))
-            ||(this.water[y-1][x]&&ch(.3))
+            if(
+              x>0&&y>0&&ch(.005)
+              ||(this.water[y][x-1]&&ch(.7))
+              ||(this.water[y-1][x]&&ch(.3))
             )
-              this.makeWater(y,x);
-        }
+            this.makeWater(y,x);
+          }
 
-        r2 += rand(-fact,fact)
+          r2 += rand(-fact,fact)
+        }
+      }
+
+
+      for(let i=0; i<49; i++){
+        for(let j=0; j<49; j++){
+          if(this.water[i][j]){
+            if(ch(.4)) this.makeWater(i-1,j);
+            if(ch(.4)) this.makeWater(i,j-1);
+            if(ch(.4)) this.makeWater(i+1,j);
+            if(ch(.4)) this.makeWater(i,j+1);
+          }
+        }
+      }
+
+      this.outMin = 120;
+      this.outMax = 225;
+    }
+
+
+    makeWater(x,y,ctx){
+      if(dist(xy(x,y),xy(25,25))<25){
+        this.water[x][y]=true;
+        this.ctx.fillStyle="#ca8f";
+        this.ctx.fillRect(x,y,1,1);
       }
     }
 
+    addFeature(obj, r){
+      if(r) this.spot(obj,r);
 
-    for(let i=0; i<49; i++){
-      for(let j=0; j<49; j++){
-        if(this.water[i][j]){
-          if(ch(.4)) this.makeWater(i-1,j);
-          if(ch(.4)) this.makeWater(i,j-1);
-          if(ch(.4)) this.makeWater(i+1,j);
-          if(ch(.4)) this.makeWater(i,j+1);
-        }
+      this.features.push(obj);
+      this.sortFeatures();
+      return obj;
+    }
+
+
+    spot(obj,r){
+      setV(obj,this.findAvailableSpot(r));
+    }
+
+    // sortFeatures()
+    //
+    // sort planet features by y position to achieve
+    // some sort of z-indexing.
+
+    sortFeatures(){
+      let sorted = [this.features[0]];
+
+      for(let i=1; i<this.features.length; i++){
+        let f = this.features[i];
+        let found = false;
+        let j=0;
+
+        // compare y-pos at the base of each element
+        sorted.forEach(el=>{
+          if(!found&&f.y+f.half<el.y+el.half){
+            // insert into array if element comes before
+            // an already sorted element
+            sorted.splice(j,0,f);
+            found = true;
+          }
+          j++;
+        });
+        // otherwise insert at the end
+        if(!found) sorted.push(f);
       }
+      // update features[]
+      this.features = sorted;
     }
 
-    this.outMin = 120;
-    this.outMax = 225;
-  }
 
 
-  makeWater(x,y,ctx){
-    if(dist(xy(x,y),xy(25,25))<25){
-      this.water[x][y]=true;
-      this.ctx.fillStyle="#ca8f";
-      this.ctx.fillRect(x,y,1,1);
+    // rPos()
+    //
+    // return a random position on this planet
+
+    rPos(){
+      return rand(-this.r,this.r);
     }
-  }
-
-  addFeature(obj, r){
-    if(r) this.spot(obj,r);
-
-    this.features.push(obj);
-    this.sortFeatures();
-    return obj;
-  }
 
 
-  spot(obj,r){
-    setV(obj,this.findAvailableSpot(r));
-  }
+    // findAvailableSpot
+    //
+    // get a random surface position that isn't
+    // right on top of another object (hopefully lol)
 
-  // sortFeatures()
-  //
-  // sort planet features by y position to achieve
-  // some sort of z-indexing.
-
-  sortFeatures(){
-    let sorted = [this.features[0]];
-
-    for(let i=1; i<this.features.length; i++){
-      let f = this.features[i];
+    findAvailableSpot(d,i){
+      let pos;
       let found = false;
-      let j=0;
 
-      // compare y-pos at the base of each element
-      sorted.forEach(el=>{
-        if(!found&&f.y+f.half<el.y+el.half){
-          // insert into array if element comes before
-          // an already sorted element
-          sorted.splice(j,0,f);
-          found = true;
+      // keep picking positions until one with no overlaps is found
+      while(!found){
+        if(!i)i=0.9;
+        pos = this.rInRange(i);
+        let clear = true;
+        //if(this.posIsInWater(pos)) continue;
+
+        for(let j=0; j<this.features.length; j++){
+          let distance = dist(pos,this.features[j]);
+
+          if(this.features[j].id=="tree"){
+            if(distance<50) clear=false;
+          }
+          else if (this.features[j]!=Dude&&distance<d)
+          clear  = false;
         }
-        j++;
-      });
-      // otherwise insert at the end
-      if(!found) sorted.push(f);
-    }
-    // update features[]
-    this.features = sorted;
-  }
 
 
-
-  // rPos()
-  //
-  // return a random position on this planet
-
-  rPos(){
-    return rand(-this.r,this.r);
-  }
-
-
-  // findAvailableSpot
-  //
-  // get a random surface position that isn't
-  // right on top of another object (hopefully lol)
-
-  findAvailableSpot(d,i){
-    let pos;
-    let found = false;
-
-    // keep picking positions until one with no overlaps is found
-    while(!found){
-      if(!i)i=0.9;
-      pos = this.rInRange(i);
-      let clear = true;
-      //if(this.posIsInWater(pos)) continue;
-
-      for(let j=0; j<this.features.length; j++){
-        let distance = dist(pos,this.features[j]);
-
-        if(this.features[j].id=="tree"){
-          if(distance<50) clear=false;
-        }
-        else if (this.features[j]!=Dude&&distance<d)
-        clear  = false;
+        found = clear;
       }
-
-
-      found = clear;
+      return pos;
     }
-    return pos;
-  }
 
-  // setupScenery()
-  //
-  // make some trees
+    // setupScenery()
+    //
+    // make some trees
 
-  setupScenery(min){
+    setupScenery(min){
 
-    // generate a unique tree family for this planet
-    // see nature.js
+      // generate a unique tree family for this planet
+      // see nature.js
 
 
-    // generate a family of trees
-    this.treeFamily = createNewTreeType();
+      // generate a family of trees
+      this.treeFamily = createNewTreeType();
 
-    // generate number of trees
-    min=26;
-    let treeCount = randi(min,min+6);
+      // generate number of trees
+      min=26;
+      let treeCount = randi(min,min+6);
 
-    // pick a random berry
-    let berry = RandomFromArray(BerryNames);
+      // pick a random berry
+      let berry = RandomFromArray(BerryNames);
 
-    for(let i=0; i<treeCount; i++){
+      for(let i=0; i<treeCount; i++){
 
-      // create tree object
-      let tree = this.addFeature(
-        new StaticObject(0,0,{img:RandomFromArray(this.treeFamily)},200),10);
+        // create tree object
+        let tree = this.addFeature(
+          new StaticObject(
+            0,
+            0,
+            {img:RandomFromArray(this.treeFamily)},
+            200
+          ),
+          10
+        );
 
         tree.collider = false;
         tree.talker = true;
@@ -404,6 +411,27 @@ class Planet {
         tree.berry = berry+" berry";
         tree.setTandA(tree.berryText(),tree.lootBerry);
         tree.id="tree";
+      }
+
+      let hillCount = randi(6, 12);
+      for(let i=0; i<hillCount; i++){
+
+        let size = flo(rand(40, 120));
+        // create hill object
+        let hill = this.addFeature(
+          new StaticObject(
+            0,
+            0,
+            hill_png,
+            size
+          ),
+          size
+        );
+        //hill.collider = false;
+        //let f=`#${randi(3,7)}8cf`;
+        //if(x<r||x>r2) f="#8bef";
+        hill.id="hill";
+        hill.collidersize = size * 0.35;
       }
 
       // order features by y

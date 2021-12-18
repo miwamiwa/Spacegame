@@ -12,8 +12,11 @@ let inventoryString = "";
 let nP;
 let knownLanguages=["Onian"];
 
-let SpeedLimit = 60;
+
 let speedLimit2 = 100;
+let speedLimit1 = 60;
+let grampQuest = true;
+let SpeedLimit = speedLimit1;
 
 // setupPlayer()
 //
