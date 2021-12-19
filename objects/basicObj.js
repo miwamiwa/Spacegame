@@ -8,6 +8,7 @@ class BasicObject {
     this.hue =0;
     this.id="";
     this.equippedItem = undefined;
+    this.windy=false;
     this.setSize(size);
     this.setTandA(text,firstReadAction);
   }
@@ -27,5 +28,13 @@ class BasicObject {
     this.collider = true;
     this.collidersize = this.size * 0.65;
     this.talkrange = this.size * 0.8;
+  }
+
+  applyTransform(){
+    if(this.transform!=undefined) this.transform();
+    else if(this.windy){
+      if(rand()<0.02)
+      new Wiggle(this, 6, 800);
+    }
   }
 }

@@ -21,6 +21,8 @@ class StaticObject extends BasicObject {
     AddToInventory({name:"stick",type:"stick"});
 
     this.talker = undefined;
+
+    new Wiggle(this, 10, 100);
   }
 
   berryText(){
@@ -32,6 +34,7 @@ class StaticObject extends BasicObject {
     if(this.active){
       // display sprite
       transform(xy(this.x,this.y),()=>{
+        this.applyTransform();
         hue(this.hue);
         image(this.img,0,0,this.half,this.size);
       });
@@ -40,6 +43,7 @@ class StaticObject extends BasicObject {
       if(this.edible) this.interact();
     }
   }
+
 /*
   interact(){
     if(!player.boarded){

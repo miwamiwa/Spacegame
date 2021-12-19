@@ -404,7 +404,7 @@ class Planet {
           ),
           10
         );
-
+        tree.windy=true;
         tree.collider = false;
         tree.talker = true;
         tree.talkrange = 34;

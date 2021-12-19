@@ -59,6 +59,8 @@ class AnimObject extends BasicObject {
 
     // update transform
     transform(xy(x,y),()=>{
+
+      this.applyTransform();
       this.displayChildren(children);
       // display sprite:
       hue(this.hue);
