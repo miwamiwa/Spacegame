@@ -11,7 +11,7 @@ if(ch(.8)&&bars%2==1) pat=nP.m.patt2;
 
 
   for(let i=0; i<nP.m.rythme.length; i++){
-    if(i==0&&ch(0.18)) break;
+    if(i==0&&ch(0.1)) break;
 
     setTimeout(()=>{
       if(!nP) return;
@@ -32,7 +32,7 @@ if(ch(.8)&&bars%2==1) pat=nP.m.patt2;
 
 let getRhythm=(m,b,t)=>{
 
-  if(ch(.4)&&b>3000) b/=2;
+  if(ch(.7)&&b>3000) b/=2;
 
   let r = [];
   let c;

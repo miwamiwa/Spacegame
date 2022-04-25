@@ -79,7 +79,7 @@ let setupPlanets=()=>{
   p=addV(xy(roughly(12000), 600),GrandpaPlanet);
   MechanicPlanet = new Planet(p.x,p.y,false,"Timmy", 340);
   Shop=MechanicPlanet.addFeature(new StaticObject(0,0,home_png, 140, ShopText), 100);
-  Shop.DialogUpdate = UpdateShopText;
+  Shop.DialogUpdate = updateMechanicText;
   Shop.hue=flo(rand(360));
 
 }

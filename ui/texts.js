@@ -10,10 +10,22 @@ let updateWorkshopText=()=>{
   stuff[0] = ["wood sword","weapon","stick",2];
   stuff[1] = ["ladder","utility","stick",16];
 
+  openTradeWindow(stuff);
+}
+
+let openTradeWindow=(stuff)=>{
   if(!tradeWindow.open)
     tradeWindow.open = true;
 
   tradeWindow.contents = stuff;
+}
+
+let updateMechanicText=()=>{
+  let stuff = [];
+  stuff[0] = [gpPart,gpPart,"coin",50];
+  stuff[1] = ["zoomzoom3000","upgrade","coin",500];
+
+  openTradeWindow(stuff);
 }
 
 // homeObjectText()
@@ -31,14 +43,14 @@ let UpdateMomText=()=>{
 // homeObjectText()
 //
 //
-
+/*
 let UpdateShopText=()=>{
   // if we can make something, make it
   if(trade(Shop,gpPart,gpPart,cash,50,false)) return;
   // otherwise just talk
   else Shop.setTandA(ShopText);
 }
-
+*/
 
 //
 //

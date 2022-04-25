@@ -28,6 +28,9 @@ let scale;
 // creates the audio context and starts the bgm
 
 let startSound=()=>{
+
+  if(!SoundEnabled) return;
+
   window.AudioContext = window.AudioContext || window.webkitAudioContext;
   aCtx = new AudioContext();
   samp = aCtx.sampleRate;
@@ -57,7 +60,7 @@ let playbar = () =>{
 
     // hats
     startBeat(
-      [4,4,4,4],
+      [8,8,8,8,8,8,8,8],
       ()=>play(
         40,
         .01,.01,.25,rand(.1,.7),
@@ -263,7 +266,7 @@ let play=(f,a,d,s,r,c,fu,v,ft,ff,fq,sl)=>
 // generate a sound buffer
 
 let preloadSound=(f,env,cycles,func,sli)=>{
-
+  console.log(f)
   let res = [];
   let pre = [];
   let len = samp * ( env.a+env.d+env.r );

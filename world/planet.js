@@ -140,13 +140,9 @@ class Planet {
               bob.setTandA(NegGreetings,()=>{
 
                 if(!know(this.language)) return;
-
                 let h = haveType(1,"muffin");
 
-                //console.log(h)
                 if(!bob.muffin){
-
-
                   if(h){
 
                     bob.setFrames(poses[randi(1,4)]);

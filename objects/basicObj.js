@@ -1,3 +1,5 @@
+
+
 // parent class with basic variables shared by most game objects
 class BasicObject {
   constructor(x,y,size,img,text,firstReadAction){
@@ -11,6 +13,26 @@ class BasicObject {
     this.windy=false;
     this.setSize(size);
     this.setTandA(text,firstReadAction);
+  }
+
+  setLootTable(t){
+    this.lootTable = t;
+  }
+
+  generateLoot(){
+    let lootlist = [];
+
+    if(this.lootTable!=undefined){
+      for(let i=0; i<this.lootTable.length; i++){
+        let item = this.lootTable[i];
+        if(rand()<item.dropChance){
+          let amount = randi(item.minNum, item.maxNum);
+          if(amount>0) lootlist.push({name:item.item.name, type:item.item.type, num:amount});
+        }
+      }
+    }
+
+    return lootlist;
   }
 
   // set size and calculate half size

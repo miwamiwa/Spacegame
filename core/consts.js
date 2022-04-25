@@ -77,7 +77,7 @@ const PlayerRotateRate = 0.14;
 const PlayerRotateRate2 = 0.24;
 const AccelerationLimit = 3;
 
-const PlayerWalkVelocity = 6;
+const PlayerWalkVelocity = 5;
 
 const PlayerStartX = 50;
 const PlayerStartY = 50;
