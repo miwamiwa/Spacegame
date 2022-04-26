@@ -393,55 +393,58 @@ update(){
       this.features.forEach(f=>f.display());
     });
 
-    let dataCount =0;
-    let color;
-    let imageData = this.ctx.getImageData(0, 0, 50, 50);
-    let newFrame = imageData.data;
+    this.updateWater();
+    this.counter++;
+  }
+}
 
-    if(this.counter%this.rainRate==0)
-    this.previous[flo(rand(50))][flo(rand(50))] = this.outMin+5;
+updateWater(){
 
-    if(this.counter%5==0){
-      for(let i=1; i<49; i++)
-      {
-        for(let j=1; j<49; j++)
-        {
+  let dataCount =0;
+  let color;
+  let imageData = this.ctx.getImageData(0, 0, 50, 50);
+  let newFrame = imageData.data;
 
-          this.current[i][j] =
-          ( this.previous[i - 1][j]
-            + this.previous[i + 1][j]
-            + this.previous[i][j - 1]
-            + this.previous[i][j + 1] ) / 2 - this.current[i][j];
+  if(this.counter%this.rainRate==0)
+  this.previous[flo(rand(50))][flo(rand(50))] = this.outMin+5;
 
-            this.current[i][j] = (this.current[i][j] * 0.7);
-            if(this.water[i][j]){
-              dataCount = 4*(j*50+i);
-              color = flo(this.outMin+(this.outMax-this.outMin)*( this.current[i][j] )/255);
-              color = flo(255 - color*0.5);
-              newFrame[dataCount] = color;
-              newFrame[dataCount+1] = color*0.9;
-              newFrame[dataCount+2] = color*0.9;
-              newFrame[dataCount+3] = 255;
-            }
-          }
-        }
+  if(this.counter%5==0){
+    for(let i=1; i<49; i++){
+      for(let j=1; j<49; j++){
 
-        this.ctx.putImageData(imageData, 0, 0);
-        let temp = [];
+        this.current[i][j] =
+        ( this.previous[i - 1][j]
+          + this.previous[i + 1][j]
+          + this.previous[i][j - 1]
+          + this.previous[i][j + 1] ) / 2 - this.current[i][j];
 
-        for(let i=0; i<50; i++){
-          temp[i] = [];
-
-          for(let j=0; j<50; j++){
-            temp[i][j] = this.previous[i][j];
-            this.previous[i][j] = this.current[i][j];
-            this.current[i][j] = temp[i][j];
+          this.current[i][j] = (this.current[i][j] * 0.7);
+          if(this.water[i][j]){
+            dataCount = 4*(j*50+i);
+            color = flo(this.outMin+(this.outMax-this.outMin)*( this.current[i][j] )/255);
+            color = flo(255 - color*0.5);
+            newFrame[dataCount] = color;
+            newFrame[dataCount+1] = color*0.9;
+            newFrame[dataCount+2] = color*0.9;
+            newFrame[dataCount+3] = 255;
           }
         }
       }
 
-      this.counter++;
+      this.ctx.putImageData(imageData, 0, 0);
+      let temp = [];
+
+      for(let i=0; i<50; i++){
+        temp[i] = [];
+
+        for(let j=0; j<50; j++){
+          temp[i][j] = this.previous[i][j];
+          this.previous[i][j] = this.current[i][j];
+          this.current[i][j] = temp[i][j];
+        }
+      }
     }
+
   }
 
   getGravityFor(input,d){
