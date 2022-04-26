@@ -92,7 +92,10 @@ class Vessel extends AnimObject {
       let d =dist(this,nP);
       // if we're beyond range of gravity (which == mass lol)
       // then nearest planet is undefined.
-      if(d >= nP.mass) nP=undefined;
+      if(d >= nP.mass){
+        nP=undefined;
+        currentPattern=undefined;
+      }
 
       else {
         // if in gravity range:

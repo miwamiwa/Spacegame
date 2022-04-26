@@ -19,6 +19,7 @@ let scount=0;
 
 // start game on page load
 window.onload =()=>{
+  preloadMarkov();
   loadImages();
   setupCanvas();
   setInterval(run,40);

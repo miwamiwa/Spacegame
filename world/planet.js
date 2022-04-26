@@ -1,6 +1,6 @@
 
 class Planet {
-  constructor(x,y,randomscenery,name, rad, minfruit){
+  constructor(x,y,randomscenery,name, rad, minfruit, isBarren){
 
     // mass and radius
     if(!rad) rad=rand(350,460);
@@ -28,6 +28,15 @@ class Planet {
     this.features = [];
     this.hue =flo(rand(360));
 
+    this.jazz = {
+      barCounter:0,
+      currentMelodySection:0,
+      headsPlayed:0,
+      playingMelody:true
+    };
+
+
+
     // create planet image, water
     this.make();
     // add trees
@@ -37,10 +46,35 @@ class Planet {
     //this.currency=cash;
     this.setLang("Onian");
 
-    // setup music
-    this.music();
+    if(isBarren!=undefined) this.setupMusic(isBarren);
+
     // all done
     planets.push(this);
+  }
+
+  setupMusic(isBarren){
+
+    // am i a barren planet?
+    this.isBarren = isBarren;
+    if(this.isBarren){
+      // setup music
+      this.music();
+    }
+    else {
+      newMusic(this);
+
+      this.jazz.bpm = randi(190,440);
+      this.jazz.beatLength = OneMinute / this.jazz.bpm;
+      this.jazz.measure = {
+        numerator: 4,
+        denominator: 4
+      }
+      this.jazz.barLength = this.jazz.measure.numerator * this.jazz.beatLength;
+      this.jazz.chanceOfShortNote = rand(.2,.9);
+      this.m={}
+      this.m.barlength=this.jazz.barLength;
+    }
+
   }
 
   // setup music for this planet
@@ -87,6 +121,8 @@ class Planet {
 
   populate(){
 
+    let peopleAdded = 0;
+
     if(ch(0.47)){
 
       // make a tribe
@@ -107,6 +143,7 @@ class Planet {
           // create person
           let size=s+randi(-5,5);
           let bob = this.addFeature(new AnimObject(0,0,size,poses[0]), s);
+          peopleAdded ++;
           planetMode(bob,true);
           bob.muffin=false;
 
@@ -177,6 +214,16 @@ class Planet {
           }
         }
       }
+
+      if(peopleAdded>0){
+        // not barren
+        this.setupMusic(false);
+      }
+      else {
+        // barren
+        this.setupMusic(true);
+      }
+
     }
 
 
