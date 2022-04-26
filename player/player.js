@@ -97,6 +97,8 @@ let moveX=(delta)=>{
   else player.running = "left";
   // move
   moveIt( PlayerWalkVelocity * delta, 0);
+
+  availableText2=undefined;
 }
 
 // moveY();
@@ -109,6 +111,7 @@ let moveY=(delta)=>{
   else player.running="up";
   // move
   moveIt(0,PlayerWalkVelocity * delta);
+  availableText2=undefined;
 }
 
 

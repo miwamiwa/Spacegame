@@ -1,6 +1,7 @@
 class AnimObject extends BasicObject {
   constructor(x,y,size,frames,text,func){
     // position,rotation,scale
+    console.log(x,y,size,frames,text,func)
     super(x,y,size,frames[0],text,func);
     this.bearing =0;
     // animation
@@ -26,7 +27,7 @@ class AnimObject extends BasicObject {
     // since we are a child of the planet object
     if(this.planetMode){
       // update "z-index"
-      if(nP) nP.sortFeatures();
+      //if(nP) nP.sortFeatures();
       // draw & update sprite
       this.draw(this);
     }

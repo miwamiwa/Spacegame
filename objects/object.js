@@ -6,7 +6,7 @@ class StaticObject extends BasicObject {
     // initialize object
     super(x,y,size,img,text,firstReadAction);
     this.setCollider();
-    this.berries=randi(1,4);
+    
   }
 
 
@@ -23,9 +23,7 @@ class StaticObject extends BasicObject {
     new Wiggle(this, 10, 100);
   }
 
-  berryText(){
-    return ["this tree has "+this.berry.replace("berry","")+"berries.","You picked "+this.berries+" "+plural(this.berry)+"."]
-  }
+
 
 
   display(){

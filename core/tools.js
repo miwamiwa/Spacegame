@@ -32,7 +32,9 @@ let transform=(pos,f,r)=>{
 }
 
 
-let plural=(t)=>{
+let plural=(t, num)=>{
+  if(num==1) return t;
+
   let i=t.length;
   if(i>0){
     i--;
