@@ -19,7 +19,7 @@ let scount=0;
 
 // start game on page load
 window.onload =()=>{
-  preloadMarkov();
+  //preloadMarkov();
   loadImages();
   setupCanvas();
   setInterval(run,40);
@@ -77,7 +77,6 @@ let run=()=>{
   runGame();
 
   mCtx.restore();
-
 }
 
 
@@ -138,6 +137,9 @@ let runStartScreen=(x,y)=>{
 
   scount+=.1;
   if(inputs.space) startGame();
+
+  // FOR DEBUG :
+  startGame();
 }
 
 

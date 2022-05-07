@@ -1,9 +1,12 @@
 let setupPopulatedPlanetMusic=(planet)=>{
 
-  //
-  newMusic(planet);
+  let bgm = getRandomBGM();
 
-  planet.jazz.bpm = randi(190,440);
+  planet.bgm=bgm;
+  //
+  //newMusic(planet);
+
+  planet.jazz.bpm = planet.bgm.bpm;
   planet.jazz.beatLength = OneMinute / planet.jazz.bpm;
   planet.jazz.measure = {
     numerator: 4,
@@ -11,6 +14,8 @@ let setupPopulatedPlanetMusic=(planet)=>{
   }
   planet.jazz.barLength = planet.jazz.measure.numerator * planet.jazz.beatLength;
   planet.jazz.chanceOfShortNote = rand(.2,.9);
+
+  // setup an "m" object for the bar length
   planet.m={}
-  planet.m.barlength=planet.jazz.barLength;
+  planet.m.barlength=planet.bgm.barLength;
 }

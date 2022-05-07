@@ -8,48 +8,37 @@
   <!-- MUSIC GEN -->
 
 
-      <!-- javascript libraries -->
-      <script src="sound/jazz/library/rita-full.js"></script>
+    <!-- generation -->
+    <script src="sound/jazz/Tunes/tunes.js"></script>
+    <script src="sound/jazz/scripts/generatePiece1.js"></script> <!-- 1 markov (combine chords and notes) method -->
+    <script src="sound/jazz/scripts/generatePiece2.js"></script> <!-- markov melody over markov harmony method -->
+    <script src="sound/jazz/scripts/generate.js"></script> <!-- markov + improviser method -->
+    <!-- library -->
+    <script src="sound/jazz/library/rita-full.js"></script>
+    <!-- classes -->
+    <script src="sound/jazz/improviser.js"></script>
+    <script src="sound/jazz/melodicLine.js"></script>
+    <script src="sound/jazz/bgm.js"></script>
+    <script src="sound/jazz/chord.js"></script>
+    <script src="sound/jazz/note.js"></script>
+    <script src="sound/jazz/scale.js"></script>
+    <script src="sound/jazz/m.js"></script>
+    <script src="sound/jazz/zik.js"></script>
+    <!-- midi -->
+    <script src="sound/jazz/midi/midiwriter.js"></script>
+    <script src="sound/jazz/midi/script.js"></script>
+    <script src="sound/jazz/script.js"></script>
 
-      <!-- UI -->
-      <script src="sound/jazz/ui/ui.js"></script>
-      <script src="sound/jazz/ui/UIElement.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.39/Tone.js"></script>
 
-      <!-- audio engine
-      <script src="js/audio/audio.js"></script>
-      <script src="js/audio/music.js"></script>  -->
-      <script src="sound/jazz/audio/playBar.js"></script>
+  <script src="sound/setupBarrenPlanetMusic.js"></script>
+  <script src="sound/setupPopulatedPlanetMusic.js"></script>
+  <script src="sound/envelope.js"></script>
+  <script src="sound/sound.js"></script>
 
-      <!-- tools for music theory -->
-      <script src="sound/jazz/musicTheory/theory.js"></script>
-      <script src="sound/jazz/musicTheory/m.js"></script>
-
-      <!-- chord generation -->
-
-      <!-- markov method -->
-      <script src="sound/jazz/generation/ChordGenUsingMarkovChain/tunes.js"></script>
-      <script src="sound/jazz/generation/ChordGenUsingMarkovChain/tools.js"></script>
-      <script src="sound/jazz/generation/ChordGenUsingMarkovChain/inferTonality.js"></script>
-      <script src="sound/jazz/generation/ChordGenUsingMarkovChain/createStructure.js"></script>
-      <script src="sound/jazz/generation/ChordGenUsingMarkovChain/generate.js"></script>
-
-      <!-- rule-based method -->
-      <script src="sound/jazz/generation/ChordGenUsingRuleSet/test.js"></script>
-
-      <!-- melody generation -->
-      <script src="sound/jazz/generation/MelodyGen/improv.js"></script>
-      <script src="sound/jazz/generation/MelodyGen/patterns.js"></script>
-      <script src="sound/jazz/generation/MelodyGen/theme.js"></script>
-      <script src="sound/jazz/generation/MelodyGen/melodicLine.js"></script>
-      <script src="sound/jazz/generation/MelodyGen/chordScaleRelationships.js"></script>
-
-      <!-- main script -->
-      <script src="sound/jazz/tools.js"></script>
-      <script src="sound/jazz/script.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.39/Tone.js"></script>
-
-      <script src="sound/setupBarrenPlanetMusic.js"></script>
-      <script src="sound/setupPopulatedPlanetMusic.js"></script>
+  <script src="sound/og_generator/improv.js"></script>
+  <script src="sound/og_generator/harmony.js"></script>
+  <script src="sound/og_generator/script.js"></script>
 
   <!-- GAME -->
 
@@ -63,10 +52,7 @@
   <script src="core/script.js"></script>
   <script src="core/tools.js"></script>
 
-  <script src="sound/envelope.js"></script>
-  <script src="sound/sound.js"></script>
-  <script src="sound/improv.js"></script>
-  <script src="sound/harmony.js"></script>
+
 
   <script src="objects/basicObj.js"></script>
   <script src="objects/object.js"></script>

@@ -147,9 +147,7 @@ const bgFill = "#2a1f42";
 const black = "black";
 const tbFill = "#445c";
 
-const defaultScales = [
-  [0,1,3,4,6,7,9,10]
-]
+
 
 const patterns = [
   [0,1,2,3],

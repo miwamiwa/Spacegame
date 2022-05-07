@@ -1,4 +1,24 @@
+const Sharp = "#";
+const Flat = "b";
+const OneMinute = 60000;
 
+
+let limit=(num,maxnum)=> Math.min(maxnum,num);
+
+let removeLastChar=(str)=>{
+  return str.substring(0,str.length-1);
+}
+
+
+let isString=(input)=>{
+  return typeof input === 'string' || input instanceof String
+}
+
+let lastListElement=(list)=>{
+  return list[list.length-1];
+}
+
+let chooseBetween=(input)=> input[randi(input.length)];
 
 // convert Hex color to an array of rgba values
 let HexToRgba =(hexinput)=>{

@@ -93,8 +93,10 @@ class Vessel extends AnimObject {
       // if we're beyond range of gravity (which == mass lol)
       // then nearest planet is undefined.
       if(d >= nP.mass){
+        if(nP.bgm!=undefined) nP.bgm.reset();
         nP=undefined;
         currentPattern=undefined;
+        Impro.initializeImprov();
       }
 
       else {
@@ -145,7 +147,17 @@ class Vessel extends AnimObject {
         let d = dist(this,p);
 
         // are we in gravity range of this planet?
-        if(d < p.mass) nP = p;
+        if(d < p.mass){
+          if(nP==undefined){
+            if(p.bgm!=undefined){
+              p.bgm.reset();
+              currentBGM = p.bgm;
+              Impro.initializeImprov();
+            }
+
+          }
+          nP = p;
+        }
         // calculate distance to planet
         p.d2p = flo(d);
 

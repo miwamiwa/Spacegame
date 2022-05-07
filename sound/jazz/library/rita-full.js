@@ -1,3 +1,10 @@
+
+// RiTa Setting (initial value was 35)
+// max harmony length before expanding
+let MaxSentenceLength = 50;
+
+let MinSentenceLength = 6;
+
 /*jshint browser:true, -W100:true, evil:true */
 
 // this is a slightly edited version of Rita.js
@@ -1713,7 +1720,7 @@ RiMarkov.prototype = {
     this.pathTrace = [];
     //this.sentenceList = [];
     this.sentenceStarts = [];
-    this.minSentenceLength = 6;
+    this.minSentenceLength = MinSentenceLength;
     this.maxSentenceLength = MaxSentenceLength;
     this.root = new TextNode(null, 'ROOT');
     this.isSentenceAware = (a.length > 1 && !a[1]) ? false : true;
@@ -2066,7 +2073,7 @@ RiMarkov.prototype = {
 
     //console.log("["+first+"]");
     //console.log("["+tokens[tokens.length - 2]+"]")
-
+    // SAM EDIT
     let ignoreFirstCapitalizationRule = true;
     if (!ignoreFirstCapitalizationRule && !first.match(/[A-Z]\S*/)) {
       //console.log("ignored because no capitalization")
@@ -2081,8 +2088,9 @@ RiMarkov.prototype = {
       return false;
     }
 
+    // SAM EDIT
     // check for mismatch between mode at start and at the end
-    if(!bothChordsAreHomeKey(first,finalChord)){
+    if(!m.bothChordsAreHomeKey(first,finalChord)){
       if (this.printIgnoredText)
         log("Mismatched start and end mode: " + sent);
       return false;
@@ -2252,7 +2260,9 @@ RiMarkov.prototype = {
   },
 
   _validSentenceStart: function(word) {
-    // THIS IS EDITED (REMOVED NEED FOR CAPITALIZATION FOR A WORD TO BE CONSIDERED A SENTENCE START)
+
+    // SAM EDIT
+    // (REMOVED NEED FOR CAPITALIZATION FOR A WORD TO BE CONSIDERED A SENTENCE START)
     //console.log("checking if "+word+" is valid start word");
     //console.log("result: "+(!this.isSentenceAware || word && word.match(SSRE)))
     return (!this.isSentenceAware || word)// && word.match(SSRE));
