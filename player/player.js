@@ -25,7 +25,8 @@ let SpeedLimit = speedLimit1;
 let setupPlayer=()=>{
   // space ship
   player = new Vessel(0,0,PlayerSize,VesselAnimation);
-  player.name="my ship"
+  player.name="my ship";
+  refreshCharacterPanel();
   // player character
   Dude = new AnimObject(PlayerStartX,PlayerStartY,DudeSize,poses[0]);
 

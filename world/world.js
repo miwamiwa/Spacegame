@@ -26,6 +26,7 @@ let Son2;
 let setupCanvas=()=>{
   // create canvas
   mainCanvas = canv();
+  mainCanvas.id="mainCanvas"
   canvasSize = xy(800,600);
 
   mainCanvas.width = canvasSize.x;
@@ -34,7 +35,7 @@ let setupCanvas=()=>{
   mCtx = getCtx(mainCanvas);
   mCtx.font = "bold "+font+"px Arial";
 
-  mainMouse = attachMouseControls(newMouseData(),mainCanvas,mouseClickedOverCanvas);
+  mainMouse = attachMouseControls(newMouseData(),mainCanvas,mouseClickedOverCanvas,mainCanvasMouseOver);
 
   let b=document.body;
   document.getElementById("canvasarea").appendChild(mainCanvas);

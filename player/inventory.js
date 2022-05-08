@@ -69,10 +69,11 @@ let isUseable=(item)=>{
 let EquipItem=(item)=>{
   console.log("equip");
   item.num--;
-  if(player.equippedItem!=undefined){
-    player.equippedItem.num++;
+  if(player.equipedItem!=undefined){
+    player.equipedItem.num++;
   }
-  player.equippedItem = item;
+  player.equipedItem = item;
+  refreshCharacterPanel();
   RefreshInventory();
 }
 

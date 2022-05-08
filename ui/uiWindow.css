@@ -23,3 +23,7 @@
 .uiwindow_body{
   padding:5px;
 }
+
+#mapCanvas{
+  margin:10px;
+}

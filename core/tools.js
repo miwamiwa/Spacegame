@@ -230,6 +230,7 @@ let abs=(i)=> Math.abs(i);
 let teach=(l)=>{
   availableText2=["I can teach you "+l];
   knownLanguages.push(l);
+  refreshCharacterPanel();
 }
 
 let know=(l)=>knownLanguages.includes(l);

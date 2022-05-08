@@ -1,3 +1,26 @@
+let characterUI;
+let craftUI;
+let tradeUI;
+let mapUI;
+let notesUI;
+
+let setupUI=()=>{
+  if(inventoryUI==undefined) inventoryUI = new UIWindow("inventory");
+  characterUI=new UIWindow("character");
+  craftUI = new UIWindow("crafting");
+  tradeui = new UIWindow("trade");
+  mapUI = new UIWindow("map");
+  notesUI = new UIWindow("notes");
+
+  setupMap();
+}
+
+let uiUpdate=()=>{
+
+  updateMapUI();
+}
+
+
 let popupText=(input)=>{
   textCounter=0;
   availableText=undefined;
@@ -33,7 +56,7 @@ let updatePlayerUi=()=>{
   }
 
   drawText(t,middle.x+20,middle.y-80,c);
-  drawText("Known languages: "+knownLanguages.join(", "), 10, 590);
+  //drawText("Known languages: "+knownLanguages.join(", "), 10, 590);
 
   if(tradeWindow.open) displayCraftWindow();
 }

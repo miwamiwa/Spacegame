@@ -17,4 +17,22 @@ class Tree extends StaticObject {
   berryText(){
     return ["this tree has "+this.berry.replace("berry","")+"berries.","You picked "+this.berries+" "+plural(this.berry,this.berries)+"."]
   }
+
+  getName(){
+    console.log(this)
+    this.name = `${this.berry} tree (${this.berries})`
+  }
+
+  // for tree objects
+  lootBerry(){
+    for(let i=0; i<this.berries; i++) AddToInventory({name:this.berry,type:"berry"});
+
+    let num = randi(3);
+    for(let i=0; i<num; i++) AddToInventory({name:"stick",type:"stick"});
+
+    this.talker = undefined;
+    this.berries = 0;
+
+    new Wiggle(this, 10, 100);
+  }
 }

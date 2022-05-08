@@ -146,6 +146,7 @@ let planetInputs=()=>{
   let running = player.running;
   let p =0;
 
+
   player.running = false;
 
   // if inputs pressed, move player

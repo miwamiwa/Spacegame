@@ -13,6 +13,7 @@ let RandomSeed = 0;
 let gamestate = "startscreen";
 // counter for start screen
 let scount=0;
+let frameCount =0;
 
 
 
@@ -33,7 +34,7 @@ window.onload =()=>{
 
 let startGame=()=>{
 
-  if(inventoryUI==undefined) inventoryUI = new UIWindow("inventory");
+  setupUI();
 
   startSound();
   setupPlayer();
@@ -78,7 +79,17 @@ let run=()=>{
   else if(gamestate=="game")
   runGame();
 
+  uiUpdate();
   mCtx.restore();
+  frameCount++;
+
+  if(mainCanvasHovered&&frameCount%30==29){
+
+    mapCamTarget = multV(mapScale,player);
+    mapCamTarget = subV(mapCamTarget,multV(0.5,mapCanvasSize));
+    updateMap();
+
+  }
 }
 
 

@@ -460,8 +460,12 @@ updateWater(){
       }
 
 
-      if(!input.crashed)
-      this.visited = true;
+      if(!this.visited && !input.crashed){
+        this.visited = true;
+        knownPlanets.push(this);
+        updateMap();
+      }
+
 
       input.landed = true;
     }

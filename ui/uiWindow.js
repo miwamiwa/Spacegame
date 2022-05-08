@@ -2,6 +2,17 @@ let windowIDCounter =0;
 let allWindowsById = [];
 let allWindowsByName = [];
 
+let toggleWindow=(name)=>{
+  allWindowsByName[name].toggle();
+
+  if(name=="map"&&allWindowsByName[name].visible){
+    mapScale = 0.01
+    mapCamTarget = multV(mapScale,player);
+    mapCamTarget = subV(mapCamTarget,multV(0.5,mapCanvasSize));
+    updateMap();
+  }
+}
+
 class UIWindow {
   constructor(name){
     this.name = name;
@@ -68,6 +79,10 @@ class UIWindow {
 
   addText(txt){
     this.bodyElement.innerHTML += txt;
+  }
+
+  addElement(el){
+    this.bodyElement.appendChild(el);
   }
 }
 

@@ -9,7 +9,7 @@ class BasicObject {
     this.active = true;
     this.hue =0;
     this.id="";
-    this.equippedItem = undefined;
+    this.equipedItem = undefined;
     this.windy=false;
     this.setSize(size);
     this.setTandA(text,firstReadAction);
