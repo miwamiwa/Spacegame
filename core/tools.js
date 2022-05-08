@@ -161,32 +161,7 @@ let angleFromDirection=(d)=>
 let vxy=(i)=> xy(i.vx,i.vy);
 
 
-// rand()
-//
-// get a random value
-let rand =(min,max)=>{
-  // 0 args: from 0 to 1
-  if(min==undefined&&max==undefined)
-  return random();
-  //return Math.random();
 
-  // 1 arg: from 0 to arg1
-  else if(max==undefined)
-  return rand()*min;
-  // 2 args: from arg1 to arg2
-  else return min + rand() * (max-min);
-}
-
-
-let random=()=> {
-    var x = Math.sin(RandomSeed++) * 10000;
-    return x - Math.floor(x);
-}
-
-
-
-
-let roughly=(i)=>rand(i-1000,i+1000);
 
 //dist()
 //
@@ -220,8 +195,7 @@ let directionFromObjectToObject=(o1, o2)=>{
 
 let zero=xy(0,0);
 
-let ch=(i)=>rand()<i;
-let randi=(i,j)=>flo(rand(i,j));
+
 // abs()
 //
 // returns abs value
@@ -236,10 +210,7 @@ let teach=(l)=>{
 let know=(l)=>knownLanguages.includes(l);
 
 
-// RandomFromArray()
-//
-// return a random value from given array
-let RandomFromArray=(array)=> array[flo(rand(array.length))]
+
 
 
 let usedPlanetNames = [];

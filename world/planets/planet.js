@@ -2,10 +2,14 @@
 class Planet {
   constructor(x,y,randomscenery,name, rad, minfruit, isBarren){
 
+    // seeded random for this planet
+    this.randomseed = generatePlanetSeed();
+    this.rng = new RNG(this.randomseed);
+
     // mass and radius
-    if(!rad) rad=rand(350,460);
+    if(!rad) rad=this.rng.randi(350,460);
     this.r = rad;
-    this.mass = rand(800,2000);
+    this.mass = this.rng.randi(800,2000);
 
     // position
     this.half =0; // for camera calculations
@@ -18,18 +22,14 @@ class Planet {
     this.bobsMuffined=0
     this.totalBobs=0;
     this.prizeAwarded=false;
+
     // random planet name
-    if(!name){
-      name = RandomFromArray(PlanetNames);
-      while(usedPlanetNames.includes(name))
-      name += flo(rand(100));
-      usedPlanetNames.push(name);
-    }
+    if(!name) name = randomPlanetName();
     this.name = name;
 
     // children
     this.features = [];
-    this.hue =flo(rand(360));
+    this.hue=this.rng.randi(360);
 
     // create planet image, water
     this.make();
@@ -79,7 +79,7 @@ class Planet {
   populate(){
 
     // populate!
-    if(ch(0.47)) this.tribe = new Tribe(this);
+    if(this.rng.ch(0.47)) this.tribe = new Tribe(this);
 
     // setup music accordingly
     if(this.tribe!=undefined) this.setupMusic(false);
@@ -87,117 +87,26 @@ class Planet {
 
   }
 
-
-
-
+  // check if given position is in water
   posIsInWater(p){
-    let x = this.toScale(p.y);
-    let y = this.toScale(p.x);
-    let w = this.water[y+1][x];
-
-    if(w) this.previous[y][x+1] = 180;
-    return w;
+    return this.surface.posIsInWater(p);
   }
 
   toScale(i){
     return flo(50*(i + this.r)/(2*this.r));
   }
 
-  // make()
-  //
-  // make planet canvas
-
+  // make planet surface
   make(){
-
-    this.rainRate = randi(1,20);
-    this.counter=0;
-
-    this.planet=scanv();
-    this.planet2=scanv();
-    this.water = [];
-    this.current = [];
-    this.previous = [];
-
-
-    let ctx=getCtx(this.planet);
-    let ctx2=getCtx(this.planet2); // mask canvas
-    this.ctx=ctx;
-    ctx2.fillStyle=black;
-
-    for(let y=0; y<50; y++){
-      this.water[y]=[];
-      this.current[y]=[];
-      this.previous[y]=[];
-
-      let r = rand(y);
-      let r2 = rand(y%30);
-      let fact = rand(0,10);
-      let started=false;
-
-      for(let x=0; x<50; x++){
-
-        this.current[y][x] = 0;
-        this.previous[y][x] = 0;
-
-        if(dist(xy(x,y),xy(25,25))<25){
-
-          if(!started){
-            started=true;
-            if(ch(0.5)) this.water[y][x]=true;
-          }
-
-          let f=`#${randi(3,7)}8cf`;
-          if(x<r||x>r2) f="#8bef";
-
-          ctx.fillStyle=f;
-          ctx.fillRect(x,y,1,1);
-          ctx2.fillRect(x,y,1,1);
-
-          if(
-            x>0&&y>0&&ch(.005)
-            ||(this.water[y][x-1]&&ch(.7))
-            ||(this.water[y-1][x]&&ch(.3))
-          )
-          this.makeWater(y,x);
-        }
-
-        r2 += rand(-fact,fact)
-      }
-    }
-
-
-    for(let i=0; i<49; i++){
-      for(let j=0; j<49; j++){
-        if(this.water[i][j]){
-          if(ch(.4)) this.makeWater(i-1,j);
-          if(ch(.4)) this.makeWater(i,j-1);
-          if(ch(.4)) this.makeWater(i+1,j);
-          if(ch(.4)) this.makeWater(i,j+1);
-        }
-      }
-    }
-
-    this.outMin = 120;
-    this.outMax = 225;
-  }
-
-
-  makeWater(x,y,ctx){
-    if(dist(xy(x,y),xy(25,25))<25){
-      this.water[x][y]=true;
-      this.ctx.fillStyle="#ca8f";
-      this.ctx.fillRect(x,y,1,1);
-    }
+    this.surface = new Surface(this.rng,this.r);
   }
 
   addFeature(obj, r){
     if(r) this.spot(obj,r);
-
     this.features.push(obj);
     this.sortFeatures();
     return obj;
   }
-
 
   spot(obj,r){
     setV(obj,this.findAvailableSpot(r));
@@ -240,7 +149,7 @@ class Planet {
   // return a random position on this planet
 
   rPos(){
-    return rand(-this.r,this.r);
+    return this.rng.rand(-this.r,this.r);
   }
 
 
@@ -256,6 +165,7 @@ class Planet {
     // keep picking positions until one with no overlaps is found
     while(!found){
       if(!i)i=0.9;
+      // get random position
       pos = this.rInRange(i);
       let clear = true;
       //if(this.posIsInWater(pos)) continue;
@@ -284,18 +194,18 @@ class Planet {
 
     // generate a family of trees
     this.trees = [];
-    this.treeCount = randi(24,32);
+    this.treeCount = this.rng.randi(24,32);
 
     this.localBerry = {
-      berryName:RandomFromArray(BerryNames),
-      treeFamily:createNewTreeType()
+      berryName:this.rng.randomFromArray(BerryNames),
+      treeFamily:createNewTreeType(this.rng)
     }
 
     for(let i=0; i<this.treeCount; i++) this.newTree();
 
     // add rocks
     this.rocks = [];
-    this.rockCount = randi(6, 12);
+    this.rockCount = this.rng.randi(6, 12);
     for(let i=0; i<this.rockCount; i++) this.newRock();
 
     // order features by y
@@ -310,7 +220,7 @@ class Planet {
 
   newRock(){
 
-    let size = flo(rand(40, 120));
+    let size = this.rng.randi(40, 120);
     let rock = this.addFeature( new Rock(size),size);
     this.rocks.push(rock);
   }
@@ -332,26 +242,19 @@ class Planet {
 
   setLang(l){
     this.language=l;
-    this.hue=allLanguages.indexOf(this.language)*30+rand(-1,1)
+    this.hue=allLanguages.indexOf(this.language)*30+this.rng.rand(-1,1)
   }
 
-  // addCheese()
-  //
-  // litter cheese crackers all over the place
-  /*
-  addCheese(){
-  let count = flo(rand(6,12));
-  for(let i=0; i<count; i++){
-  let pos = this.rSurf(1);
-  let c = new StaticObject(pos.x,pos.y,cracker_png,10);
-  c.edible = true;
-  c.collider = false;
-  c.id="cheese";
-  this.features.push(c);
-}
-}
-*/
 
+// displayAtmosphere()
+// displays ring around the planet
+displayAtmosphere(){
+  // draw atmosphere
+  fill("#5593");
+  mCtx.beginPath();
+  circ(0,0,this.mass);
+  mCtx.fill();
+}
 
 // update()
 //
@@ -366,21 +269,16 @@ update(){
 
     transform(pos,()=>{
       hue(this.hue);
-      // draw atmosphere
-      fill("#5593");
-      mCtx.beginPath();
-      circ(0,0,this.mass);
-      mCtx.fill();
 
-      // draw mask
+      this.displayAtmosphere();
+
       mCtx.globalCompositeOperation = 'destination-out';
-      mCtx.drawImage(this.planet2,-this.r,-this.r,this.r*4,this.r*4);
-
+      this.surface.drawMask(mCtx);
       // draw things inside mask:
       transform(zero,()=>{
         // draw planet
         mCtx.globalCompositeOperation = 'xor';
-        mCtx.drawImage(this.planet,-this.r,-this.r,this.r*4,this.r*4);
+        this.surface.draw(mCtx);
         // draw shadows
         this.features.forEach(f=>displayShadow(f));
       });
@@ -393,59 +291,10 @@ update(){
       this.features.forEach(f=>f.display());
     });
 
-    this.updateWater();
-    this.counter++;
+    this.surface.updateWater();
+
   }
 }
-
-updateWater(){
-
-  let dataCount =0;
-  let color;
-  let imageData = this.ctx.getImageData(0, 0, 50, 50);
-  let newFrame = imageData.data;
-
-  if(this.counter%this.rainRate==0)
-  this.previous[flo(rand(50))][flo(rand(50))] = this.outMin+5;
-
-  if(this.counter%5==0){
-    for(let i=1; i<49; i++){
-      for(let j=1; j<49; j++){
-
-        this.current[i][j] =
-        ( this.previous[i - 1][j]
-          + this.previous[i + 1][j]
-          + this.previous[i][j - 1]
-          + this.previous[i][j + 1] ) / 2 - this.current[i][j];
-
-          this.current[i][j] = (this.current[i][j] * 0.7);
-          if(this.water[i][j]){
-            dataCount = 4*(j*50+i);
-            color = flo(this.outMin+(this.outMax-this.outMin)*( this.current[i][j] )/255);
-            color = flo(255 - color*0.5);
-            newFrame[dataCount] = color;
-            newFrame[dataCount+1] = color*0.9;
-            newFrame[dataCount+2] = color*0.9;
-            newFrame[dataCount+3] = 255;
-          }
-        }
-      }
-
-      this.ctx.putImageData(imageData, 0, 0);
-      let temp = [];
-
-      for(let i=0; i<50; i++){
-        temp[i] = [];
-
-        for(let j=0; j<50; j++){
-          temp[i][j] = this.previous[i][j];
-          this.previous[i][j] = this.current[i][j];
-          this.current[i][j] = temp[i][j];
-        }
-      }
-    }
-
-  }
 
   getGravityFor(input,d){
     // d is the distance from the input object to the center of this planet
@@ -491,3 +340,23 @@ updateWater(){
     }
   }
 }
+
+
+// LOL
+// gotta bring back the cheese some day
+// addCheese()
+//
+// litter cheese crackers all over the place
+/*
+addCheese(){
+let count = flo(rand(6,12));
+for(let i=0; i<count; i++){
+let pos = this.rSurf(1);
+let c = new StaticObject(pos.x,pos.y,cracker_png,10);
+c.edible = true;
+c.collider = false;
+c.id="cheese";
+this.features.push(c);
+}
+}
+*/

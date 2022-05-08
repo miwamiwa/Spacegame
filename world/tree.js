@@ -19,7 +19,7 @@ class Tree extends StaticObject {
   }
 
   getName(){
-    console.log(this)
+    //console.log(this)
     this.name = `${this.berry} tree (${this.berries})`
   }
 

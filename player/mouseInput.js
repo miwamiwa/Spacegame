@@ -44,7 +44,7 @@ let attachMouseControls=(data,canvas,clickevent,mouseoverfunc)=>{
 let mainCanvasHovered=false;
 let mainCanvasMouseOver=()=>{
   mainCanvasHovered=true;
-  console.log(mainCanvasHovered);
+  //console.log(mainCanvasHovered);
 }
 
 
