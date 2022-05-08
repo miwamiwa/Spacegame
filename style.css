@@ -1,3 +1,6 @@
+*{
+  user-select: none;
+}
 body{
   background-color:black;/*#213d;*/
   width:95vw;
@@ -5,6 +8,7 @@ body{
   font-family:arial;
   color:white;
   font-weight:bold;
+  overflow:hidden;
 }
 #mainCanvas{
   width:800px;
@@ -24,5 +28,10 @@ body{
 .bottomButton{
   padding:10px 20px;
   border-style:solid;
+  background-color:#555f;
   cursor:pointer;
+}
+
+.bottomButton:hover{
+  background-color:#888f;
 }

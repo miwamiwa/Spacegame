@@ -2,8 +2,15 @@
   position:fixed;
   min-width:100px;
   min-height:100px;
+
+  max-width:500px;
   z-index:100;
   background-color:grey;
+
+  border-style:solid;
+  border-width:1px;
+  border-color:black;
+  box-shadow:2px 2px #0005;
 }
 
 .uiwindow_closebutton{
@@ -11,7 +18,14 @@
   top:5px;
   right:10px;
   cursor:pointer;
+  padding:0 10px;
   color:black;
+  background-color:white;
+}
+
+.uiwindow_closebutton:hover{
+  color:white;
+  background-color:black;
 }
 
 .uiwindow_title{

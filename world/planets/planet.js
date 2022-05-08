@@ -308,13 +308,9 @@ update(){
         input.crash();
       }
 
-
       if(!this.visited && !input.crashed){
-        this.visited = true;
-        knownPlanets.push(this);
-        updateMap();
+        this.visit();
       }
-
 
       input.landed = true;
     }
@@ -326,6 +322,12 @@ update(){
 
     // otherwise gravity is 0
     return 0;
+  }
+
+  visit(){
+    this.visited = true;
+    knownPlanets.push(this);
+    updateMap();
   }
 
   // removeDude()

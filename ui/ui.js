@@ -3,6 +3,7 @@ let craftUI;
 let tradeUI;
 let mapUI;
 let notesUI;
+let aboutUI;
 
 let setupUI=()=>{
   if(inventoryUI==undefined) inventoryUI = new UIWindow("inventory");
@@ -12,7 +13,26 @@ let setupUI=()=>{
   mapUI = new UIWindow("map");
   notesUI = new UIWindow("notes");
 
+  setupAbout();
+
   setupMap();
+}
+
+let setupAbout=()=>{
+  aboutUI = new UIWindow("about");
+  aboutUI.setText(`
+      planets by sam pc
+      <br><br>
+      Controls:
+      <br><br>
+      (while on planet) WASD to move, SPACE to interact.
+      <br><br>
+      (while on vessel) W to accelerate, AD to rotate, SPACE to stop, E to exit vessel.
+      <br><br>
+      in this game, you pretty much just roam space and give out muffins to the people you meet ;) Each planet gets a unique look, different trees, even a generated soundtrack. There's even different languages to learn if you can find a sage who can teach you.
+      <br><br>
+      this was originally made in 2021 for <a href="https://js13kgames.com/entries/spacew">js13k</a>, where the goal is to make a javascript game with a 13kb zip file limit `
+    );
 }
 
 let uiUpdate=()=>{
