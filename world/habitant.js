@@ -8,6 +8,7 @@ class Habitant extends AnimObject{
     this.planet = planet;
     this.tribe = tribe;
     this.isSage = false;
+    this.name="habitant";
   }
 
   becomeSage(){

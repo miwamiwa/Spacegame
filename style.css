@@ -10,3 +10,18 @@ canvas{
   width:800px;
   height:600px;
 }
+
+#bottombar{
+  width:800px;
+  background-color:grey;
+}
+
+#inventoryButton{
+
+}
+
+.bottomButton{
+  padding:10px 20px;
+  border-style:solid;
+  cursor:pointer;
+}

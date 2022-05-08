@@ -2,6 +2,7 @@
 let mainCanvas;
 let mCtx;
 let middle = xy(400,260);
+let canvasSize;
 
 // Planets
 let HomePlanet;
@@ -25,10 +26,15 @@ let Son2;
 let setupCanvas=()=>{
   // create canvas
   mainCanvas = canv();
-  mainCanvas.width = 800;
-  mainCanvas.height = 600;
+  canvasSize = xy(800,600);
+
+  mainCanvas.width = canvasSize.x;
+  mainCanvas.height = canvasSize.y;
+
   mCtx = getCtx(mainCanvas);
   mCtx.font = "bold "+font+"px Arial";
+
+  mainMouse = attachMouseControls(newMouseData(),mainCanvas,mouseClickedOverCanvas);
 
   let b=document.body;
   document.getElementById("canvasarea").appendChild(mainCanvas);
@@ -50,19 +56,23 @@ let setupPlanets=()=>{
   HomePlanet = new Planet(p.x,p.y, false, "Home, sweet home", 550, 7, false);
   closestPlanet=planets[0];
 
-  HomePlanet.addFeature( new StaticObject(0,0,home_png, 100, HomeText), 100);
+  let homeobject = new StaticObject(0,0,home_png, 100, HomeText);
+  homeobject.name="my house"
+  HomePlanet.addFeature( homeobject, 100);
 
   Mom = HomePlanet.addFeature( new AnimObject(0,0,100,poses[0],MomText), 100);
   Mom.DialogUpdate = UpdateMomText;
+  Mom.name="mom";
   planetMode(Mom);
 
   Son2 = HomePlanet.addFeature( new AnimObject(0,0,40,poses[0],Son2Text), 50);
+  Son2.name="Son II (my brother)"
   planetMode(Son2);
 
   let workshop = HomePlanet.addFeature( new StaticObject(0,0,home_png, 80, WorkshopText), 100);
   workshop.hue = 80;
   workshop.DialogUpdate = updateWorkshopText;
-
+  workshop.name="workshop"
 
   // create grandpas's planet:
 
@@ -73,6 +83,7 @@ let setupPlanets=()=>{
   GrandpaPlanet.addFeature(new StaticObject(0,0,vessel_png, 100, ["Grandpa's ship"]),70);
   Grandpa = GrandpaPlanet.addFeature(new AnimObject(0,0,100,poses[0],GrandpaText), 100);
   Grandpa.DialogUpdate = UpdateGPText;
+  Grandpa.name="grandpa"
   planetMode(Grandpa);
 
   // create the mechanic's planet:
@@ -83,6 +94,7 @@ let setupPlanets=()=>{
   Shop=MechanicPlanet.addFeature(new StaticObject(0,0,home_png, 140, ShopText), 100);
   Shop.DialogUpdate = updateMechanicText;
   Shop.hue=flo(rand(360));
+  Shop.name="mechanic's shop"
 
 }
 

@@ -4,7 +4,7 @@ class Vessel extends AnimObject {
   constructor(x,y,size,frames,t,f){
 
     super(x,y,size,frames,t,f);
-
+    
     this.throttle =0;
     this.mass = VesselMass;
     this.crashThreshold = CrashThreshold / this.mass;

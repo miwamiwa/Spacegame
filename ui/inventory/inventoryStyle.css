@@ -1,0 +1,19 @@
+.equipable_txt{
+  color:#99ef;
+}
+
+.useable_txt{
+  color:#9e9f;
+}
+
+.greyed{
+  color:#bbbf;
+}
+
+.inventoryitem{
+  cursor:pointer;
+}
+
+.inventoryitem:hover{
+  background-color:#999f;
+}

@@ -1,0 +1,25 @@
+.uiwindow{
+  position:fixed;
+  min-width:100px;
+  min-height:100px;
+  z-index:100;
+  background-color:grey;
+}
+
+.uiwindow_closebutton{
+  position:absolute;
+  top:5px;
+  right:10px;
+  cursor:pointer;
+  color:black;
+}
+
+.uiwindow_title{
+  padding:5px;
+  background-color:white;
+  color:black;
+}
+
+.uiwindow_body{
+  padding:5px;
+}

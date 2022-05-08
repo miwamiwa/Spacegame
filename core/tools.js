@@ -83,6 +83,7 @@ let sq=(i)=>Math.pow(i,2);
 
 let addV=(v,v2)=>xy(v.x+v2.x,v.y+v2.y);
 let subV=(v,v2)=>xy(v.x-v2.x,v.y-v2.y);
+let multV=(i,v)=>xy(v.x*i,v.y*i);
 
 
 let xy=(x,y)=>{

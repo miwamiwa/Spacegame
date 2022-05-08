@@ -1,7 +1,7 @@
 class Rock extends StaticObject {
   constructor(size){
     super(0, 0, hill_png, size);
-
+    this.name="rock";
     this.isFavorite=false;
     this.id="hill";
     this.collidersize = size * 0.35;
@@ -19,6 +19,7 @@ class Rock extends StaticObject {
           availableText2=["This is now your favorite rock!"];
           player.favoriteRock=this;
           this.isFavorite = true;
+          this.name="favorite rock";
         }
 
         // if there is a fav

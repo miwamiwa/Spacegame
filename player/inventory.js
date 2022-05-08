@@ -4,6 +4,8 @@ let inventoryOptions = {
   item:undefined
 }
 
+
+// old version
 let displayInventory=()=>{
   if(inventoryOptions.shown){
     frect(zero,mainCanvas.width,mainCanvas.height,tbFill);
@@ -29,29 +31,30 @@ let AddToInventory =(item)=>{
 
 }
 
-
+let inventoryByIndex = [];
 let RefreshInventory=()=>{
-  inventoryString = "inventory";
+  inventoryString = "";
   let counter =0;
-//  console.log("o")
+  inventoryByIndex = [];
+
   for(let i in inventory){
-    //console.log(inventory[i]);
-
     if(inventory[i].num>0 && (inventory[i].equipped!=true)){
-
-      inventoryString += "\n"+inventory[i].name+": "+inventory[i].num;
-
+      inventoryByIndex.push(inventory[i])
+      inventoryString += formatInventoryItem(inventory[i],counter);//.name,inventory[i].num);
+      /*
       if(inventoryOptions.shown && inventoryOptions.selection==counter){
         inventoryOptions.item = inventory[i];
         if(isEquipable(inventory[i])) inventoryString += " - e to equip";
         if(isUseable(inventory[i])) inventoryString += " - e to use";
-
         if(counter>0) inventoryString += " - w up";
         if(counter<Object.keys(inventory).length-1) inventoryString += " - s down";
       }
+      */
+      counter ++;
     }
-    counter ++;
+
   }
+  updateInventoryUI();
 }
 
 let isEquipable=(item)=>{

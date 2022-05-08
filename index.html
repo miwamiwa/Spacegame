@@ -65,9 +65,14 @@
   <script src="player/inventory.js"></script>
   <script src="player/trade.js"></script>
   <script src="player/inputs.js"></script>
+  <script src="player/mouseInput.js"></script>
 
   <script src="ui/ui.js"></script>
   <script src="ui/texts.js"></script>
+  <script src="ui/uiWindow.js"></script>
+  <script src="ui/inventory/inventoryUI.js"></script>
+  <link rel="stylesheet" href="ui/inventory/inventoryStyle.css">
+  <link rel="stylesheet" href="ui/uiWindow.css">
 
   <script src="world/stars.js"></script>
   <script src="world/planet.js"></script>
@@ -83,6 +88,11 @@
 
 <body>
   <div id="canvasarea"></div>
+
+  <div id="bottombar">
+    <div id="inventoryButton" class="bottomButton" onclick="toggleInventory()">inventory</div>
+  </div>
+
   <div>
 
     planets by sam pc

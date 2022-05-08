@@ -6,7 +6,7 @@ class StaticObject extends BasicObject {
     // initialize object
     super(x,y,size,img,text,firstReadAction);
     this.setCollider();
-    
+
   }
 
 
@@ -35,7 +35,12 @@ class StaticObject extends BasicObject {
         image(this.img,0,0,this.half,this.size);
       });
 
-
+      if(
+        mainMouse.planetPos
+        &&dist(mainMouse.planetPos,this)<=mouseOverDist
+      ){
+          planetMouseOverTarget=this
+        }
       if(this.edible) this.interact();
     }
   }

@@ -8,6 +8,7 @@ class Tree extends StaticObject {
     this.talker = true;
     this.talkrange = 34;
     this.berry = features.berryName+" berry";
+    this.name=this.berry+" tree"
     this.berries=randi(1,4);
     this.setTandA(this.berryText(),this.lootBerry);
     this.id="tree";

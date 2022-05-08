@@ -6,7 +6,7 @@ let genplanets = [];
 let closestPlanet;
 
 let CrashEnabled = false;
-let SoundEnabled = true;
+let SoundEnabled = false;
 
 let RandomSeed = 0;
 // current game screen
@@ -32,6 +32,8 @@ window.onload =()=>{
 //
 
 let startGame=()=>{
+
+  if(inventoryUI==undefined) inventoryUI = new UIWindow("inventory");
 
   startSound();
   setupPlayer();
@@ -87,6 +89,7 @@ let run=()=>{
 
 let runGame=()=>{
 
+  planetMouseOverTarget=undefined;
   playerCurrentSpeed = dist(zero,vxy(player));
 
   updateStars();
@@ -99,7 +102,8 @@ let runGame=()=>{
   camera.update();
   updatePlayerUi();
 
-  displayInventory();
+  handlePlanetHover();
+
 
   // add random planets
   let x = Math.round(player.x/FarRange)

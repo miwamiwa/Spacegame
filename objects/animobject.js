@@ -30,6 +30,14 @@ class AnimObject extends BasicObject {
       //if(nP) nP.sortFeatures();
       // draw & update sprite
       this.draw(this);
+
+      if(
+        mainMouse.planetPos
+        &&dist(mainMouse.planetPos,this)<=mouseOverDist
+      ){
+          //console.log("mouse over ",this);
+          planetMouseOverTarget=this;
+        }
     }
     else {
       // if not on a planet,
@@ -39,6 +47,14 @@ class AnimObject extends BasicObject {
       // if on screen
       if(camera.isOnScreen(pos,this.half))
           this.draw(pos,children);
+
+          if(
+            mainMouse.planetPos
+            &&dist(mainMouse.worldPos,this)<=mouseOverDist
+          ){
+              //console.log("mouse over ",this);
+              planetMouseOverTarget=this;
+            }
     }
   }
 
