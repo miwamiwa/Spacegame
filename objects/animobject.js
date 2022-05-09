@@ -35,9 +35,9 @@ class AnimObject extends BasicObject {
         mainMouse.planetPos
         &&dist(mainMouse.planetPos,this)<=mouseOverDist
       ){
-          //console.log("mouse over ",this);
-          planetMouseOverTarget=this;
-        }
+        //console.log("mouse over ",this);
+        planetMouseOverTarget=this;
+      }
     }
     else {
       // if not on a planet,
@@ -45,22 +45,24 @@ class AnimObject extends BasicObject {
       let pos = camera.position(this,this.half);
 
       // if on screen
-      if(camera.isOnScreen(pos,this.half))
-          this.draw(pos,children);
+      if(camera.isOnScreen(pos,this.half)){
+        this.draw(pos,children);
 
-          if(
-            mainMouse.planetPos
-            &&dist(mainMouse.worldPos,this)<=mouseOverDist
-          ){
-              //console.log("mouse over ",this);
-              planetMouseOverTarget=this;
-            }
+        if(
+          mainMouse.planetPos
+          &&dist(mainMouse.worldPos,this)<=mouseOverDist
+        ){
+          //console.log("mouse over ",this);
+          planetMouseOverTarget=this;
+        }
+      }
+
     }
   }
 
   draw(p,c){
     if(this.hat)
-      this.hat.draw(addV(p,this.hat));
+    this.hat.draw(addV(p,this.hat));
 
     this.drawMe(p.x,p.y,c);
     this.updateAnimation();

@@ -2,7 +2,10 @@ const poses =[
   [player1_png,player2_png],
   [walk_left_2_png,walk_left_1_png],
   [walk_down_2_png,walk_down_1_png],
-  [walk_up_1_png,walk_up_2_png]
+  [walk_up_1_png,walk_up_2_png],
+
+  [walk_upleft_1_png,walk_upleft_2_png],
+  [walk_downleft_1_png,walk_downleft_2_png]
 ]
 // ANIMATION
 const Hat = [chapo_png,chapo2_png];

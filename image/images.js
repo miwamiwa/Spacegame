@@ -1,4 +1,4 @@
-let all_colors = ["#00000000","#ff9568f01","#baffd0f01","#77ffa4f01","#775b47f01","#c69777f01","#9e795ef01","#ffea66f01","#4e4ea3f01","#424289f01","#ffc65ef01","#ff9b49f01","#ff4744f01","#ffe16bf01","#7fc5fff01","#3fff7cf01","#8ca0c8f01","#a9b3c6f01","#d89d84f01","#ffb99bf01","#a57865f01","#a9cc78f01","#ccb87af01","#366391f01","#229946f01","#c4f8fff01","#fffcbff01","#000000f01","#ffbe68f01","#7ffffff01","#3dff60f01"];
+let all_colors = ["#00000000","#ff9568f01","#baffd0f01","#77ffa4f01","#775b47f01","#c69777f01","#9e795ef01","#ffea66f01","#4e4ea3f01","#424289f01","#ffc65ef01","#ff9b49f01","#ff4744f01","#ffe16bf01","#7fc5fff01","#3fff7cf01","#8ca0c8f01","#a9b3c6f01","#d89d84f01","#ffb99bf01","#a57865f01","#a9cc78f01","#ccb87af01","#366391f01","#229946f01","#c4f8fff01","#fffcbff01","#000000f01","#ffbe68f01","#7ffffff01","#3dff60f01","#fffffff01"];
 
 let branchbit_png = {
   w:6,
@@ -120,6 +120,16 @@ let walk_down_2_png = {
   t:"0_150<170:18091:081<05132010201120102012041322112213021520132014021=00110212001222130011021101170310021200170811011102110<1102110<1102110<1201110A110@12",
   c:[0,23,24]
 };
+let walk_downleft_1_png = {
+  w:20,
+  t:"0s120>150<18091:071;071<06112010201020102013061122102213061<061<071:081:09170<1102110<1201110<1300110=110012",
+  c:[0,23,24]
+};
+let walk_downleft_2_png = {
+  w:20,
+  t:"0s120>150<18091:071;071<06112010201020102013061122102213061<061<071:081:09170=1100120<1102120;1103110:11",
+  c:[0,23,24]
+};
 let walk_left_1_png = {
   w:20,
   t:"0s150<170:180:19081;071;0620102010201020150622102215061;081:0819091400130;1101120<1200110=1200110A120?13",
@@ -140,5 +150,14 @@ let walk_up_2_png = {
   t:"0s150;18091:081<051>041?021@021=0011021200190011021101170310021200170811011102110<1102110<1102110<1201110A110@12",
   c:[0,23]
 };
-let all_images = [branchbit_png,chapo_png,chapo2_png,chest_png,couch_png,cracker_png,crash1_png,crash2_png,crash3_png,fire1_png,fire2_png,hill_png,home_png,leaf1_png,player1_png,player2_png,star1_png,star2_png,stick_png,trunkbit_png,vessel_png,vessel2_png,walk_down_1_png,walk_down_2_png,walk_left_1_png,walk_left_2_png,walk_up_1_png,walk_up_2_png];
-      
+let walk_upleft_1_png = {
+  w:20,
+  t:"0s120>150<18091:071;071<061<061<061<061<071:081:09180;1101120<1200120=1100110?13",
+  c:[0,23]
+};
+let walk_upleft_2_png = {
+  w:20,
+  t:"0s120>150<18091:071;071<061<061<061<061<071:081:09170<1200120<1102120;1103110:11",
+  c:[0,23]
+};
+let all_images = [branchbit_png,chapo_png,chapo2_png,chest_png,couch_png,cracker_png,crash1_png,crash2_png,crash3_png,fire1_png,fire2_png,hill_png,home_png,leaf1_png,player1_png,player2_png,star1_png,star2_png,stick_png,trunkbit_png,vessel_png,vessel2_png,walk_down_1_png,walk_down_2_png,walk_downleft_1_png,walk_downleft_2_png,walk_left_1_png,walk_left_2_png,walk_up_1_png,walk_up_2_png,walk_upleft_1_png,walk_upleft_2_png];

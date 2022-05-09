@@ -147,13 +147,15 @@ let planetInputs=()=>{
   let p =0;
 
 
-  player.running = false;
+  player.running = "";
 
   // if inputs pressed, move player
   if(inputs.d) moveX(1);
   if(inputs.a) moveX(-1);
   if(inputs.w) moveY(-1);
   if(inputs.s) moveY(1);
+
+  if(player.running=="") player.running=false;
 
   // update animation
   if(running!=player.running){
@@ -162,6 +164,11 @@ let planetInputs=()=>{
       case "right": p=1; Dude.left=false; break;
       case "down": p=2; break;
       case "up": p=3; break;
+
+      case "leftdown": p=5; Dude.left=true; break;
+      case "leftup": p=4; Dude.left=true; break;
+      case "rightdown": p=5; Dude.left=false; break;
+      case "rightup": p=4; Dude.left=false; break;
     }
     Dude.setFrames(poses[p]);
   }

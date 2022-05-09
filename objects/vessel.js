@@ -18,20 +18,24 @@ let reachPlanet=(p)=>{
     if(p.lastVisit){
       let timeSinceLastVisit = Math.max(0, frameCount - p.lastVisit);
       console.log("time since last visit "+timeSinceLastVisit);
+
       p.trees.forEach(tree=>{
+
+        let sprites = getAppropriateTreeSprites(tree.features,tree.variation);
+
         if(tree.age!="mature"){
           let age = flo((tree.age + timeSinceLastVisit)/tree.ageMult);
         //  console.log("new age "+age);
           if(age>=4){
             tree.berries = randi(1,4);
-            tree.img = {img:tree.matureSprite};
+            tree.img = {img:sprites.matureSprite};
             tree.setTandA(tree.berryText(),tree.lootBerry);
             tree.talker = true;
             tree.age="mature"
           }
           else {
             tree.age=age*tree.ageMult;
-            tree.img = {img:tree.youngSprites[age]};
+            tree.img = {img:sprites.youngSprites[age]};
           }
         }
 
@@ -85,7 +89,7 @@ class Vessel extends AnimObject {
 
         let d = dist(zero,v);
 
-        if(grampQuest&&d>speedLimit1){
+        if(this==player&&grampQuest&&d>speedLimit1){
           if(haveType(1,"surprizze")){
             console.log("ey")
             grampQuest=false;
@@ -198,7 +202,7 @@ class Vessel extends AnimObject {
 
         if(p.d2p<closestPlanet.d2p) closestPlanet=p;
         // update radar.
-        if(this.radar){
+        if(this.radar && this==player){
           // add to radar list if in range
           if(d>p.r + RadarMin&&d<p.r + RadarMax)
             this.onradar.push(p);

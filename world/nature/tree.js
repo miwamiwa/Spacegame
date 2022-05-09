@@ -1,32 +1,52 @@
-class Tree extends StaticObject {
-  constructor(features,age,rng){
+let getTreeSprite=(features,age,rng)=>{
+  // create new family if necessary
+  if(treeFamilies[features.berryName]==undefined){
+    let data = createNewTreeType();
+    treeFamilies[features.berryName] = data.mature_trees;
+    youngTrees[features.berryName] = data.younglings;
+  }
 
-    // create new family if necessary
-    if(treeFamilies[features.berryName]==undefined){
-      let data = createNewTreeType();
-      treeFamilies[features.berryName] = data.mature_trees;
-      youngTrees[features.berryName] = data.younglings;
-    }
-
-    // pick initial sprite
-    let sprite;
-    let variation = rng.randi(3);
-    if(age=="mature") sprite = treeFamilies[features.berryName][variation];
-    else{
-      sprite = youngTrees[features.berryName][variation][age];
-    //  console.log("sprite ",sprite)
-    }
-
-
-    super(0,0,{img:sprite},200);
-    this.matureSprite = treeFamilies[features.berryName][variation];
-    this.youngSprites = [
+  // pick initial sprite
+  let sprite;
+  let variation = rng.randi(3);
+  if(age=="mature") sprite = treeFamilies[features.berryName][variation];
+  else{
+    sprite = youngTrees[features.berryName][variation][age];
+  //  console.log("sprite ",sprite)
+  }
+  return {
+    sprite:sprite,
+    variation:variation,
+    matureSprite:treeFamilies[features.berryName][variation],
+    youngSprites:[
       youngTrees[features.berryName][variation][0],
       youngTrees[features.berryName][variation][1],
       youngTrees[features.berryName][variation][2],
       youngTrees[features.berryName][variation][3]
-    ];
-    this.variation = variation;
+    ]
+  }
+}
+
+let getAppropriateTreeSprites=(features,variation)=>{
+  return {
+    matureSprite:treeFamilies[features.berryName][variation],
+    youngSprites:[
+      youngTrees[features.berryName][variation][0],
+      youngTrees[features.berryName][variation][1],
+      youngTrees[features.berryName][variation][2],
+      youngTrees[features.berryName][variation][3]
+    ]
+  }
+}
+
+class Tree extends StaticObject {
+  constructor(features,age,rng){
+
+    let data = getTreeSprite(features,age,rng);
+
+    super(0,0,{img:data.sprite},200);
+    this.variation = data.variation;
+    this.features = features;
     this.family = features.treeFamily;
     this.age = age;
     this.windy=true;
@@ -34,6 +54,7 @@ class Tree extends StaticObject {
     this.talker = true;
     this.berries=randi(1,4);
     this.ageMult = 1000;
+    this.rng=rng;
 
     if(this.age!="mature"){
       this.talker = false;
@@ -74,18 +95,19 @@ class Tree extends StaticObject {
       ///console.log("immature tree",this.age);
       this.age += 1;
       if(this.age%this.ageMult==0){
+        let data = getTreeSprite(this.features,this.age,this.rng)
         if(this.age==4*this.ageMult){
           this.age = "mature";
           //console.log("new age mature");
           this.talker = true;
           this.berries=randi(1,4);
           this.setTandA(this.berryText(),this.lootBerry);
-          this.img = {img:this.matureSprite};
+          this.img = {img:data.matureSprite};
         }
         else{
           let newage = this.age/this.ageMult;
           //console.log("new age "+newage)
-          this.img = {img:this.youngSprites[newage]};
+          this.img = {img:data.youngSprites[newage]};
 
         }
       //  console.log(this.img,this.age)

@@ -51,6 +51,7 @@ let startGame=()=>{
   gamestate="game";
 
   // woosh sound
+  /*
   setInterval(()=>{
     if(player.throttle>0)
     play(40,
@@ -59,6 +60,7 @@ let startGame=()=>{
       player.throttle*4,
       'lowpass',100+player.throttle*1000,2);
   }, woosh);
+  */
 }
 
 
@@ -115,6 +117,8 @@ let runGame=()=>{
   updatePlayerUi();
 
   handlePlanetHover();
+
+  updateEnemies();
 
 
   // add random planets

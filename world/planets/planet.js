@@ -210,7 +210,7 @@ class Planet {
 
     // add rocks
     this.rocks = [];
-    this.rockCount = this.rng.randi(6, 12);
+    this.rockCount = this.rng.randi(3, 8);
     for(let i=0; i<this.rockCount; i++) this.newRock();
 
     // order features by y

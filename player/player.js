@@ -95,8 +95,8 @@ let playerLanded=()=>{
 
 let moveX=(delta)=>{
   // set animation
-  if(delta==1) player.running = "right";
-  else player.running = "left";
+  if(delta==1) player.running += "right";
+  else player.running += "left";
   // move
   moveIt( PlayerWalkVelocity * delta, 0);
 
@@ -109,8 +109,8 @@ let moveX=(delta)=>{
 
 let moveY=(delta)=>{
   // set animation
-  if(delta==1) player.running="down";
-  else player.running="up";
+  if(delta==1) player.running+="down";
+  else player.running+="up";
   // move
   moveIt(0,PlayerWalkVelocity * delta);
   availableText2=undefined;
