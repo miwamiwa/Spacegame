@@ -35,3 +35,12 @@ body{
 .bottomButton:hover{
   background-color:#888f;
 }
+
+.disabled{
+  background-color:#bbbf;
+}
+
+.disabled:hover{
+  cursor:default;
+  background-color:#bbbf;
+}

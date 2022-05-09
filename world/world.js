@@ -14,7 +14,7 @@ let Mom;
 let Grandpa;
 let Shop;
 let Son2;
-
+let Scientist;
 
 
 
@@ -60,7 +60,7 @@ let setupPlanets=()=>{
   let homeobject = new StaticObject(0,0,home_png, 100, HomeText);
   homeobject.name="my house"
   HomePlanet.addFeature( homeobject, 100);
-
+  HomePlanet.special=true;
   Mom = HomePlanet.addFeature( new AnimObject(0,0,100,poses[0],MomText), 100);
   Mom.DialogUpdate = UpdateMomText;
   Mom.name="mom";
@@ -79,6 +79,7 @@ let setupPlanets=()=>{
 
   p=addV(xy(200,-12000),HomePlanet);
   GrandpaPlanet = new Planet(p.x,p.y, false, "Grandpa's", 410, false);
+  GrandpaPlanet.special=true;
   GrandpaPlanet.setupMusic(false);
   GrandpaPlanet.addFeature(new StaticObject(80,0,home_png, 80));
   GrandpaPlanet.addFeature(new StaticObject(0,0,vessel_png, 100, ["Grandpa's ship"]),70);
@@ -92,10 +93,31 @@ let setupPlanets=()=>{
   p=addV(xy(roughly(12000), 600),GrandpaPlanet);
   MechanicPlanet = new Planet(p.x,p.y,false,"Timmy", 340, false);
   MechanicPlanet.setupMusic(false);
+  MechanicPlanet.special=true;
   Shop=MechanicPlanet.addFeature(new StaticObject(0,0,home_png, 140, ShopText), 100);
   Shop.DialogUpdate = updateMechanicText;
   Shop.hue=flo(rand(360));
-  Shop.name="mechanic's shop"
+  Shop.name="mechanic's shop";
+
+  Scientist = MechanicPlanet.addFeature( new AnimObject(0,0,100,poses[0]), 100);
+  Scientist.name="a man of science";
+  Scientist.hue=flo(rand(360));
+  Scientist.setTandA([
+    "Yo dude!",
+    "me? I'm a scientist.\nI do science stuff all day.",
+    "#cool I know",
+    "looks like you might want\nto be a scientist too!",
+    "here take this and go explore places\nk bye",
+    ""
+  ],()=>{
+    console.log("received a map!");
+    availableText=undefined
+    receiveMap();
+    Scientist.setTandA([
+      "i friggen love science","you.. go explore stuff!"
+    ],undefined);
+  });
+  planetMode(Scientist)
 
 }
 

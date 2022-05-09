@@ -123,7 +123,7 @@ let showInteractionText=()=>{
     //console.log("babomm")
     // display text
     if(player.reading)
-    showTextArray(availableText.text,availableText.id!="tree");
+    showTextArray(availableText.text,availableText.id!="tree"&&availableText.id!="hill");
   }
 }
 

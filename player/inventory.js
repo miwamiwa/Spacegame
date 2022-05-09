@@ -69,6 +69,10 @@ let isOpenable=(item)=>{
   return item.type=="berry"
 }
 
+let isUpgrade=(item)=>{
+  return item.type=="upgrade"
+}
+
 
 let EquipItem=(item)=>{
   console.log("equip");

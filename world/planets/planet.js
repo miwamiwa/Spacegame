@@ -1,3 +1,7 @@
+let visitPlanet =(p)=>{
+  p.visited = true;
+  knownPlanets.push(p);
+}
 
 class Planet {
   constructor(x,y,randomscenery,name, rad, minfruit, isBarren){
@@ -79,7 +83,7 @@ class Planet {
   populate(){
 
     // populate!
-    if(this.rng.ch(0.47)) this.tribe = new Tribe(this);
+    if(this.rng.ch(0.57)) this.tribe = new Tribe(this);
 
     // setup music accordingly
     if(this.tribe!=undefined) this.setupMusic(false);
@@ -328,8 +332,7 @@ update(){
   }
 
   visit(){
-    this.visited = true;
-    knownPlanets.push(this);
+    visitPlanet(this);
     updateMap();
   }
 

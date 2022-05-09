@@ -49,20 +49,28 @@ let mapScale = 0.01;
 let updateMap=()=>{
   mapCtx.fillStyle = "black";
   mapCtx.fillRect(0,0,mapCanvasSize.x,mapCanvasSize.y);
-  mapCtx.strokeStyle = "white";
-  mapCtx.beginPath();
+
+
 
   let planetMapSize = 20 * mapScale * 100
 
-  knownPlanets.forEach(planet=>{
+  planets.forEach(planet=>{
+    if(knownPlanets.includes(planet)){
+      if(planet.special) mapCtx.strokeStyle = "green";
+      else if(planet.tribe) mapCtx.strokeStyle = "blue";
+      else mapCtx.strokeStyle = "white";
+    }
+    else mapCtx.strokeStyle = "grey";
+    mapCtx.beginPath();
     planet.mapPos = subV(multV(mapScale,planet),mapCamTarget);
     planet.showOnMap = posInBounds(planet.mapPos,planetMapSize,mapBounds);
     if(planet.showOnMap){
       mapCtx.moveTo(planet.mapPos.x,planet.mapPos.y)
       mapCtx.ellipse(planet.mapPos.x,planet.mapPos.y,planetMapSize,planetMapSize,0,0,TWO_PI);
     }
+    mapCtx.stroke();
   });
-  mapCtx.stroke();
+
 
   mapCtx.fillStyle= "white"
   knownPlanets.forEach(planet=>{

@@ -1,4 +1,5 @@
 let leavePlanet=()=>{
+
   if(nP.bgm!=undefined) nP.bgm.reset();
   currentPattern=undefined;
   Impro.initializeImprov();
@@ -9,6 +10,8 @@ let reachPlanet=(p)=>{
   if(p.bgm!=undefined){
     p.bgm.reset();
     currentBGM = p.bgm;
+
+    Impro.initializeMelody(currentBGM);
     Impro.initializeImprov();
 
     // update trees
@@ -131,7 +134,7 @@ class Vessel extends AnimObject {
       // if we're beyond range of gravity (which == mass lol)
       // then nearest planet is undefined.
       if(d >= nP.mass){
-        leavePlanet(nP);
+        if(this==player)leavePlanet(nP);
         nP=undefined;
 
       }
@@ -185,7 +188,7 @@ class Vessel extends AnimObject {
 
         // are we in gravity range of this planet?
         if(d < p.mass){
-          if(nP==undefined){
+          if(nP==undefined&&this==player){
             reachPlanet(p);
           }
           nP = p;

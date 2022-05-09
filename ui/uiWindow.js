@@ -1,8 +1,19 @@
 let windowIDCounter =0;
 let allWindowsById = [];
 let allWindowsByName = [];
+let disabledWindows = [];
+
+let receiveMap=()=>{
+  disabledWindows["map"]=undefined;
+  let el = document.getElementById("mapButton");
+  el.classList.remove("disabled");
+  el.setAttribute("onclick","toggleWindow('map')");
+  toggleWindow('map');
+}
 
 let toggleWindow=(name)=>{
+  if(disabledWindows[name]!=undefined) return;
+
   allWindowsByName[name].toggle();
 
   if(name=="map"&&allWindowsByName[name].visible){

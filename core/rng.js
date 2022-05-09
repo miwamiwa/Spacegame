@@ -49,7 +49,7 @@ let random=()=>{
 }
 
 // SEEDED RANDOM
-let WorldSeed = "apples";
+let WorldSeed = "applez";
 let WorldRandom;
 let planetSeedLength = 8;
 
