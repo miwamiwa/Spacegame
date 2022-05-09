@@ -36,7 +36,7 @@ window.onload =()=>{
 let startGame=()=>{
 
   setupUI();
-
+  setupTreeFamilies();
   startSound();
   setupPlayer();
   setupStars();

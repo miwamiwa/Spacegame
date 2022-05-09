@@ -9,13 +9,6 @@ class StaticObject extends BasicObject {
 
   }
 
-
-
-  
-
-
-
-
   display(){
     if(this.active){
       // display sprite
@@ -29,25 +22,26 @@ class StaticObject extends BasicObject {
         mainMouse.planetPos
         &&dist(mainMouse.planetPos,this)<=mouseOverDist
       ){
-          planetMouseOverTarget=this
-        }
-      if(this.edible) this.interact();
-    }
-  }
-
-/*
-  interact(){
-    if(!player.boarded){
-      // if in range
-      if(dist(this,Dude)<34){
-        // pick up item
-        this.active = false;
-
-        // do something
-        //if(this.id=="cheese")
-        //  playerFoundCracker();
+        planetMouseOverTarget=this
       }
+      if(this.edible) this.interact();
+      if(this.age) this.continueLife();
     }
   }
-  */
+
+  /*
+  interact(){
+  if(!player.boarded){
+  // if in range
+  if(dist(this,Dude)<34){
+  // pick up item
+  this.active = false;
+
+  // do something
+  //if(this.id=="cheese")
+  //  playerFoundCracker();
+}
+}
+}
+*/
 }

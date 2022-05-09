@@ -65,6 +65,10 @@ let isUseable=(item)=>{
   return item.type=="utility" || item.type=="food"
 }
 
+let isOpenable=(item)=>{
+  return item.type=="berry"
+}
+
 
 let EquipItem=(item)=>{
   console.log("equip");
@@ -77,8 +81,21 @@ let EquipItem=(item)=>{
   RefreshInventory();
 }
 
+
 let UseItem=(item)=>{
   console.log("use");
+  item.num--;
+  RefreshInventory();
+}
+
+
+
+let OpenItem=(item)=>{
+  console.log("open",item);
+  if(item.type=="berry"){
+    //let kind = item.name.replace(" berry","");
+    AddToInventory({name:item.name+" seed",type:"seed"});
+  }
   item.num--;
   RefreshInventory();
 }

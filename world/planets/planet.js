@@ -196,9 +196,10 @@ class Planet {
     this.trees = [];
     this.treeCount = this.rng.randi(24,32);
 
-    this.localBerry = {
-      berryName:this.rng.randomFromArray(BerryNames),
-      treeFamily:createNewTreeType(this.rng)
+    let berry = this.rng.randomFromArray(BerryNames);
+    this.localFlora = {
+      berryName:berry,
+      treeFamily:treeFamilies[berry]
     }
 
     for(let i=0; i<this.treeCount; i++) this.newTree();
@@ -214,7 +215,9 @@ class Planet {
 
   newTree(){
     // create tree object
-    let tree = this.addFeature(new Tree(this.localBerry), 10);
+    let age = this.rng.randi(5);
+    if(age==4) age = "mature"
+    let tree = this.addFeature(new Tree(this.localFlora,age,this.rng), 10);
     this.trees.push(tree);
   }
 

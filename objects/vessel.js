@@ -1,10 +1,48 @@
+let leavePlanet=()=>{
+  if(nP.bgm!=undefined) nP.bgm.reset();
+  currentPattern=undefined;
+  Impro.initializeImprov();
+  nP.lastVisit = frameCount;
+}
 
+let reachPlanet=(p)=>{
+  if(p.bgm!=undefined){
+    p.bgm.reset();
+    currentBGM = p.bgm;
+    Impro.initializeImprov();
+
+    // update trees
+    if(p.lastVisit){
+      let timeSinceLastVisit = Math.max(0, frameCount - p.lastVisit);
+      console.log("time since last visit "+timeSinceLastVisit);
+      p.trees.forEach(tree=>{
+        if(tree.age!="mature"){
+          let age = flo((tree.age + timeSinceLastVisit)/tree.ageMult);
+        //  console.log("new age "+age);
+          if(age>=4){
+            tree.berries = randi(1,4);
+            tree.img = {img:tree.matureSprite};
+            tree.setTandA(tree.berryText(),tree.lootBerry);
+            tree.talker = true;
+            tree.age="mature"
+          }
+          else {
+            tree.age=age*tree.ageMult;
+            tree.img = {img:tree.youngSprites[age]};
+          }
+        }
+
+      });
+    }
+
+  }
+}
 
 class Vessel extends AnimObject {
   constructor(x,y,size,frames,t,f){
 
     super(x,y,size,frames,t,f);
-    
+
     this.throttle =0;
     this.mass = VesselMass;
     this.crashThreshold = CrashThreshold / this.mass;
@@ -93,10 +131,9 @@ class Vessel extends AnimObject {
       // if we're beyond range of gravity (which == mass lol)
       // then nearest planet is undefined.
       if(d >= nP.mass){
-        if(nP.bgm!=undefined) nP.bgm.reset();
+        leavePlanet(nP);
         nP=undefined;
-        currentPattern=undefined;
-        Impro.initializeImprov();
+
       }
 
       else {
@@ -149,12 +186,7 @@ class Vessel extends AnimObject {
         // are we in gravity range of this planet?
         if(d < p.mass){
           if(nP==undefined){
-            if(p.bgm!=undefined){
-              p.bgm.reset();
-              currentBGM = p.bgm;
-              Impro.initializeImprov();
-            }
-
+            reachPlanet(p);
           }
           nP = p;
         }
