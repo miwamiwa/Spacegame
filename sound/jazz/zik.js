@@ -184,6 +184,9 @@ class ZikGenerator {
     let longestPhrase =0;
     let phraselength =0;
 
+    MinSentenceLength = 6;
+    MaxSentenceLength = 32;
+
     // generate chords
     markovObject.generateSentence().split(" ").forEach(symbol=>{
       // split chords and notes
@@ -228,12 +231,12 @@ class ZikGenerator {
   // generate rhythm for a list of melodic phrases.
 
   generateMelodicRhythm(phrases,subdivision,bgmObject){
-    let chosenSubdivision = this.getSmallestSubdivision(subdivision,phrases);
-    bgmObject.smallestSubdivision = chosenSubdivision * 2;
+    subdivision = this.getSmallestSubdivision(subdivision,phrases);
+    bgmObject.smallestSubdivision = subdivision * 2;
     let longestPhrase =0;
 
     phrases.forEach(phrase=>{
-      let phraseWithRhythm = this.addRhythmToMelody(phrase,chosenSubdivision);
+      let phraseWithRhythm = this.addRhythmToMelody(phrase,subdivision);
       longestPhrase = Math.max(phraseWithRhythm.length, longestPhrase);
       bgmObject.melody.push(phraseWithRhythm);
     });

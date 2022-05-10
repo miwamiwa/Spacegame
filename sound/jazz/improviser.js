@@ -4,8 +4,8 @@ class Improviser {
     this.lastMelodyNote =0;
     this.lastMelodyScaleNote =0;
     this.lastSection =0;
-    this.InitialMelodyOctave = 3;
-    this.InitialImprovOctave = 6;
+    this.InitialMelodyOctave = 2;
+    this.InitialImprovOctave = 5;
     this.MaxNoteRange = 12;
     this.firstNote;
     this.currentChord;
@@ -425,21 +425,21 @@ class Improviser {
     let playNote3=ch(0.4);
 
     if(playNote1){
-      let noteLength = currentBGM.barLength*.0005;
+      let noteLength = currentBGM.barLength*.001;
       if(playNote2) noteLength /=2;
       else if(playNote3) noteLength *= .7;
 
       playNote(this.getNote(scale), noteLength);
     }
     if(playNote2){
-      let noteLength = currentBGM.barLength*.0005*0.5;
-      if(playNote3) noteLength = currentBGM.barLength*.0005*0.2;
+      let noteLength = currentBGM.barLength*.01*0.5;
+      if(playNote3) noteLength = currentBGM.barLength*.01*0.2;
       setTimeout(()=>{
         playNote(this.getNote(scale), noteLength);
       }, currentBGM.barLength * 0.5);
     }
     if(playNote3){
-      let noteLength = currentBGM.barLength*.0005*0.3;
+      let noteLength = currentBGM.barLength*.05*0.3;
       setTimeout(()=>{
         playNote(this.getNote(scale), noteLength);
       }, currentBGM.barLength * 0.7);

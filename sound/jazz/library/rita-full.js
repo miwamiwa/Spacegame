@@ -2,8 +2,12 @@
 // RiTa Setting (initial value was 35)
 // max harmony length before expanding
 let MaxSentenceLength = 50;
-
 let MinSentenceLength = 6;
+
+// skip list
+const skipList = [
+  "IV", "9sharp11"
+];
 
 /*jshint browser:true, -W100:true, evil:true */
 
@@ -2081,6 +2085,15 @@ RiMarkov.prototype = {
         log("Skipping: bad first char in '" + sent + "'");
       return false;
     }
+
+    // also SAM EDIT
+    // skip some chords cuz they dont work
+    skipList.forEach(chord=>{
+      tokens.forEach(token=>{
+        if(token==chord) return false;
+      });
+      ///if(sent.indexOf(chord+" ")!=-1) return false;
+    });
 
     if (!last.match(/[!?.]/)) {
       if (this.printIgnoredText)

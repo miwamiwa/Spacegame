@@ -24,6 +24,7 @@ let inputs = {
 
 let key;
 let doneAction = false;
+let waitForEBackUp = false;
 // keyUp()
 //
 // track keyup events
@@ -33,6 +34,7 @@ let keyUp=(e)=>{
   e = e.keyCode;
   setKey(e,false);
   if(e==32) inputs.space = false;
+  if(inputs.e==false) waitForEBackUp=false;
 }
 
 let setKey=(e,b)=>{
@@ -62,6 +64,18 @@ let keyDown=(e)=>{
   }
 
   if(key==73) toggleInventoryOptions();
+
+  //console.log(inputs.e,canBoard())
+  if(!player.boarded && inputs.e && canBoard()){
+    //console.log("board!")
+    // update dude
+    waitForEBackUp = true;
+    board();
+    nP.removeDude();
+    // update camera target
+    camera.targetIsVessel();
+    //availableText2 = undefined;
+  }
 
   if(inventoryOptions.shown){
     if(inputs.w){
@@ -126,12 +140,14 @@ let vesselInputs=()=>{
   if(inputs.a) player.rotate(PlayerRotateRate);
   if(inputs.d) player.rotate(-PlayerRotateRate);
 
+  if(inputs.s && !player.landed && !availableText2) StopPlayer();
+
   // when landed,
   if(player.landed){
     // enable help text
     canExit = true;
     // press e to exit vessel
-    if(inputs.e&&!player.crashed)
+    if(!waitForEBackUp && inputs.e&&!player.crashed)
     playerLanded();
   }
 }
@@ -141,6 +157,9 @@ let vesselInputs=()=>{
 //
 // handle inputs for when player is on a planet
 let planetInputs=()=>{
+
+
+  handlePlanetHover();
 
   // look out for animation changes
   let running = player.running;
@@ -154,6 +173,7 @@ let planetInputs=()=>{
   if(inputs.a) moveX(-1);
   if(inputs.w) moveY(-1);
   if(inputs.s) moveY(1);
+
 
   if(player.running=="") player.running=false;
 
@@ -185,10 +205,21 @@ let planetInputs=()=>{
     availableText = f;
 
   });
+
+
 }
 
 
+let shoot = ()=>{
+  if(!canShoot) return;
+  if(!player.boarded) return;
+  console.log(player.bearing)
+  let direction = xy(Math.sin(player.bearing),-Math.cos(player.bearing));
+//  console.log("shoot!",direction);
 
+  new Projectile(player,false,direction);
+
+}
 
 
 
@@ -216,26 +247,15 @@ let SpacePressInGameState =()=>{
     return;
   }
 
-  if(!player.landed && !availableText2) StopPlayer();
-  // 1. BOARD VESSEL
 
-  // if vessel is in range
-  // and boarding is enabled
-  if(canBoard()){
-    // update dude
-    board();
-    nP.removeDude();
-    // update camera target
-    camera.targetIsVessel();
-    //availableText2 = undefined;
-  }
+
 
 
   // 2. READ availableText2 TEXT BOX
   // (quest popup text)
 
   // if there is available text
-  else if (availableText2){
+  if (availableText2){
     // read next text
     textCounter++;
     // close if end reached
@@ -284,4 +304,7 @@ let SpacePressInGameState =()=>{
       }
     }
   }
+
+  else //
+  shoot();
 }

@@ -57,7 +57,10 @@ let UpdateShopText=()=>{
 //
 
 let UpdateGPText=()=>{
-  if(trade(Grandpa,"surprizze","surprizze",gpPart,1,false)) GrandpaText=GrandpaText2;
+  if(trade(Grandpa,"surprizze","surprizze",gpPart,1,false)){
+    //canShoot = true;
+    GrandpaText=GrandpaText2;
+  }
   else Grandpa.setTandA(GrandpaText,grandpaQuestStart);
 }
 

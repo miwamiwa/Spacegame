@@ -19,8 +19,8 @@ class MelodicLine {
 
     // settings
     this.possibleSubdivisions = 2;
-    this.preferredSubdivision = randi(this.possibleSubdivisions);
-    this.preferenceAmount = rand()/4;
+    this.preferredSubdivision = 1;
+    this.preferenceAmount = 0.5;
     this.scarcity = Math.max(0.5,rand());
 
     // generate!

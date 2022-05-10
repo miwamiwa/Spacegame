@@ -1,18 +1,13 @@
 let currentBGM;
 
-let playJazzMusic=()=>{
+let playJazzMusic=(time)=>{
 
   if(nP!=undefined){
     currentBGM = nP.bgm;
-    nP.bgm.play();
+    nP.bgm.play(time);
   }
 }
 
-let playNote=(num,length,isChord)=>{
-  //console.log(note)
-  noteSynth.triggerAttackRelease(
-    toToneFormat(num), length);
-}
 
 
 let setBGM=(bgm)=>{

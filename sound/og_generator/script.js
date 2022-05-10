@@ -34,30 +34,23 @@ let playBarrenPlanetMusic=()=>{
   setScale(nP.m);
 
   // hats
-  startBeat(
-    [8,8,8,8,8,8,8,8],
-    ()=>playDrumSound(),.92,1,true
-  );
-
 
   // trigger melody notes
   playImprov();
 
   // play chords
 
-  let now = Tone.now()
+  //let now = Tone.now()
 
   let octave = 48;
   let notes = [
-    toToneFormat(octave + randomVoicing() + scale[0]),
-    toToneFormat(octave + randomVoicing() + scale[2]),
-    toToneFormat(octave + randomVoicing() + scale[scale.length-1])
+    (octave + randomVoicing() + scale[0]),
+    (octave + randomVoicing() + scale[2]),
+    (octave + randomVoicing() + scale[scale.length-1])
   ];
   console.log(notes)
-  setTimeout(()=>{
-    playChordNotes(notes, 4, 0.2, now);
-  },mu.barlength/2);
 
-  playChordNotes(notes, 4, 0.2, now);
+
+  playChordNotes(notes, 4, 0.8, now);
 
 }

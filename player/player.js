@@ -1,6 +1,6 @@
 let canExit = false; // trigger exit vehicle prompt
 let canEnter = false; // are we in range of the ship?
-let tradedOnce = true;
+let tradedOnce = false; // set to true to enable ship from the start
 let crashtext; // text displayed on crash
 let availableText;
 let availableText2;

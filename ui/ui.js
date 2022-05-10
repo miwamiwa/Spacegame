@@ -67,7 +67,7 @@ let updatePlayerUi=()=>{
 
   // when boarded and on ground
   if(canExit&&!player.crashed) t="press e to exit. hold w to launch.";
-  if(canBoard()) t="press space to board";
+  if(canBoard()) t="press e to enter";
 
   if(autopilotActive){
     t="autopilot active";

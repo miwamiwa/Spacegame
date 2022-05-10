@@ -14,6 +14,9 @@ class Surface {
   posIsInWater(p){
     let x = this.toScale(p.y);
     let y = this.toScale(p.x);
+    if(this.water[y+1]==undefined) return false;
+    if(this.water[y+1][x]==undefined) return false;
+    
     let w = this.water[y+1][x];
 
     if(w) this.previous[y][x+1] = 180;

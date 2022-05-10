@@ -15,7 +15,9 @@ if(ch(.8)&&bars%2==1) pat=nP.m.patt2;
 
     setTimeout(()=>{
       if(!nP) return;
-      noteSynth.triggerAttackRelease(toToneFormat(pat.octaves[i] + scale[pat.notes[i]%scale.length]), nP.m.nL)
+      console.log( nP.m.nL )
+      playNote(pat.octaves[i] + scale[pat.notes[i]%scale.length], nP.m.nL )
+      //noteSynth.triggerAttackRelease(, )
     }, nP.m.rythme[i]);
   }
 }

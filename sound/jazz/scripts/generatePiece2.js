@@ -31,7 +31,7 @@ let generatePiece2=(bgmObject, params)=>{
 
   // generate melodic rhythm
   let subdivision = chooseBetween([3,4]);
-  Zik.generateMelodicRhythm(phrases,subdivision,bgmObject);
+  Zik.generateMelodicRhythm(phrases,2,bgmObject);
 
   // done!
 }

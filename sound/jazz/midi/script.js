@@ -116,7 +116,7 @@ let convertListToTones=(arr)=>{
 }
 
 let toToneFormat=(note)=>{
-  let octave = flo(note / m.Octave);
+  let octave = flo(note / m.Octave) -1;
   let noteName = m.Keys[note%m.Octave];
   return noteName+octave;
 }

@@ -56,7 +56,7 @@ let updateAutopilot=()=>{
     !autopilotActive
     &&b
     &&playerCurrentSpeed>player.crashThreshold
-    &&closestPlanet.d2p<75*(playerCurrentSpeed)
+    &&closestPlanet.d2p<25*(playerCurrentSpeed)
   ){
     preventCrash=true;
     autopilotActive=true;
@@ -70,7 +70,7 @@ let updateAutopilot=()=>{
       if(b){
         player.rotate(PlayerRotateRate2);
         player.plusThrottle();
-        
+
       }
       else {
         player.minusThrottle();

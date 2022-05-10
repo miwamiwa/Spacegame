@@ -4,9 +4,11 @@ let camera;
 let planets = [];
 let genplanets = [];
 let closestPlanet;
+let canShoot = false;
+let enemiesCanShoot = false;
 
 let CrashEnabled = false;
-let SoundEnabled = false;
+let SoundEnabled = true;
 
 
 // current game screen
@@ -14,7 +16,7 @@ let gamestate = "startscreen";
 // counter for start screen
 let scount=0;
 let frameCount =0;
-
+let mainDelta =0;
 
 
 
@@ -24,7 +26,12 @@ window.onload =()=>{
   setupRNG();
   loadImages();
   setupCanvas();
-  setInterval(run,40);
+
+  //setInterval(run,40);
+  requestAnimationFrame(function(timestamp){
+    starttime = timestamp || new Date().getTime() //if browser doesn't support requestAnimationFrame, generate our own timestamp using Date
+    run(timestamp) // 400px over 1 second
+});
 }
 
 
@@ -49,38 +56,34 @@ let startGame=()=>{
   player.update();
 
   gamestate="game";
-
-  // woosh sound
-  /*
-  setInterval(()=>{
-    if(player.throttle>0)
-    play(40,
-      0.2,0.1,0.65,0.1,
-      10,noisey,
-      player.throttle*4,
-      'lowpass',100+player.throttle*1000,2);
-  }, woosh);
-  */
+  reachPlanet(HomePlanet)
 }
+
+let starttime;
+let lastTimestamp =0;
+const expectedDelta = 40;
 
 
 // run()
 //
 // main game loop
 
-let run=()=>{
+let run=(timestamp)=>{
+
+  var timestamp = timestamp || new Date().getTime();
+  //var runtime = timestamp - starttime;
+  mainDelta = (timestamp - lastTimestamp)/expectedDelta;
+  lastTimestamp=timestamp;
+  //console.log(mainDelta,timestamp)
 
   mCtx.save();
   // background
   bg();
 
   // run start screen
-  if(gamestate=="startscreen")
-  runStartScreen(200,middle.y);
-
+  if(gamestate=="startscreen") runStartScreen(200,middle.y);
   // run game
-  else if(gamestate=="game")
-  runGame();
+  else if(gamestate=="game") runGame();
 
   uiUpdate();
   mCtx.restore();
@@ -91,8 +94,12 @@ let run=()=>{
     mapCamTarget = multV(mapScale,player);
     mapCamTarget = subV(mapCamTarget,multV(0.5,mapCanvasSize));
     updateMap();
-
   }
+
+
+  requestAnimationFrame(function(timestamp){ // call requestAnimationFrame again with parameters
+          run(timestamp);
+  });
 }
 
 
@@ -110,16 +117,18 @@ let runGame=()=>{
   player.displayRadar();
   updateAll(planets);
   HandlePlayerInputs();
+  displayProjectiles();
 
   player.update();
+
   resetPlayerOnCrash();
   camera.update();
   updatePlayerUi();
 
-  handlePlanetHover();
+
 
   updateEnemies();
-
+  updateProjectiles();
 
   // add random planets
   let x = Math.round(player.x/FarRange)

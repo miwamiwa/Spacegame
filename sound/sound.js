@@ -1,69 +1,138 @@
-// tone.js objects
-let chordSynth;
-let noteSynth;
-let drumSynth1;
-let rev;
-let limiter;
-let membrane;
-let monochord;
-let bassSynth;
-let noiseSynth;
+let startPlanetBGM=(p)=>{
+
+  p.bgm.reset();
+  currentBGM = p.bgm;
+  Impro.initializeMelody(currentBGM);
+  Impro.initializeImprov();
+  clearTimeout(musicTimeout);
+  musicTimeout = setTimeout(playbar,currentBGM.barLength)
+
+    //playbar(time);
+  console.log("bgm started")
+}
+
+let endPlanetBGM=(p)=>{
+  if(nP.bgm!=undefined) nP.bgm.reset();
+  currentPattern=undefined;
+  Impro.initializeImprov();
+}
+
+
 
 // startsound()
 //
 // creates the audio context and starts the bgm
 
 let startSound=()=>{
-
   if(!SoundEnabled) return;
+
+  // setup audio
+  window.AudioContext = window.AudioContext || window.webkitAudioContext;
+  aCtx = new AudioContext();
+  samp = aCtx.sampleRate;
   sound=true;
 
-  // setup instruments
-  chordSynth = new Tone.PolySynth(Tone.DuoSynth).toDestination();
-  chordSynth.volume.value = -24;
-  noiseSynth = new Tone.NoiseSynth().toDestination();
-  membrane = new Tone.MembraneSynth().toDestination();
-  bassSynth = new Tone.FMSynth().toDestination();
-  rev = new Tone.Reverb(3).toDestination();
-  noteSynth =  new Tone.Synth();
-  noteSynth.volume.value = -0;
-  limiter = new Tone.Gain(0.5).toDestination();
-  noteSynth.fan(rev,limiter);
-  chordSynth.fan(rev,limiter);
-
-  // start beat
-  playbar();
-  console.log("sound started")
-
-
 }
+
+let musicTimeout;
 
 
 
 let playChordNotes=(notes,length,roll,moment)=>{
-  for(let i=0; i<notes.length; i++)
-  chordSynth.triggerAttack(notes[i], moment + i*roll);
-  chordSynth.triggerRelease(notes, moment + length*0.7);
+  if(ch(0.5)){
+    actualyPlayChord(notes,moment,length,0);
+  }
+  else if(ch(0.5)){
+    actualyPlayChord(notes,moment,length*0.2,0);
+  }
+  else if(ch(0.5)){
+    actualyPlayChord(notes,moment,length,0.05);
+  }
+  else {
+    actualyPlayChord(notes,moment,length*0.7,0);
+    actualyPlayChord(notes,moment+0.72,length*0.25,0);
+  }
+}
+
+let actualyPlayChord=(notes,time,length,roll)=>{
+  playBassNote(notes[0]%m.Octave + 3*m.Octave, length * currentBGM.barLength)
+  for(let i=0; i<notes.length; i++) setTimeout(()=>{playNote(notes[i], length * currentBGM.barLength)},roll*i*currentBGM.barLength);
 }
 
 
 
+
+let playNote=(num,length,isChord)=>{
+  length /=2000;
+  //console.log(num,length,isChord);
+  //return;
+  //console.log(num,length)
+  length = Math.abs(length)
+
+  //console.log(nToF(num))
+  if(isChord){
+    play(
+      nToF(num),
+      0.1*length, 0.8*length, 0.3*length, 2.6*length,
+      2, constSine2,
+      1.2,
+      'lowpass',4000,1
+    );
+  }
+  else {
+    play(
+      nToF(num),
+      0.15, 0.9*length, 0.3*length, 1.0*length,
+      2, constSine,
+      2.4 - length / 4,
+      'lowpass',12000,1
+    );
+  }
+}
+
+
+
+
+let playBassNote=(num,length)=>{
+  length /=2000;
+  //console.log(num,length,isChord);
+  //return;
+  //console.log(num,length)
+  length = Math.abs(length)
+
+  play(
+    nToF(num),
+    0.1*length, 0.8*length, 0.3*length, 2.6*length,
+    2, constSine2,
+    3.2,
+    'lowpass',4000,1
+  );
+
+  if(ch(.25)) setTimeout(()=>{playBassNote(num,length*1000)}, currentBGM.barLength * .75);
+}
+/*
+let playNote=(num,length,isChord,time)=>{
+  console.log(length)
+  noteSynth.triggerAttackRelease(
+    toToneFormat(num), length*2, time);
+}
+*/
 
 // playbar()
 //
 // called at an interval, each bar.
 // trigger every note in this bar for each instrument
 
-let playbar = () =>{
+let playbar = (time) =>{
 
   // WHILE ON PLANET
-
+  //console.log("play bar.." + nP.bgm.barCounter)
   if(nP){
     if(nP.isBarren){
-      playBarrenPlanetMusic();
+      playBarrenPlanetMusic(time);
       //spaceyRhythm();
     }
-    else playJazzMusic();
+    else playJazzMusic(time);
   }
 
   // WHILE IN SPACE
@@ -73,14 +142,16 @@ let playbar = () =>{
   }
 
   // trigger next bar
-  if(nP&&!nP.isBarren) setTimeout(playbar,nP.jazz.barLength);
-  else setTimeout(playbar,mu.barlength);
+  //if(nP&&!nP.isBarren) setTimeout(playbar,nP.jazz.barLength);
+  //else setTimeout(playbar,mu.barlength);
 
   // update TIME:
   bars++;
 
   // if end of tune reached
   backToTop();
+
+  musicTimeout = setTimeout(playbar,currentBGM.barLength)
 }
 
 
@@ -88,6 +159,7 @@ let playbar = () =>{
 let spaceyRhythm=()=>{
 
   console.log("spacey rhythm!")
+  return;
 
   // bass drum
   startBeat(
@@ -121,7 +193,7 @@ let setScale=(m)=>{
 //
 // reset tune if over
 let backToTop=()=>{
-  if(bars>=mu.scales.length){
+  if(mu&&bars>=mu.scales.length){
     bars=0;
     melcount =0;
   }
@@ -225,7 +297,11 @@ playSound(preloadSound(
 ),v,ft,ff,fq);
 
 
-
+let playHat=()=>{
+  play(
+    100,0.01,0.1,0.1,0.5,
+    4,noisey2,1,"highpass",3000,1)
+}
 
 
 // preloadSound()

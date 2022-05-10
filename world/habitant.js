@@ -111,8 +111,22 @@ class Habitant extends AnimObject{
   teachLanguage(){
     let k=know(this.planet.language);
     let k2=know(this.knownLanguage);
+    let updatetxt=false;
 
-    if(k&&!k2) teach(this.knownLanguage);
-    else if(!k&&k2) teach(this.planet.language);
+    if(k&&!k2){
+      updatetxt = true;
+      teach(this.knownLanguage);
+    }
+    else if(!k&&k2){
+      updatetxt=true;
+      teach(this.planet.language);
+    }
+
+    if(updatetxt){
+      this.setTandA(
+        ["I'm such a sage","..."],
+        undefined
+      );
+    }
   }
 }
