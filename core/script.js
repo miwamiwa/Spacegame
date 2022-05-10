@@ -124,12 +124,14 @@ let runGame=()=>{
   //camera.update();
   resetPlayerOnCrash();
 
+  updateEnemies();
+  updateProjectiles();
+
   updatePlayerUi();
 
 
 
-  updateEnemies();
-  updateProjectiles();
+
 
   // add random planets
   let x = Math.round(player.x/FarRange)
