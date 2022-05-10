@@ -12,6 +12,8 @@ class Camera {
 
     //set camera center
     setV(this.middle,subV(this,middle));
+
+    //console.log(player.throttle,this.middle,player.x,player.y)
   }
 
   // position object relative to camera target

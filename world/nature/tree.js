@@ -39,6 +39,31 @@ let getAppropriateTreeSprites=(features,variation)=>{
   }
 }
 
+
+let ageAllTreesOnPlanet=(timeSinceLastVisit,p)=>{
+  p.trees.forEach(tree=>{
+
+    let sprites = getAppropriateTreeSprites(tree.features,tree.variation);
+
+    if(tree.age!="mature"){
+      let age = flo((tree.age + timeSinceLastVisit)/tree.ageMult);
+    //  console.log("new age "+age);
+      if(age>=4){
+        tree.berries = randi(1,4);
+        tree.img = {img:sprites.matureSprite};
+        tree.setTandA(tree.berryText(),tree.lootBerry);
+        tree.talker = true;
+        tree.age="mature"
+      }
+      else {
+        tree.age=age*tree.ageMult;
+        tree.img = {img:sprites.youngSprites[age]};
+      }
+    }
+
+  });
+}
+
 class Tree extends StaticObject {
   constructor(features,age,rng){
 

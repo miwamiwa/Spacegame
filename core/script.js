@@ -8,7 +8,7 @@ let canShoot = false;
 let enemiesCanShoot = false;
 
 let CrashEnabled = false;
-let SoundEnabled = true;
+let SoundEnabled = false;
 
 
 // current game screen
@@ -119,10 +119,11 @@ let runGame=()=>{
   HandlePlayerInputs();
   displayProjectiles();
 
-  player.update();
-
-  resetPlayerOnCrash();
   camera.update();
+  player.update();
+  //camera.update();
+  resetPlayerOnCrash();
+
   updatePlayerUi();
 
 

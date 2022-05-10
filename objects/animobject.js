@@ -61,10 +61,10 @@ class AnimObject extends BasicObject {
   }
 
   draw(p,c){
-    if(this.hat)
-    this.hat.draw(addV(p,this.hat));
+    if(this.hat) this.hat.draw(addV(p,this.hat));
 
     this.drawMe(p.x,p.y,c);
+    //if(this==player) console.log(player.throttle,p)
     this.updateAnimation();
 
     this.counter++;

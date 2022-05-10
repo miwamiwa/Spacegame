@@ -307,7 +307,7 @@ update(){
     // d is the distance from the input object to the center of this planet
 
     // if this is true, we are touching the surface
-    if(d<this.r){
+    if(d<=this.r+1){
       let vel = dist(zero,vxy(input));
 
       // crash if going too fast

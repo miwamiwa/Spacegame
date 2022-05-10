@@ -1,116 +1,84 @@
-let leavePlanet=()=>{
 
+// leavePlanet()
+//
+// triggered when we exit gravity range
+let leavePlanet=()=>{
   endPlanetBGM(nP);
   nP.lastVisit = frameCount;
-  console.log("stop loop")
-  //Tone.Transport.stop();
-
 }
 
+// reachPlanet()
+//
+// triggered when we enter gravity range
 let reachPlanet=(p)=>{
-
   if(p.bgm!=undefined){
-
     startPlanetBGM(p);
 
-    // update trees
+    // catch up with planet updates
     if(p.lastVisit){
       let timeSinceLastVisit = Math.max(0, frameCount - p.lastVisit);
       console.log("time since last visit "+timeSinceLastVisit);
 
-      p.trees.forEach(tree=>{
-
-        let sprites = getAppropriateTreeSprites(tree.features,tree.variation);
-
-        if(tree.age!="mature"){
-          let age = flo((tree.age + timeSinceLastVisit)/tree.ageMult);
-        //  console.log("new age "+age);
-          if(age>=4){
-            tree.berries = randi(1,4);
-            tree.img = {img:sprites.matureSprite};
-            tree.setTandA(tree.berryText(),tree.lootBerry);
-            tree.talker = true;
-            tree.age="mature"
-          }
-          else {
-            tree.age=age*tree.ageMult;
-            tree.img = {img:sprites.youngSprites[age]};
-          }
-        }
-
-      });
+      // update trees
+      ageAllTreesOnPlanet(timeSinceLastVisit,p);
     }
-
   }
 }
 
 class Vessel extends AnimObject {
   constructor(x,y,size,frames,t,f){
-
     super(x,y,size,frames,t,f);
 
     this.throttle =0;
     this.mass = VesselMass;
     this.crashThreshold = CrashThreshold / this.mass;
-
     this.flame = new AnimObject(0,55,50,FlameAnimation);
     this.children = [this.flame];
     this.gravity = true;
     this.radar = false;
     this.crashed = false;
-
     this.stop();
-
   }
 
-
-
+  // update()
+  //
   update(){
 
-
     if(!this.crashed){
-
       // update radar and check for nearby
       // planet exerting gravity on this vessel
       this.findNearestPlanet();
 
       // if affected by gravity, update velocity
-      if(this.gravity)
-        this.applyGravity();
+      if(this.gravity) this.applyGravity();
 
       // if accelerating, update velocity
       if(this.throttle > 0){
 
+        // increase velocity
         let v = xy(
           this.vx + this.throttle * Math.sin(this.bearing),
           this.vy + this.throttle * Math.cos(this.bearing)
         );
 
+        // get speed (1 dimensional)
         let d = dist(zero,v);
 
-        if(this==player&&grampQuest&&d>speedLimit1){
-          if(haveType(1,"surprizze")){
-            console.log("ey")
-            grampQuest=false;
-            inventory["surprizze"].num --;
-            SpeedLimit = speedLimit2;
-            popupText(["ring ring!","...","ring ring!","well gramps that's a nice surprise!","Gramps: your ship is twice as fast now","Yipekayay","Now about those ships that followed you",".. I also installed a shooting\ndevice on your ship.","press space to fire.","Those guys aren't good news.","I don't know who they are\nThey just appeared 2 days ago","They seemed to mind their own\nbusiness at first","but yesterday, I tried heading out\nto go harvest some black berries","they stopped me and said \nI couldn't leave my planet!","I don't like the sound of this","Look out for trouble... \nAnd don't tell your mom about your ship!"]);
-            RefreshInventory();
-            canShoot=true;
-          }
+        // if player, quest completion
+        if(this==player&&grampQuest&&d>speedLimit1&&haveType(1,"surprizze")){
+            showGrandpaQuestCompleteDialogue();
         }
 
-        // if we are below the speed limit, add the acceleration
+        // if we are below the speed limit, this velocity is correct
         if(d<=SpeedLimit){
           this.vx = v.x;
           this.vy = v.y;
         }
-        // if we are above the speed limit, gotta compress the speed
+        // if we are above the speed limit, gotta compress velocity value
         else {
           this.vx = v.x * SpeedLimit / d;
           this.vy = v.y * SpeedLimit / d;
         }
-
       }
 
       // update flame position according to throttle power
@@ -120,11 +88,12 @@ class Vessel extends AnimObject {
       this.x += mainDelta*this.vx;
       this.y -= mainDelta*this.vy;
 
-      // display object, and its children
+      // display object, and its children (flame)
+      if(this==player&&player.boarded) camera.update();
       this.display(this.children);
     }
 
-    // if crashed
+    // if crashed, draw without flame
     else this.display();
 
   }
@@ -155,8 +124,8 @@ class Vessel extends AnimObject {
         // if in flight, apply gravity
         else {
           let dir = directionFromObjectToObject(nP,this);
-          this.vx +=  g * dir.x;
-          this.vy +=  g * dir.y;
+          this.vx +=  g * dir.x / mainDelta;
+          this.vy +=  g * dir.y / mainDelta;
         }
       }
     }
