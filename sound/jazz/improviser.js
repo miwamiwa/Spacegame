@@ -1,3 +1,5 @@
+let MusicRng;
+
 class Improviser {
   constructor(){
     this.currentMelodySection=0;
@@ -324,9 +326,9 @@ class Improviser {
       let chanceOfAscending = constrain(this.firstNote-this.lastNotePlayed, 0, this.MaxNoteRange)/this.MaxNoteRange;
       let chanceOfDescending = constrain(this.lastNotePlayed-this.firstNote, 0, this.MaxNoteRange)/this.MaxNoteRange;
 
-      if(this.lastNotePlayed<this.firstNote&&ch(chanceOfAscending))
+      if(this.lastNotePlayed<this.firstNote&&MusicRng.ch(chanceOfAscending))
         this.currentPattern = this.newAscendingPattern();
-      else if(this.lastNotePlayed>this.firstNote&&ch(chanceOfDescending))
+      else if(this.lastNotePlayed>this.firstNote&&MusicRng.ch(chanceOfDescending))
         this.currentPattern = this.newDescendingPattern();
       else this.currentPattern = this.newRandomPattern();
     }
@@ -492,8 +494,8 @@ class Improviser {
   // either invert, reverse, both, or none.
   randomTransformation(pattern){
     // choose random transforms
-    let inverted = this.Invert==chooseBetween([this.Invert,this.NoInvert]);
-    let reversed = this.Reverse==chooseBetween([this.Reverse,this.NoReverse]);
+    let inverted = this.Invert==MusicRng.randomFromArray([this.Invert,this.NoInvert]);
+    let reversed = this.Reverse==MusicRng.randomFromArray([this.Reverse,this.NoReverse]);
     // apply
     let newpattern;
     if(reversed) newpattern = this.reversePattern(pattern);

@@ -103,7 +103,7 @@ class ZikGenerator {
 
     // add as many notes as possible
     while(notesAdded<numNotes&&notesAdded<subdivision){
-      let pick = randi(subdivision);
+      let pick = MusicRng.randi(subdivision);
       if(rhythmNotes[pick]==false){
         let time = pick/subdivision;
         if(isHalf==true) time += 0.72/subdivision;
@@ -159,9 +159,9 @@ class ZikGenerator {
   addRhythmToMelody(phrase,chosenSubdivision){
     let notes = this.noteStringToList(phrase);
     // generate beats
-    let beats = this.newRhythmicPattern(chosenSubdivision,notes.length,ch(0.4));
+    let beats = this.newRhythmicPattern(chosenSubdivision,notes.length,MusicRng.ch(0.4));
     // generate off-beats
-    let offbeats = this.newRhythmicPattern(chosenSubdivision,notes.length - beats.notesAdded,ch(0.2), true);
+    let offbeats = this.newRhythmicPattern(chosenSubdivision,notes.length - beats.notesAdded,MusicRng.ch(0.2), true);
 
     // assign notes
     let orderedBeats = this.combineBeats(beats.actualRhythm,offbeats.actualRhythm);
@@ -192,7 +192,7 @@ class ZikGenerator {
       // split chords and notes
       let data = this.splitCombinedSymbol(symbol);
 
-      if(data.chord!=lastchord || ch(0.1*phraselength)){
+      if(data.chord!=lastchord || MusicRng.ch(0.1*phraselength)){
         if(currentPhrase!=undefined) phrases.push(currentPhrase);
         allChords.push(new Chord(data.chord,bgmObject.homeKey));
         currentPhrase = "";
@@ -310,10 +310,10 @@ class ZikGenerator {
 
     // melody generation parameters
 
-    if(params.minMelodyPerChord==undefined) params.minMelodyPerChord = randi(2, 3);
+    if(params.minMelodyPerChord==undefined) params.minMelodyPerChord = MusicRng.randi(2, 3);
     MinSentenceLength = params.minMelodyPerChord;
 
-    if(params.maxMelodyPerChord==undefined) params.maxMelodyPerChord = 1+flo(rand(1.5,3.)*MinSentenceLength);
+    if(params.maxMelodyPerChord==undefined) params.maxMelodyPerChord = 1+flo(MusicRng.rand(1.5,3.)*MinSentenceLength);
     MaxSentenceLength = params.maxMelodyPerChord;
 
     if(params.chanceToDupeSameChord==undefined) params.chanceToDupeSameChord = 0.6;
@@ -331,7 +331,7 @@ class ZikGenerator {
 
       if(generatedContent[chordinpiece]!=undefined){
         // chance to use this melody
-        if(ch(params.chanceToDupeSameChord - dupetype2 * params.dupeChanceDecay)){
+        if(MusicRng.ch(params.chanceToDupeSameChord - dupetype2 * params.dupeChanceDecay)){
           dupetype2++;
           phrases.push(generatedContent[chordinpiece]);
           done=true;
@@ -346,7 +346,7 @@ class ZikGenerator {
         uniquePhrases.forEach(phrase=>{
           if(!done&&this.phraseFitsChord(phrase, allnotes[chordinpiece])){
             // chance to use this melody
-            if(ch(params.chanceToDupeSamePattern - dupetype1 * params.dupeChanceDecay)){
+            if(MusicRng.ch(params.chanceToDupeSamePattern - dupetype1 * params.dupeChanceDecay)){
               phrases.push(phrase);
               done=true;
               dupetype1 ++;
@@ -475,8 +475,8 @@ class ZikGenerator {
   createStructure(bgmObject,params){
 
     console.log("Hmmm!! what would Wolfgang Amadeus say?");
-    if(params.doublingFactor==undefined) params.doublingFactor = randi(1,4);
-    if(params.chanceOfNoChord==undefined) params.chanceOfNoChord = rand(.0,.9);
+    if(params.doublingFactor==undefined) params.doublingFactor = MusicRng.randi(1,4);
+    if(params.chanceOfNoChord==undefined) params.chanceOfNoChord = MusicRng.rand(.0,.9);
 
     let data = this.analyzeHarmony(bgmObject);
 
@@ -566,13 +566,13 @@ class ZikGenerator {
     let result = []; // reset harmony since we're about to add sections back in
     sections.forEach(section=>{
       // chance to double first chord
-      if(ch(.5)) section.splice(0,0,section[0]);
+      if(MusicRng.ch(.5)) section.splice(0,0,section[0]);
 
       // double random chords
       let min = Math.max(params.doublingFactor, flo(section.length/3));
       while(min>0 || section.length%2==1){
-        if(ch(.5)){
-          let index = randi(section.length);
+        if(MusicRng.ch(.5)){
+          let index = MusicRng.randi(section.length);
           section.splice(index,0,section[index]);
         }
 

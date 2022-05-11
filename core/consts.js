@@ -125,7 +125,7 @@ const PlanetNames = [
 
 const BerryNames=[
   "red",
-  "blue",
+  "cyan",
   "orange",
   "yellow",
   "black"

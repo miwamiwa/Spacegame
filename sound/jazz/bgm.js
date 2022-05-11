@@ -2,7 +2,7 @@ class BGM {
   constructor(params){
     this.harmony = []; // list of Chord objects
     this.melody = []; // list of lists of Note objects
-    if(params.homeKey==undefined) this.homeKey = randi(12);
+    if(params.homeKey==undefined) this.homeKey = MusicRng.randi(12);
     else this.homeKey = params.homeKey;
     this.bpm = params.bpm;
     this.beatLength = OneMinute / this.bpm;
@@ -41,7 +41,7 @@ class BGM {
 
   play(time){
     //console.log(this.barCounter)
-    let chanceOfShortNote = rand(.2,.9);
+    let chanceOfShortNote = MusicRng.rand(.2,.9);
     //console.log("..")
 
     if(this.harmony[this.barCounter]!=undefined&&this.harmony[this.barCounter]!=m.NoChord){
@@ -56,7 +56,7 @@ class BGM {
       this.playChord(chord,0.9,recordingHead,time);
 
       playHat();
-      if(ch(0.5)) setTimeout(playHat, this.barLength * 0.66)
+      if(MusicRng.ch(0.5)) setTimeout(playHat, this.barLength * 0.66)
 
       // play melody
       if(this.headsPlayed%4<2){

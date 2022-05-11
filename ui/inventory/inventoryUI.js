@@ -27,6 +27,10 @@ let clickToOpen=(index)=>{
   OpenItem(inventoryByIndex[index])
 }
 
+let clickToPlant=(index)=>{
+  PlantItem(inventoryByIndex[index])
+}
+
 let formatInventoryItem=(item,index)=>{
   // item.name
   // item.num
@@ -46,6 +50,10 @@ let formatInventoryItem=(item,index)=>{
   if(isOpenable(item)){
     suffix = "<span class='openable_txt'> open </span>";
     func = `onclick="clickToOpen(${index})"`;
+  }
+  if(isPlantable(item)){
+    suffix = "<span class='plantable_txt'> open </span>";
+    func = `onclick="clickToPlant(${index})"`;
   }
   let str = `<div ${func}class="inventoryitem">
   <span class="inventoryitem_name">${item.name}</span>

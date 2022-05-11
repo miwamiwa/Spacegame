@@ -235,7 +235,7 @@ class MusicTheory {
     }
 
     // make a choice out of the available options
-    let pick = randi(options.length);
+    let pick = MusicRng.randi(options.length);
     return options[pick];
   }
 

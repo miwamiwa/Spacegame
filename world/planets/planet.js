@@ -43,10 +43,55 @@ class Planet {
     // set local currency and language
     this.setLang("Onian");
 
+    // generate music seed
+    this.getMusicSeed();
+
     if(isBarren!=undefined) this.setupMusic(isBarren);
+
+
 
     // all done
     planets.push(this);
+  }
+
+  getMusicSeed(){
+    let str = this.name[0] + this.name[1] + this.language[0] + this.language[1];
+    /*
+    let trees = [];
+    this.trees.forEach(tree=>{
+      if(trees[tree.kindOfBerry]==undefined) trees[tree.kindOfBerry] =0;
+      trees[tree.kindOfBerry] ++;
+    });
+
+    for(let i in trees){
+      if(BerryNames.includes(i)) str += trees[i] + i;
+    }
+    */
+
+    /*
+    this.trees.forEach(tree=>{
+      if(trees[tree.kindOfBerry]==undefined){
+        trees[tree.kindOfBerry] =0;
+        numberries++;
+      }
+      trees[tree.kindOfBerry] ++;
+      totalberries ++;
+    });
+
+    for(let i in trees){
+      if(BerryNames.includes(i)){
+        let num = Math.max(1,6*flo(trees[i]/totalberries));
+        for(let j=0; j<num; j++) str += i[0]
+      }
+    }
+    */
+    this.trees.forEach(tree=>{
+      str += tree.kindOfBerry[0];
+    });
+
+    //console.log(str)
+    this.musicSeed = str;
+    this.musicRng = new RNG(this.musicSeed);
   }
 
   setupMusic(isBarren){
@@ -60,6 +105,9 @@ class Planet {
 
     // am i a barren planet?
     this.isBarren = isBarren;
+
+    MusicRng = this.musicRng;
+    RitaRng = this.musicRng;
 
     if(this.isBarren){
       // barren music for this planet
@@ -171,24 +219,29 @@ class Planet {
       if(!i)i=0.9;
       // get random position
       pos = this.rInRange(i);
-      let clear = true;
-      //if(this.posIsInWater(pos)) continue;
-
-      for(let j=0; j<this.features.length; j++){
-        let distance = dist(pos,this.features[j]);
-
-        if(this.features[j].id=="tree"){
-          if(distance<50) clear=false;
-        }
-        else if (this.features[j]!=Dude&&distance<d)
-        clear  = false;
-      }
 
 
-      found = clear;
+      found = this.checkIfClear(pos,d);
     }
     return pos;
   }
+
+  checkIfClear(pos,d){
+    let clear = true;
+    //if(this.posIsInWater(pos)) continue;
+
+    for(let j=0; j<this.features.length; j++){
+      let distance = dist(pos,this.features[j]);
+
+      if(this.features[j].id=="tree"){
+        if(distance<50) clear=false;
+      }
+      else if (this.features[j]!=Dude&&distance<d)
+      clear  = false;
+    }
+    return clear;
+  }
+
 
   // setupScenery()
   //

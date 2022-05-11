@@ -21,7 +21,7 @@ class MelodicLine {
     this.possibleSubdivisions = 2;
     this.preferredSubdivision = 1;
     this.preferenceAmount = 0.5;
-    this.scarcity = Math.max(0.5,rand());
+    this.scarcity = Math.max(0.5,MusicRng.rand());
 
     // generate!
     this.generateRhythm();
@@ -80,7 +80,7 @@ class MelodicLine {
 
       // chance to generate note at each subdivision
       for(let j=0; j<subdivision; j++){
-        let playANote = ch(this.scarcity);
+        let playANote = MusicRng.ch(this.scarcity);
         if(playANote) this.noteCount++;
         // add array element with true/false to indicate whether a note
         // is played at this point in time
@@ -226,10 +226,10 @@ class MelodicLine {
     let subdivision = this.preferredSubdivision;
 
     // chance to pick another
-    if(!ch(0.5 + this.preferenceAmount)){
+    if(!MusicRng.ch(0.5 + this.preferenceAmount)){
       if(this.possibleSubdivisions>2){
         for(let i=0; i<this.possibleSubdivisions-1; i++)
-        if(ch(0.5)) subdivision += 1;
+        if(MusicRng.ch(0.5)) subdivision += 1;
       }
       else subdivision += 1;
     }

@@ -32,15 +32,8 @@ let playBarrenPlanetMusic=()=>{
   console.log("barren music")
 
   setScale(nP.m);
-
-  // hats
-
   // trigger melody notes
   playImprov();
-
-  // play chords
-
-  //let now = Tone.now()
 
   let octave = 48;
   let notes = [
@@ -51,6 +44,6 @@ let playBarrenPlanetMusic=()=>{
   console.log(notes)
 
 
-  playChordNotes(notes, 4, 0.8, now);
+  playChordNotes(notes, 1, 0.8);//, now);
 
 }

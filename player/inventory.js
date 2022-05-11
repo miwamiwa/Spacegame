@@ -61,6 +61,10 @@ let isEquipable=(item)=>{
   return item.type=="weapon"||item.type=="armor"
 }
 
+let isPlantable=(item)=>{
+  return item.type=="seed"
+}
+
 let isUseable=(item)=>{
   return item.type=="utility" || item.type=="food"
 }
@@ -102,6 +106,36 @@ let OpenItem=(item)=>{
   }
   item.num--;
   RefreshInventory();
+}
+
+let PlantItem=(item)=>{
+  //console.log("plant",item);
+  //{name:item.name+" seed",type:"seed"}
+
+  let pos = xy(Dude.x,Dude.y + 5);
+
+  if(nP.checkIfClear(pos,40)){
+    let flora = {berryName:item.name.replace(" seed","")};
+    flora.treeFamily = treeFamilies[flora.berryName];
+
+    //local flora: {berryName: 'orange', treeFamily: Array(3)}
+    //this.addFeature(new Tree(this.localFlora,age,this.rng), 10);
+    let tree =new Tree(flora,0,nP.rng);
+    tree.x = pos.x;
+    tree.y = pos.y;
+    nP.trees.push(tree);
+    nP.features.push(tree);
+    nP.resetMelodyOnNextVisit=true;
+    nP.sortFeatures();
+
+
+    item.num--;
+    RefreshInventory();
+    console.log("planted tree!")
+  }
+  else {
+    console.log("can't plant");
+  }
 }
 
 

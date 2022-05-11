@@ -3,6 +3,7 @@
 // max harmony length before expanding
 let MaxSentenceLength = 50;
 let MinSentenceLength = 6;
+let RitaRng;
 
 // skip list
 const skipList = [
@@ -125,7 +126,7 @@ function shuffle(oldArray) { // shuffle array
     len = newArray.length,
     i = len;
   while (i--) {
-    var p = parseInt(Math.random() * len),
+    var p = parseInt(RitaRng.rand() * len),
       t = newArray[i];
     newArray[i] = newArray[p];
     newArray[p] = t;
@@ -256,14 +257,14 @@ var RiTa = {
   // Start functions =================================
 
   random: function() {
-    var currentRandom = Math.random();
+    var currentRandom = RitaRng.rand();
     if (!arguments.length) return currentRandom;
     return (arguments.length === 1) ? currentRandom * arguments[0] :
       currentRandom * (arguments[1] - arguments[0]) + arguments[0];
   },
 
   randomItem: function(arr) {
-    return arr[Math.floor(Math.random() * arr.length)];
+    return arr[Math.floor(RitaRng.rand() * arr.length)];
   },
 
   distance: function(x1, y1, x2, y2) {
@@ -834,7 +835,7 @@ var RiTa = {
     if (num) {
       for (var z = 0; z < num; z++) o.push(z);
       // Array shuffle, from http://jsfromhell.com/array/shuffle
-      for (var j, x, i = o.length; i; j = parseInt(Math.random() * i),
+      for (var j, x, i = o.length; i; j = parseInt(RitaRng.rand() * i),
         x = o[--i], o[i] = o[j], o[j] = x) { /* no-op */ }
     }
     return o;
@@ -1612,7 +1613,7 @@ RiLexicon.prototype = {
   randomWord: function() { // takes nothing, pos, syllableCount, or both
 
     var i, j, rdata, numSyls, pluralize = false,
-      ran = Math.floor(Math.random() * this.size()),
+      ran = Math.floor(RitaRng.rand() * this.size()),
       found = false, a = arguments, words = this.keys;
 
     var  isNNWithoutNNS = function(w, pos) {
@@ -2179,7 +2180,7 @@ RiMarkov.prototype = {
     while (true) {
 
       pTotal = 0;
-      selector = Math.random();
+      selector = RitaRng.rand();
       for (var i = 0, j = nodes.length; i < j; i++) {
 
         pTotal += nodes[i].probability();
@@ -3090,7 +3091,7 @@ RiGrammar.prototype = {
 
     var getStochasticRule = function(temp) { // map
 
-      var name, dbug = false, p = Math.random(), result, total = 0;
+      var name, dbug = false, p = RitaRng.rand(), result, total = 0;
       if (dbug) log("getStochasticRule(" + temp + ")");
       for (name in temp) {
         total += parseFloat(temp[name]);
@@ -3413,7 +3414,7 @@ TextNode.prototype = {
   _select: function(arr, probabalisticSelect) {
     if (!arr) throw TypeError("bad arg to '_select()'");
     probabalisticSelect = probabalisticSelect || false;
-    return (probabalisticSelect ? this._probabalisticSelect(arr) : arr[Math.floor((Math.random() * arr.length))]);
+    return (probabalisticSelect ? this._probabalisticSelect(arr) : arr[Math.floor((RitaRng.rand() * arr.length))]);
   },
 
   _probabalisticSelect: function(arr) {
@@ -3426,7 +3427,7 @@ TextNode.prototype = {
 
     // select from multiple options based on frequency
     var pTotal = 0,
-      selector = Math.random();
+      selector = RitaRng.rand();
     for (var i = 0; i < arr.length; i++) {
 
       pTotal += arr[i].probability();

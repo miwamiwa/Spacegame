@@ -90,6 +90,7 @@ class Tree extends StaticObject {
     this.berryCounter =0;
     this.berryLoopLength=10000;
     this.berry = features.berryName+" berry";
+    this.kindOfBerry = features.berryName;
     this.name=this.berry+" tree"
 
     this.setTandA(this.berryText(),this.lootBerry);

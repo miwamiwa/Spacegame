@@ -15,6 +15,12 @@ let endPlanetBGM=(p)=>{
   if(nP.bgm!=undefined) nP.bgm.reset();
   currentPattern=undefined;
   Impro.initializeImprov();
+
+  if(p.resetMelodyOnNextVisit){
+    nP.resetMelodyOnNextVisit=false;
+    nP.getMusicSeed();
+    nP.setupMusic(!nP.special && nP.tribe==undefined)
+  }
 }
 
 
@@ -56,7 +62,7 @@ let playChordNotes=(notes,length,roll,moment)=>{
 
 let actualyPlayChord=(notes,time,length,roll)=>{
   playBassNote(notes[0]%m.Octave + 3*m.Octave, length * currentBGM.barLength)
-  for(let i=0; i<notes.length; i++) setTimeout(()=>{playNote(notes[i], length * currentBGM.barLength)},roll*i*currentBGM.barLength);
+  for(let i=0; i<notes.length; i++) setTimeout(()=>{playNote(notes[i], length * currentBGM.barLength,true)},roll*i*currentBGM.barLength);
 }
 
 
@@ -73,17 +79,17 @@ let playNote=(num,length,isChord)=>{
   if(isChord){
     play(
       nToF(num),
-      0.1*length, 0.8*length, 0.3*length, 2.6*length,
-      2, constSine2,
-      1.2,
-      'lowpass',4000,1
+      0.05, 0.9*length, 0.3*length, 1.0*length,
+      2, constSine1,
+      2.4 - length / 4,
+      'lowpass',12000,1
     );
   }
   else {
     play(
       nToF(num),
       0.15, 0.9*length, 0.3*length, 1.0*length,
-      2, constSine,
+      2, constSine2,
       2.4 - length / 4,
       'lowpass',12000,1
     );
@@ -100,13 +106,25 @@ let playBassNote=(num,length)=>{
   //console.log(num,length)
   length = Math.abs(length)
 
-  play(
-    nToF(num),
-    0.1*length, 0.8*length, 0.3*length, 2.6*length,
-    2, constSine2,
-    3.2,
-    'lowpass',4000,1
-  );
+  if(ch(0.3)){
+    play(
+      nToF(num),
+      0.1*length, 0.8*length, 0.3*length, 2.6*length,
+      2, noisey2,
+      2.9,
+      'lowpass',4000,1
+    );
+  }
+  else {
+    play(
+      nToF(num),
+      0.1*length, 0.8*length, 0.3*length, 2.6*length,
+      2, constSine3,
+      2.9,
+      'lowpass',4000,1
+    );
+  }
+
 
   if(ch(.25)) setTimeout(()=>{playBassNote(num,length*1000)}, currentBGM.barLength * .75);
 }
@@ -208,8 +226,18 @@ let backToTop=()=>{
 // sin of a value at index i in the sample buffer.
 let sine=(i,a,d)=>Math.sin(i/(a+d));
 
+let sine2=(i,a,d)=>Math.floor(0.5+1.5*Math.sin(i/(a+d)));
+
+let tanwavee=(i,a,d)=>Math.tan(i/(a+d));
+
+let constSine1=(i,d)=>
+constrain( tanwavee(i,0,d),-0.1,0.1);
+
 let constSine2=(i,d)=>
-constrain( sine(i,0,d)+sine(i*0.975,0,d)+rand(.1,.3),-0.1,0.1);
+constrain( tanwavee(i,0,d),-0.1,0.1);
+
+let constSine3=(i,d)=>
+constrain( sine(i,0,d)+sine(i*0.925,0,d)+rand(-.2,.2),-0.2,0.2);
 
 // synth used in playhop2 and playcash
 let constSineZ=(i,d)=>0.2*sine(i,i,d)+0.2*sine(2*i,i,d)+0.2*sine(4*i,i,d)
