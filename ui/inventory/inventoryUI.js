@@ -52,7 +52,7 @@ let formatInventoryItem=(item,index)=>{
     func = `onclick="clickToOpen(${index})"`;
   }
   if(isPlantable(item)){
-    suffix = "<span class='plantable_txt'> open </span>";
+    suffix = "<span class='plantable_txt'> plant </span>";
     func = `onclick="clickToPlant(${index})"`;
   }
   let str = `<div ${func}class="inventoryitem">

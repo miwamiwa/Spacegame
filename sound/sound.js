@@ -51,9 +51,9 @@ let playChordNotes=(notes,length,roll,moment)=>{
   else if(ch(0.5)){
     actualyPlayChord(notes,moment,length*0.2,0);
   }
-  else if(ch(0.5)){
-    actualyPlayChord(notes,moment,length,0.05);
-  }
+  //else if(ch(0.5)){
+    //actualyPlayChord(notes,moment,length,0.1);
+  //}
   else {
     actualyPlayChord(notes,moment,length*0.7,0);
     actualyPlayChord(notes,moment+0.72,length*0.25,0);
@@ -62,7 +62,7 @@ let playChordNotes=(notes,length,roll,moment)=>{
 
 let actualyPlayChord=(notes,time,length,roll)=>{
   playBassNote(notes[0]%m.Octave + 3*m.Octave, length * currentBGM.barLength)
-  for(let i=0; i<notes.length; i++) setTimeout(()=>{playNote(notes[i], length * currentBGM.barLength,true)},roll*i*currentBGM.barLength);
+  for(let i=0; i<notes.length; i++) setTimeout(()=>{playNote(notes[i] + randomVoicing(), length * currentBGM.barLength,true)},roll*i*currentBGM.barLength);
 }
 
 
@@ -74,6 +74,7 @@ let playNote=(num,length,isChord)=>{
   //return;
   //console.log(num,length)
   length = Math.abs(length)
+  length = Math.max(0.1,length)
 
   //console.log(nToF(num))
   if(isChord){
@@ -86,6 +87,7 @@ let playNote=(num,length,isChord)=>{
     );
   }
   else {
+    length = 0.2
     play(
       nToF(num),
       0.15, 0.9*length, 0.3*length, 1.0*length,

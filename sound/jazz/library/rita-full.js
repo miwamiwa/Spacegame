@@ -2096,6 +2096,7 @@ RiMarkov.prototype = {
       ///if(sent.indexOf(chord+" ")!=-1) return false;
     });
 
+
     if (!last.match(/[!?.]/)) {
       if (this.printIgnoredText)
         log("Bad last token: '" + last + "' in: " + sent);

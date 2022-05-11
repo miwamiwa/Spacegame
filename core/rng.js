@@ -54,7 +54,8 @@ let WorldRandom;
 let planetSeedLength = 8;
 
 let setupRNG=()=>{
-
+  WorldSeed = "";
+  for(let i=0; i<10; i++) WorldSeed += randomLetter();
   WorldRandom = new RNG(WorldSeed);
 
   //console.log(generatePlanetSeed(),generatePlanetSeed())
@@ -115,6 +116,10 @@ class RNG {
   ch(i){
     return this.rand()<i;
   }
+}
+
+let randomLetter=()=>{
+  return String.fromCharCode(97+randi(26));
 }
 
 let xmur3=(str)=>{

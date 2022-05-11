@@ -62,7 +62,7 @@ let isEquipable=(item)=>{
 }
 
 let isPlantable=(item)=>{
-  return item.type=="seed"
+  return item.type=="seed" || item.type=="spice"
 }
 
 let isUseable=(item)=>{

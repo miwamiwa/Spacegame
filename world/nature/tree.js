@@ -1,40 +1,42 @@
 let getTreeSprite=(features,age,rng)=>{
   // create new family if necessary
-  if(treeFamilies[features.berryName]==undefined){
+  let berryname = features.berryName.replace(" berry","");
+  if(treeFamilies[berryname]==undefined){
     let data = createNewTreeType();
-    treeFamilies[features.berryName] = data.mature_trees;
-    youngTrees[features.berryName] = data.younglings;
+    treeFamilies[berryname] = data.mature_trees;
+    youngTrees[berryname] = data.younglings;
   }
 
   // pick initial sprite
   let sprite;
   let variation = rng.randi(3);
-  if(age=="mature") sprite = treeFamilies[features.berryName][variation];
+  if(age=="mature") sprite = treeFamilies[berryname][variation];
   else{
-    sprite = youngTrees[features.berryName][variation][age];
+    sprite = youngTrees[berryname][variation][age];
   //  console.log("sprite ",sprite)
   }
   return {
     sprite:sprite,
     variation:variation,
-    matureSprite:treeFamilies[features.berryName][variation],
+    matureSprite:treeFamilies[berryname][variation],
     youngSprites:[
-      youngTrees[features.berryName][variation][0],
-      youngTrees[features.berryName][variation][1],
-      youngTrees[features.berryName][variation][2],
-      youngTrees[features.berryName][variation][3]
+      youngTrees[berryname][variation][0],
+      youngTrees[berryname][variation][1],
+      youngTrees[berryname][variation][2],
+      youngTrees[berryname][variation][3]
     ]
   }
 }
 
 let getAppropriateTreeSprites=(features,variation)=>{
+  let berryname = features.berryName.replace(" berry","");
   return {
-    matureSprite:treeFamilies[features.berryName][variation],
+    matureSprite:treeFamilies[berryname][variation],
     youngSprites:[
-      youngTrees[features.berryName][variation][0],
-      youngTrees[features.berryName][variation][1],
-      youngTrees[features.berryName][variation][2],
-      youngTrees[features.berryName][variation][3]
+      youngTrees[berryname][variation][0],
+      youngTrees[berryname][variation][1],
+      youngTrees[berryname][variation][2],
+      youngTrees[berryname][variation][3]
     ]
   }
 }
@@ -89,8 +91,9 @@ class Tree extends StaticObject {
     this.talkrange = 34;
     this.berryCounter =0;
     this.berryLoopLength=10000;
-    this.berry = features.berryName+" berry";
-    this.kindOfBerry = features.berryName;
+    if(features.berryName.indexOf("berry")==-1) this.berry = features.berryName+" berry";
+    else this.berry = features.berryName;
+    this.kindOfBerry = features.berryName.replace(" berry","");
     this.name=this.berry+" tree"
 
     this.setTandA(this.berryText(),this.lootBerry);

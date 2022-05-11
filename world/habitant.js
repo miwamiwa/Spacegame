@@ -91,7 +91,7 @@ class Habitant extends AnimObject{
 
           this.setTandA(["Oh!\nA muffin! For me?","Thank you!"],()=>{
             this.setTandA([RandomFromArray(Greetings)],()=>{
-              if(this.planet.bobsMuffined==this.planet.tribe.totalBobs){
+              if(this.planet.bobsMuffined==this.planet.tribe.peopleAdded){
                 this.planet.tribe.everyoneGotAMuffin();
               }
             });
