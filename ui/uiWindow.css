@@ -41,3 +41,15 @@
 #mapCanvas{
   margin:10px;
 }
+
+
+.shopitem{
+  padding:5px;
+  cursor:pointer;
+  background-color:#444f;
+}
+
+.shopitem:hover{
+  background-color:white;
+  color:black;
+}

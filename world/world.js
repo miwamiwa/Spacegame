@@ -3,6 +3,7 @@ let mainCanvas;
 let mCtx;
 let middle = xy(400,260);
 let canvasSize;
+let currentShop;
 
 // Planets
 let HomePlanet;
@@ -94,8 +95,21 @@ let setupPlanets=()=>{
   MechanicPlanet = new Planet(p.x,p.y,false,"Timmy", 340, false);
   MechanicPlanet.setupMusic(false);
   MechanicPlanet.special=true;
-  Shop=MechanicPlanet.addFeature(new StaticObject(0,0,home_png, 140, ShopText), 100);
-  Shop.DialogUpdate = updateMechanicText;
+  Shop=MechanicPlanet.addFeature(new StaticObject(0,0,home_png, 140), 100);
+  Shop.setTandA(["Welcome to my shop!",""],()=>{
+    
+    currentShop=Shop;
+
+    tradeui.setText(formatTradeButtons([
+      [gpPart,gpPart,"coin",50],
+      ["zoomzoom3000","upgrade","coin",500]
+    ]));
+
+    availableText=undefined;
+    toggleWindow("trade");
+  });
+
+  Shop.talker=true;
   Shop.hue=flo(rand(360));
   Shop.name="mechanic's shop";
 

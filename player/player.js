@@ -68,6 +68,9 @@ let resetPlayerOnCrash=()=>{
 let playerLanded=()=>{
   // unboard
   player.boarded = false;
+  player.throttle=0;
+  player.vx=0;
+  player.vy=0;
   // switch camera target to dude
   camera.targetIsDude();
   // move dude to planet

@@ -551,7 +551,6 @@ class Improviser {
     pattern = Array.from(pattern);
     this.currentPatternIndex = 0;
     this.currentPatternOffset = -pattern[0];
-    //console.log("ascending")
     return pattern;
   }
 
@@ -565,7 +564,6 @@ class Improviser {
     pattern = this.reversePattern(pattern);
     this.currentPatternIndex = 0;
     this.currentPatternOffset = -pattern[0];
-    //console.log("descending")
     return pattern;
   }
 
@@ -581,10 +579,7 @@ class Improviser {
     }
 
     this.refreshAscendingPatterns();
-
-    //console.log(this.NotePatterns, this.AscendingNotePatterns)
   }
-
 }
 
 const Impro = new Improviser();

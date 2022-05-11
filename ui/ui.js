@@ -47,6 +47,31 @@ let popupText=(input)=>{
   availableText2=input;
 }
 
+
+let formatTradeButtons=(list)=>{
+  let result = "";
+  list.forEach(data=>{
+    let str = `<div class="shopitem" onclick="tryBuy('${data[0]}','${data[1]}','${data[2]}','${data[3]}')">
+    <span class="greyed">buy one </span>${data[0]}<span class="greyed"> for </span> ${data[3]} ${data[2]}
+    </div>`;
+    //stuff[0] = [gpPart,gpPart,"coin",50];
+    //stuff[1] = ["zoomzoom3000","upgrade","coin",500];
+    result += str;
+  });
+  return result;
+}
+
+let tryBuy=(itemname,itemtype,currency,price)=>{
+  if(haveType(price,currency)){
+    inventory[currency]-=price;
+    AddToInventory({name:itemname,type:itemtype});
+
+    popupText(["one "+itemname+" coming right up!","here you go."]);
+    toggleWindow("trade");
+    currentShop = undefined;
+  }
+}
+
 // updatePlayerUi()
 //
 // called in rungame()
