@@ -64,6 +64,7 @@ let setupPlanets=()=>{
   HomePlanet.special=true;
   Mom = HomePlanet.addFeature( new AnimObject(0,0,100,poses[0],MomText), 100);
   Mom.DialogUpdate = UpdateMomText;
+  Mom.talker=true
   Mom.name="mom";
   planetMode(Mom);
 
@@ -73,8 +74,19 @@ let setupPlanets=()=>{
 
   let workshop = HomePlanet.addFeature( new StaticObject(0,0,home_png, 80, WorkshopText), 100);
   workshop.hue = 80;
-  workshop.DialogUpdate = updateWorkshopText;
-  workshop.name="workshop"
+  //workshop.DialogUpdate = updateWorkshopText;
+  workshop.name="workshop";
+
+  workshop.setTandA(["This is my shed...","Oh wow tools!",""],()=>{
+    currentShop=workshop;
+    craftUI.setText(formatCraftButtons([
+      ["wood sword","weapon","stick",2],
+      ["ladder","utility","stick",16]
+    ]));
+
+    availableText=undefined;
+    toggleWindow("crafting");
+  });
 
   // create grandpas's planet:
 
@@ -97,7 +109,7 @@ let setupPlanets=()=>{
   MechanicPlanet.special=true;
   Shop=MechanicPlanet.addFeature(new StaticObject(0,0,home_png, 140), 100);
   Shop.setTandA(["Welcome to my shop!",""],()=>{
-    
+
     currentShop=Shop;
 
     tradeui.setText(formatTradeButtons([

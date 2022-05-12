@@ -47,12 +47,22 @@ let popupText=(input)=>{
   availableText2=input;
 }
 
+let formatCraftButtons=(list)=>{
+ return formatTradeButtons(list,true)
+}
 
-let formatTradeButtons=(list)=>{
+
+let formatTradeButtons=(list,isCrafting)=>{
   let result = "";
+  let action = "buy";
+  let word = "for";
+  if(isCrafting){
+    action = "craft";
+    word = "using"
+  }
   list.forEach(data=>{
     let str = `<div class="shopitem" onclick="tryBuy('${data[0]}','${data[1]}','${data[2]}','${data[3]}')">
-    <span class="greyed">buy one </span>${data[0]}<span class="greyed"> for </span> ${data[3]} ${data[2]}
+    <span class="greyed">${action} one </span>${data[0]}<span class="greyed"> ${word} </span> ${data[3]} ${data[2]}
     </div>`;
     //stuff[0] = [gpPart,gpPart,"coin",50];
     //stuff[1] = ["zoomzoom3000","upgrade","coin",500];

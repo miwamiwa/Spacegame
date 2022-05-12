@@ -66,7 +66,7 @@ let trade=(obj,type2,type,ingred,num,blend,notxt)=>{
         inventory[h.name].num -= num;
         if(spice!="") inventory[spice.replace(" ","")].num --;
         AddToInventory(theitem);
-
+        //refreshAvailableText(); 
       });
 
       // all other items:

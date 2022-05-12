@@ -198,15 +198,18 @@ let planetInputs=()=>{
   if(dist(player,addV(Dude,nP))<HopDistance)
   canEnter = true;
 
+  refreshAvailableText();
+
+
+}
+
+
+let refreshAvailableText=()=>{
   // look through all features
   nP.features.forEach(f=>{
     // if collider enabled
-    if(f.talker&&dist(Dude,xy(f.x,f.y+60))<f.talkrange)
-    availableText = f;
-
+    if((f.talker)&&dist(Dude,xy(f.x,f.y+60))<f.talkrange) availableText = f;
   });
-
-
 }
 
 
@@ -215,7 +218,7 @@ let shoot = ()=>{
   if(!player.boarded) return;
   console.log(player.bearing)
   let direction = xy(Math.sin(player.bearing),-Math.cos(player.bearing));
-//  console.log("shoot!",direction);
+  //  console.log("shoot!",direction);
 
   new Projectile(player,false,direction);
 
@@ -272,10 +275,7 @@ let SpacePressInGameState =()=>{
     // display text box:
     if(!player.reading){
       player.reading = true;
-
-      if(availableText.DialogUpdate!=undefined)
-        availableText.DialogUpdate();
-
+      if(availableText.DialogUpdate!=undefined) availableText.DialogUpdate();
       textCounter =0;
     }
 
@@ -301,10 +301,11 @@ let SpacePressInGameState =()=>{
       if(!availableText||textCounter==availableText.text.length){
         availableText = undefined;
         player.reading = false;
+        refreshAvailableText()
+        console.log(availableText)
       }
     }
   }
 
-  else //
-  shoot();
+  else if(player.boarded) shoot();
 }
