@@ -1,5 +1,5 @@
 class Projectile {
-  constructor(pos,targetIsPlayer,direction){
+  constructor(pos,targetIsPlayer,direction,initVel){
     console.log(pos,targetIsPlayer,direction)
     this.visible = true;
     this.going=false;
@@ -8,6 +8,7 @@ class Projectile {
 
     this.size=10;
     this.half=5;
+    this.initVel=initVel
 
     this.targetIsPlayer=targetIsPlayer;
 

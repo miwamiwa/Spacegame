@@ -36,6 +36,7 @@ class Vessel extends AnimObject {
     this.children = [this.flame];
     this.gravity = true;
     this.radar = false;
+    this.speed =0;
     this.crashed = false;
     this.stop();
   }
@@ -63,6 +64,7 @@ class Vessel extends AnimObject {
 
         // get speed (1 dimensional)
         let d = dist(zero,v);
+        this.speed = d;
 
         // if player, quest completion
         if(this==player&&grampQuest&&d>speedLimit1&&haveType(1,"surprizze")){

@@ -220,7 +220,7 @@ let shoot = ()=>{
   let direction = xy(Math.sin(player.bearing),-Math.cos(player.bearing));
   //  console.log("shoot!",direction);
 
-  new Projectile(player,false,direction);
+  new Projectile(player,false,direction, xy(player.xy,player.vy));
 
 }
 
@@ -249,6 +249,8 @@ let SpacePressInGameState =()=>{
     tradeWindow.open=false;
     return;
   }
+
+  if(tradeui.visible||craftUI.visible) return;
 
 
 

@@ -8,7 +8,7 @@ let canShoot = false;
 let enemiesCanShoot = false;
 
 let CrashEnabled = false;
-let SoundEnabled = false;
+let SoundEnabled = true;
 
 
 // current game screen
@@ -149,7 +149,8 @@ let runGame=()=>{
     doneAction=false;
     player.reading=false;
   }
-  updateAutopilot();
+
+  if(autopilotActive) updateAutopilot();
 }
 
 
@@ -180,4 +181,98 @@ let runStartScreen=(x,y)=>{
 //
 // draw background
 
-let bg=()=> frect(zero,mainCanvas.width,mainCanvas.height,bgFill);
+let bg=()=>{
+  if(camera==undefined||canvasSize==undefined){
+    //frect(zero,mainCanvas.width,mainCanvas.height,bgFill);
+    return;
+  }
+
+  //console.log(camera,ca)
+
+  let scaling = 10;
+
+  let canvas = subV(camera,multV(0.5,canvasSize));
+  canvas.w = mainCanvas.width;
+  canvas.h = mainCanvas.height;
+
+
+  let source = {
+    x:(canvas.x / scaling)/2 % bgPngWidth,
+    y:(canvas.y / scaling)/2 % bgPngHeight,
+    w:mainCanvas.width / scaling,
+    h:mainCanvas.height / scaling
+  }
+
+  let image = {
+    w:bgPngWidth,
+    h:bgPngHeight
+  }
+
+  mCtx.save();
+
+  // blur effect
+  let opa = Math.max(0.2,1 - player.speed / 1.5 / speedLimit2);
+  //console.log(opa)
+  mCtx.filter = `brightness(0.4) opacity(${opa})`;
+
+
+  // main background
+  mCtx.drawImage(bgPng, source.x, source.y, source.w, source.h, 0,0, canvas.w, canvas.h);
+
+  // add more on top
+  if(source.y<0)
+    mCtx.drawImage(bgPng, source.x, image.h + source.y, source.w, abs(source.y), 0,0, canvas.w, source.y * -scaling);
+
+  // add more on left
+  if(source.x<0)
+    mCtx.drawImage(bgPng, image.w + source.x, source.y, abs(source.x), source.h, 0,0, source.x * -scaling, canvas.h);
+
+  // add more on top-left
+  if(source.x<0&&source.y<0)
+    mCtx.drawImage(bgPng, image.w + source.x, image.h + source.y, abs(source.x), abs(source.y), 0,0, source.x * -scaling, source.y * -scaling);
+
+
+  // add more to the right
+  if(source.x + source.w > image.w){
+    let resultingW = source.x + source.w - image.w;
+    mCtx.drawImage(bgPng, 0, source.y, resultingW, source.h, scaling*(source.w - resultingW), 0, scaling * resultingW, canvas.h);
+  }
+
+  // add more below
+  if(source.y + source.h > image.h){
+    let resultingH = source.y + source.h - image.h;
+    mCtx.drawImage(bgPng, source.x, 0, source.w, resultingH, 0, scaling*(source.h - resultingH), canvas.w, scaling * resultingH);
+  }
+
+  // add to bottom-right
+  if(source.y + source.h > image.h && source.x + source.w > image.w){
+    let resultingH = source.y + source.h - image.h;
+    let resultingW = source.x + source.w - image.w;
+    mCtx.drawImage(bgPng, source.x, source.y, resultingW, resultingH, scaling*(source.w - resultingW), scaling*(source.h - resultingH), scaling * resultingW, scaling * resultingH);
+  }
+
+  // add to bottom-left
+  if(source.y + source.h > image.h && source.x<0){
+    let resultingH = source.y + source.h - image.h;
+    mCtx.drawImage(bgPng, image.w + source.x, 0, abs(source.x), resultingH, 0, scaling*(source.h - resultingH), source.x * -scaling, scaling * resultingH);
+  }
+
+  // add to top-right
+  if(source.x + source.w > image.w && source.y<0){
+    let resultingW = source.x + source.w - image.w;
+    mCtx.drawImage(bgPng, 0, image.h + source.y, resultingW, abs(source.y), scaling*(source.w - resultingW), 0, scaling * resultingW, source.y * -scaling);
+  }
+
+  /*
+  // add more below
+  if(source.y>bgPngHeight - mainCanvas.height/scaling)
+    mCtx.drawImage(bgPng, source.x, 0, mainCanvas.width/scaling, bgPngHeight - source.y, 0,mainCanvas.height - (bgPngHeight-source.y), mainCanvas.width, source.y);
+
+  // add more on bottom right
+  if(source.y>bgPngHeight - mainCanvas.height/scaling && source.x>bgPngWidth - mainCanvas.width/scaling)
+    mCtx.drawImage(bgPng, source.x, source.y, bgPngWidth - source.x, bgPngHeight - source.y, bgPngWidth - source.x,bgPngHeight - source.y, source.x, source.y);
+    */
+  //console.log(source)
+  mCtx.restore();
+  //mCtx.drawImage(bgPng, source.x, source.y, mainCanvas.width/scaling, mainCanvas.height/scaling, 0, 0, mainCanvas.width, mainCanvas.height);
+}

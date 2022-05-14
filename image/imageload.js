@@ -1,8 +1,18 @@
+let bgPng;
+let bgPngWidth;
+let bgPngHeight;
+
 // loadImages()
 //
 // load all images in the pre-generated all_images array
-let loadImages=()=>
+let loadImages=()=>{
   all_images.forEach(el=>loadImage(el));
+  bgPng = new Image();
+  bgPng.src = "image/assets/bg.png";
+  bgPngWidth = 1024;
+  bgPngHeight = 657;
+}
+
 
 // loadImage()
 //
