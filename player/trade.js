@@ -44,7 +44,7 @@ let trade=(obj,type2,type,ingred,num,blend,notxt)=>{
   let h = haveType(num,ingred);
   let name=type2;
 
-
+  console.log("muffin trade...")
   if(h&&knownLanguages.includes(nP.language)){
     let spice="";
     if(ingred=="berry"){
@@ -60,21 +60,29 @@ let trade=(obj,type2,type,ingred,num,blend,notxt)=>{
     };
 
     // if muffin
-    if(notxt==undefined)
-    obj.setTandA([ `Oh, you have ${plural(h.type)}\nGive me a moment..`,
-      ".....", "All done!\nHere's a "+name], ()=>{
-        inventory[h.name].num -= num;
-        if(spice!="") inventory[spice.replace(" ","")].num --;
-        AddToInventory(theitem);
-        //refreshAvailableText(); 
-      });
+    if(notxt==undefined){
+      obj.setTandA([ `Oh, you have ${plural(h.type)}\nGive me a moment..`,
+        ".....", "All done!\nHere's a "+name], ()=>{
+
+          console.log("traded.")
+          inventory[h.name].num -= num;
+          if(spice!="") inventory[spice.replace(" ","")].num --;
+          AddToInventory(theitem);
+          //refreshAvailableText();
+        });
+    }
+
 
       // all other items:
       else {
         inventory[h.name].num -= num;
         AddToInventory(theitem);
       }
+      console.log("yes muffin!")
       return true;
     }
-    else return false;
+    else{
+      console.log("no muffin!")
+      return false;
+    }
   }

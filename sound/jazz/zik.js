@@ -158,6 +158,15 @@ class ZikGenerator {
 
   addRhythmToMelody(phrase,chosenSubdivision){
     let notes = this.noteStringToList(phrase);
+    let rhythm = new Rhythm(chosenSubdivision * 2,notes.length);
+    this.combineNotesAndBeats(rhythm.beats,notes,4);
+
+    return rhythm.beats
+
+
+    // old version:
+
+
     // generate beats
     let beats = this.newRhythmicPattern(chosenSubdivision,notes.length,MusicRng.ch(0.4));
     // generate off-beats
@@ -165,9 +174,13 @@ class ZikGenerator {
 
     // assign notes
     let orderedBeats = this.combineBeats(beats.actualRhythm,offbeats.actualRhythm);
-    for(let i=0; i<orderedBeats.length; i++) orderedBeats[i].note = 4*m.Octave + notes[i];
+    this.combineNotesAndBeats(orderedBeats,notes,4);
 
     return orderedBeats;
+  }
+
+  combineNotesAndBeats(beats,notes,octave){
+    for(let i=0; i<beats.length; i++) beats[i].note = octave*m.Octave + notes[i];
   }
 
   // generateFromCombinedData()

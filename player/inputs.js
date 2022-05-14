@@ -275,7 +275,10 @@ let SpacePressInGameState =()=>{
     // display text box:
     if(!player.reading){
       player.reading = true;
-      if(availableText.DialogUpdate!=undefined) availableText.DialogUpdate();
+      if(availableText.DialogUpdate!=undefined){
+        console.log("dialog update!")
+        availableText.DialogUpdate();
+      }
       textCounter =0;
     }
 
