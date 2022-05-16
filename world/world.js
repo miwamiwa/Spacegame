@@ -114,7 +114,8 @@ let setupPlanets=()=>{
 
     tradeui.setText(formatTradeButtons([
       [gpPart,gpPart,"coin",50],
-      ["zoomzoom3000","upgrade","coin",500]
+      ["zoomzoom3000","upgrade","coin",500],
+      ["astro-caliper-breaks","upgrade","coin",1500]
     ]));
 
     availableText=undefined;

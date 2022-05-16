@@ -19,7 +19,7 @@ let setBGM=(bgm)=>{
 
 let getRandomBGM=()=>{
   let bgm;
-  let pick=MusicRng.randi(3);
+  let pick=MusicRng.randi(2);
   switch(pick){
     case 0: bgm = createType1BGM(); break;
     case 1: bgm = createType2BGM(); break;

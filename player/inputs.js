@@ -7,6 +7,7 @@ let inputs = {
   space:false, //32
   e:false,
   l:false,
+  k:false,
   i:false,
   numbers:[
     false,
@@ -158,14 +159,12 @@ let vesselInputs=()=>{
 // handle inputs for when player is on a planet
 let planetInputs=()=>{
 
-
+  // detect hovered object
   handlePlanetHover();
 
   // look out for animation changes
   let running = player.running;
   let p =0;
-
-
   player.running = "";
 
   // if inputs pressed, move player
@@ -173,23 +172,28 @@ let planetInputs=()=>{
   if(inputs.a) moveX(-1);
   if(inputs.w) moveY(-1);
   if(inputs.s) moveY(1);
-
-
   if(player.running=="") player.running=false;
 
-  // update animation
+  // if player's current movement/direction changed
   if(running!=player.running){
+
+    // assign corresponding animation
     switch(player.running){
       case "left": p=1; Dude.left=true; break;
       case "right": p=1; Dude.left=false; break;
       case "down": p=2; break;
       case "up": p=3; break;
-
       case "leftdown": p=5; Dude.left=true; break;
       case "leftup": p=4; Dude.left=true; break;
       case "rightdown": p=5; Dude.left=false; break;
       case "rightup": p=4; Dude.left=false; break;
     }
+
+    // check if facing up
+    if(p==3||p==4) Dude.up=true;
+    else Dude.up=false;
+
+    // set new animation
     Dude.setFrames(poses[p]);
   }
 
@@ -198,9 +202,13 @@ let planetInputs=()=>{
   if(dist(player,addV(Dude,nP))<HopDistance)
   canEnter = true;
 
+  // handle attack button
+  if(!Dude.attacking&&inputs.k&&player.equipedItem!=undefined){
+    attack(Dude);
+  }
+
+  // check for nearby interactible objects
   refreshAvailableText();
-
-
 }
 
 

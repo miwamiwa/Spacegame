@@ -11,8 +11,6 @@ let teach=(l)=>{
   knownLanguages.push(l);
   refreshCharacterPanel();
 
-
-
   let prizeIndex =0;
   if(Scientist.prizeCount){
     Scientist.prizeCount++;

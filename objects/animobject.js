@@ -11,6 +11,7 @@ class AnimObject extends BasicObject {
     this.counter =0;
     this.boarded = true;
     this.left=true;
+    this.up=false;
   }
 
   // setup animation frames
@@ -56,7 +57,6 @@ class AnimObject extends BasicObject {
           planetMouseOverTarget=this;
         }
       }
-
     }
   }
 
@@ -80,10 +80,12 @@ class AnimObject extends BasicObject {
     transform(xy(x,y),()=>{
 
       this.applyTransform();
-      this.displayChildren(children);
+
+      if(!this.left) mCtx.scale(-1,1);
+      if(this.children!=undefined&&this.children.length>0) this.displayChildren(this.children);
       // display sprite:
       hue(this.hue);
-      if(!this.left) mCtx.scale(-1,1);
+
       image(this.img,0,0,this.half,this.size);
 
     },this.bearing);
@@ -92,14 +94,16 @@ class AnimObject extends BasicObject {
   displayChildren(children){
     if(children!=undefined){
       // this is an exception for the player
-      // object only, don't draw children if player isn't boarded.
+      // object only, don't draw children if player isn't boarded. ?? wat
       if(this.boarded){
-        children.forEach(c=>{
-          // check which method to use then draw object
+
+        for(let i=children.length-1; i>=0; i--){
+          let c = children[i];
           if(c.drawMe) c.draw(c);
           else c.display();
 
-        });
+          if(c.done) children.splice(i,1);
+        }
       }
     }
   }
