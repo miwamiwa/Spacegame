@@ -45,8 +45,8 @@ let teach=(l)=>{
 
 class Habitant extends AnimObject{
   constructor(x,y,size,frames, planet, tribe){
-    console.log("new hab")
-    console.log(x,y,size,frames, planet, tribe)
+    //console.log("new hab")
+    //console.log(x,y,size,frames, planet, tribe)
     super(0,0,size,frames,undefined,undefined);
     planetMode(this,true);
     this.muffin=false;

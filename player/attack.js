@@ -33,24 +33,40 @@ class WeaponSwipeAnimation {
 
         if(frame>this.frames-numFramesDisplayed)
         transform(zero,()=>{
-
           mCtx.filter=`opacity(${1-(this.frames-frame)/numFramesDisplayed})`;
-
           mCtx.fillStyle="#fdd9"
           mCtx.beginPath();
           mCtx.moveTo(0,0)
           mCtx.arc(0,0, this.weapon.h, blurStart,blurStart+progress);
           mCtx.fill();
-
           mCtx.translate(-this.weapon.distance,0);
-
-
           mCtx.rotate(-PI*0.9)
           mCtx.drawImage(this.weapon.img.img,0,0,this.weapon.w,this.weapon.h);
         },-progress+this.swipeStartAngle);
 
         progress+=this.angleDelta;
         frame++;
+      }
+
+      // inflict damage
+      if(this.attacker==Dude){
+        console.log(player.running)
+        let hitPos = addV(Dude.middle(), multV(20, player.getDirection(player.running)));
+        let hitRange = 10;
+        nP.enemies.forEach(enemy=>{
+          let bounds = enemy.getBounds();
+          console.log(bounds,hitPos);
+
+          let pos1 = camera.position(bounds,enemy.half);
+          let pos2 = camera.position(hitPos,enemy.half);
+
+          mCtx.strokeStyle = "black"
+          mCtx.strokeRect(pos1.x,pos1.y,bounds.w,bounds.h)
+          mCtx.beginPath();
+          mCtx.arc(pos2.x,pos2.y,hitRange,0,TWO_PI)
+          mCtx.stroke();
+          if(posInBounds(hitPos,hitRange,bounds)) enemy.health -= 10;
+        });
       }
 
       this.frames++;

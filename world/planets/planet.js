@@ -22,6 +22,7 @@ class Planet {
     this.d2p =-1; // distance to player
 
     this.tribe;
+    this.enemies = [];
 
     this.bobsMuffined=0
     this.totalBobs=0;
@@ -324,6 +325,21 @@ update(){
   // check if planet is visible
   let pos = camera.position(this);
   if(camera.isOnScreen(pos,this.mass)){
+    if(player.moving==false) this.sortFeatures();
+
+    for(let i=this.enemies.length-1; i>=0; i--){
+      let enemy = this.enemies[i];
+      enemy.enemyUpdate();
+      if(enemy.health<0){
+        enemy.died();
+        this.enemies.splice(i,1);
+        for(let j=this.features.length-1; j>=0; j--)
+          if(this.features[j]==enemy){
+             this.features.splice(j,1);
+             break;
+          }
+      }
+    }
 
     // back layer
 

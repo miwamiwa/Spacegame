@@ -169,9 +169,9 @@ let planetInputs=()=>{
 
   // if inputs pressed, move player
   if(inputs.d) moveX(1);
-  if(inputs.a) moveX(-1);
+  else if(inputs.a) moveX(-1);
   if(inputs.w) moveY(-1);
-  if(inputs.s) moveY(1);
+  else if(inputs.s) moveY(1);
   if(player.running=="") player.running=false;
 
   // if player's current movement/direction changed
@@ -231,7 +231,6 @@ let shoot = ()=>{
   new Projectile(player,false,direction, xy(player.xy,player.vy));
 
 }
-
 
 
 

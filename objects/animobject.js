@@ -64,9 +64,7 @@ class AnimObject extends BasicObject {
     if(this.hat) this.hat.draw(addV(p,this.hat));
 
     this.drawMe(p.x,p.y,c);
-    //if(this==player) console.log(player.throttle,p)
     this.updateAnimation();
-
     this.counter++;
   }
 
@@ -80,12 +78,19 @@ class AnimObject extends BasicObject {
     transform(xy(x,y),()=>{
 
       this.applyTransform();
+      if(this.isEnemy==true)  mCtx.filter="invert(1) grayscale(1) contrast(3)";
+
+      if(this.healthBar){
+        mCtx.save();
+        mCtx.translate(0,this.size*-0.8);
+        this.healthBar.display();
+        mCtx.restore();
+      }
 
       if(!this.left) mCtx.scale(-1,1);
       if(this.children!=undefined&&this.children.length>0) this.displayChildren(this.children);
       // display sprite:
       hue(this.hue);
-
       image(this.img,0,0,this.half,this.size);
 
     },this.bearing);

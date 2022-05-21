@@ -11,6 +11,7 @@ let inventory = [];
 let inventoryString = "";
 let nP;
 let knownLanguages=["Onian"];
+let directions = [];
 
 
 let speedLimit2 = 100;
@@ -36,6 +37,18 @@ let setupPlayer=()=>{
   player.reading = false;
   player.animRate = 20;
   player.running = false;
+
+  directions["left"] = xy(-1,0);
+  directions["right"] = xy(1,0);
+  directions["up"] = xy(0,-1);
+  directions["down"] = xy(0,1);
+  directions[false] = xy(1,0);
+
+  directions["leftdown"] = xy(-1,1);
+  directions["leftup"] = xy(-1,-1);
+  directions["rightdown"] = xy(1,1);
+  directions["rightup"] = xy(1,-1);
+
 }
 
 

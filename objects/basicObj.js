@@ -15,6 +15,18 @@ class BasicObject {
     this.setTandA(text,firstReadAction);
   }
 
+  getDirection(str){
+    if(str==false){
+      if(this.left) return directions["left"]
+      return directions["right"]
+    }
+    return directions[str]
+  }
+
+  middle(){
+    return xy(this.x+0.5*this.size,this.y+0.5*this.size)
+  }
+
   setLootTable(t){
     this.lootTable = t;
   }
@@ -50,6 +62,10 @@ class BasicObject {
     this.collider = true;
     this.collidersize = this.size * 0.65;
     this.talkrange = this.size * 0.8;
+  }
+
+  getBounds(){
+    return {x:this.x,y:this.y,w:this.size,h:this.size}
   }
 
   applyTransform(){
