@@ -76,8 +76,9 @@ let tryBuy=(itemname,itemtype,currency,price)=>{
     inventory[currency]-=price;
     AddToInventory({name:itemname,type:itemtype});
 
-    popupText(["one "+itemname+" coming right up!","here you go."]);
-    toggleWindow("trade");
+    popupText(["here it is!",`obtained one ${itemname}`]);
+    if(tradeui.visible) toggleWindow("trade");
+    else toggleWindow("crafting");
     currentShop = undefined;
   }
 }

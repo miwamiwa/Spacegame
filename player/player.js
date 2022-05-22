@@ -19,6 +19,27 @@ let speedLimit1 = 60;
 let grampQuest = true;
 let SpeedLimit = speedLimit1;
 
+let teleportHome=()=>{
+  removePlayerFromPlanet();
+  flushEnemies();
+  player.boarded=false;
+  HomePlanet.addFeature(Dude,100)
+}
+
+let removePlayerFromPlanet=()=>{
+  if(nP){
+    let i = nP.features.indexOf(Dude);
+    if(i!=-1) nP.features.splice(i,1);
+  }
+}
+
+let handlePlayerDied=()=>{
+  if(Dude.health<=0){
+    teleportHome();
+    Dude.health=100;
+  }
+}
+
 // setupPlayer()
 //
 // create player and spaceship on load
@@ -30,6 +51,8 @@ let setupPlayer=()=>{
   refreshCharacterPanel();
   // player character
   Dude = new AnimObject(PlayerStartX,PlayerStartY,DudeSize,poses[0]);
+  Dude.health=100;
+  attachHealthBar(Dude,1.0);
 
   // setup player
   player.radar = true;
@@ -98,6 +121,8 @@ let playerLanded=()=>{
     setV(Dude,pos);
     d=dist(player,addV(nP,Dude));
   }
+
+  if(nP.isBarren) trySpawnEnemy();
 }
 
 

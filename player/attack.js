@@ -1,5 +1,33 @@
+let attackDebug;
+
 let attack=(attacker)=>{
   new WeaponSwipeAnimation(attacker,{img:stick_png,w:10,h:60,distance:20})
+}
+
+let getSword=()=>{
+  let sword={name:"wood sword",type:"weapon"};
+  AddToInventory(sword)
+  EquipItem(sword)
+}
+
+let showAttackDebug=()=>{
+  if(attackDebug!=undefined){
+
+    mCtx.strokeStyle="red";
+    let pos = camera.position(attackDebug.pos,attackDebug.range);
+  //  console.log("attackdebug",pos)
+    mCtx.beginPath();
+    mCtx.arc(pos.x,pos.y,attackDebug.range,0,TWO_PI);
+    mCtx.stroke();
+
+    mCtx.strokeStyle="blue";
+
+    pos = camera.position(addV(Dude,nP),attackDebug.range);
+  //  console.log("attackdebug",pos)
+    mCtx.beginPath();
+    mCtx.arc(pos.x,pos.y,5,0,TWO_PI);
+    mCtx.stroke();
+  }
 }
 
 class WeaponSwipeAnimation {
@@ -50,21 +78,27 @@ class WeaponSwipeAnimation {
 
       // inflict damage
       if(this.attacker==Dude){
-        console.log(player.running)
-        let hitPos = addV(Dude.middle(), multV(20, player.getDirection(player.running)));
-        let hitRange = 10;
+        //console.log(player.running)
+        let hitPos = addV(Dude, multV(50, Dude.getDirection(player.running)));
+        let hitRange = 30;
+
+        attackDebug={
+          pos:addV(hitPos,nP),
+          range:hitRange
+        }
+
         nP.enemies.forEach(enemy=>{
           let bounds = enemy.getBounds();
-          console.log(bounds,hitPos);
+          //console.log(bounds,hitPos);
 
-          let pos1 = camera.position(bounds,enemy.half);
-          let pos2 = camera.position(hitPos,enemy.half);
+          //let pos1 = camera.position(bounds,enemy.half);
+          //let pos2 = camera.position(hitPos,enemy.half);
 
-          mCtx.strokeStyle = "black"
-          mCtx.strokeRect(pos1.x,pos1.y,bounds.w,bounds.h)
-          mCtx.beginPath();
-          mCtx.arc(pos2.x,pos2.y,hitRange,0,TWO_PI)
-          mCtx.stroke();
+          //mCtx.strokeStyle = "black"
+          //mCtx.strokeRect(pos1.x,pos1.y,bounds.w,bounds.h)
+          //mCtx.beginPath();
+          //mCtx.arc(pos2.x,pos2.y,hitRange,0,TWO_PI)
+          //mCtx.stroke();
           if(posInBounds(hitPos,hitRange,bounds)) enemy.health -= 10;
         });
       }

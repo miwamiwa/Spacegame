@@ -238,6 +238,7 @@ let shoot = ()=>{
 //
 // hop on board
 let board=()=>{
+  removePlayerFromPlanet();
   setV(Dude,zero);
   player.throttle=0;
   Dude.visible = false;

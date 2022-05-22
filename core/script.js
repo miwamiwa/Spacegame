@@ -31,7 +31,7 @@ window.onload =()=>{
   requestAnimationFrame(function(timestamp){
     starttime = timestamp || new Date().getTime() //if browser doesn't support requestAnimationFrame, generate our own timestamp using Date
     run(timestamp) // 400px over 1 second
-});
+  });
 }
 
 
@@ -74,7 +74,8 @@ let run=(timestamp)=>{
   //var runtime = timestamp - starttime;
   mainDelta = (timestamp - lastTimestamp)/expectedDelta;
   lastTimestamp=timestamp;
-  //console.log(mainDelta,timestamp)
+  //console.log(mainDelta,timestamp);
+  attackDebug=undefined;
 
   mCtx.save();
   // background
@@ -98,7 +99,7 @@ let run=(timestamp)=>{
 
 
   requestAnimationFrame(function(timestamp){ // call requestAnimationFrame again with parameters
-          run(timestamp);
+    run(timestamp);
   });
 }
 
@@ -130,6 +131,9 @@ let runGame=()=>{
   updatePlayerUi();
 
 
+  showAttackDebug();
+
+  handlePlayerDied();
 
 
 
@@ -221,15 +225,15 @@ let bg=()=>{
 
   // add more on top
   if(source.y<0)
-    mCtx.drawImage(bgPng, source.x, image.h + source.y, source.w, abs(source.y), 0,0, canvas.w, source.y * -scaling);
+  mCtx.drawImage(bgPng, source.x, image.h + source.y, source.w, abs(source.y), 0,0, canvas.w, source.y * -scaling);
 
   // add more on left
   if(source.x<0)
-    mCtx.drawImage(bgPng, image.w + source.x, source.y, abs(source.x), source.h, 0,0, source.x * -scaling, canvas.h);
+  mCtx.drawImage(bgPng, image.w + source.x, source.y, abs(source.x), source.h, 0,0, source.x * -scaling, canvas.h);
 
   // add more on top-left
   if(source.x<0&&source.y<0)
-    mCtx.drawImage(bgPng, image.w + source.x, image.h + source.y, abs(source.x), abs(source.y), 0,0, source.x * -scaling, source.y * -scaling);
+  mCtx.drawImage(bgPng, image.w + source.x, image.h + source.y, abs(source.x), abs(source.y), 0,0, source.x * -scaling, source.y * -scaling);
 
 
   // add more to the right
@@ -266,12 +270,12 @@ let bg=()=>{
   /*
   // add more below
   if(source.y>bgPngHeight - mainCanvas.height/scaling)
-    mCtx.drawImage(bgPng, source.x, 0, mainCanvas.width/scaling, bgPngHeight - source.y, 0,mainCanvas.height - (bgPngHeight-source.y), mainCanvas.width, source.y);
+  mCtx.drawImage(bgPng, source.x, 0, mainCanvas.width/scaling, bgPngHeight - source.y, 0,mainCanvas.height - (bgPngHeight-source.y), mainCanvas.width, source.y);
 
   // add more on bottom right
   if(source.y>bgPngHeight - mainCanvas.height/scaling && source.x>bgPngWidth - mainCanvas.width/scaling)
-    mCtx.drawImage(bgPng, source.x, source.y, bgPngWidth - source.x, bgPngHeight - source.y, bgPngWidth - source.x,bgPngHeight - source.y, source.x, source.y);
-    */
+  mCtx.drawImage(bgPng, source.x, source.y, bgPngWidth - source.x, bgPngHeight - source.y, bgPngWidth - source.x,bgPngHeight - source.y, source.x, source.y);
+  */
   //console.log(source)
   mCtx.restore();
   //mCtx.drawImage(bgPng, source.x, source.y, mainCanvas.width/scaling, mainCanvas.height/scaling, 0, 0, mainCanvas.width, mainCanvas.height);

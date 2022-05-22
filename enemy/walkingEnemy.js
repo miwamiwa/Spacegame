@@ -3,13 +3,20 @@ let trySpawnEnemy=()=>{
   nP.features.push(enemy);
   nP.enemies.push(enemy);
   nP.spot(enemy,20);
-
   nP.sortFeatures();
+}
 
-  console.log(enemy)
+let flushEnemies=()=>{
+  nP.enemies.forEach(enemy=>{
+    for(let i=nP.features.length-1; i>=0; i--)
+      if(nP.features[i]==enemy) nP.features.splice(i,1);
+  });
+
+  nP.enemies = [];
 }
 
 class WalkingEnemy extends AnimObject{
+
   constructor(x,y,size,frames,planet){
     super(0,0,size,frames,undefined,undefined);
     planetMode(this,true);
@@ -19,12 +26,16 @@ class WalkingEnemy extends AnimObject{
     this.isEnemy=true;
     this.vel = 1;
     this.left=false;
-    this.health = 99;
-
+    this.health = 100;
+    this.attackRange = 50;
+    this.collider=undefined;
     attachHealthBar(this,1.0);
   }
+
   enemyUpdate(){
     if(player.boarded) return;
+
+    // update position and animation
     let lastp=this.p;
     this.p=0;
 
@@ -54,9 +65,14 @@ class WalkingEnemy extends AnimObject{
     }
 
     if(this.p!=lastp)this.setFrames(poses[this.p]);
+
+
+    // attack player
+    if(dist(this,Dude)<this.attackRange) Dude.health --;
   }
 
   died(){
     trySpawnEnemy();
+    if(ch(0.4)) trySpawnEnemy();
   }
 }

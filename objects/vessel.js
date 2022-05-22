@@ -3,6 +3,7 @@
 //
 // triggered when we exit gravity range
 let leavePlanet=()=>{
+  flushEnemies();
   endPlanetBGM(nP);
   nP.lastVisit = frameCount;
 }
