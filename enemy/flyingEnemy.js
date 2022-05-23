@@ -8,6 +8,7 @@ class FlyingEnemy extends Enemy {
     this.size = 60;
     this.half = 30;
     this.removeable = false;
+    this.damage = 4;
     this.img;
     this.shotInterval = 50;
     this.shotCounter=0;
@@ -54,7 +55,7 @@ class FlyingEnemy extends Enemy {
     if(this.shotCounter%this.shotInterval==0){
       let direction = addV(subV(player,this),xy(rand(-0.3,0.3),rand(-0.1,0.1)));
       direction=multV(1/dist(this,player),direction);
-      new Projectile(this,true,direction)
+      new Projectile(this,true,direction,zero,this)
     }
   }
 

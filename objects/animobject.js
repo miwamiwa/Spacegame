@@ -80,13 +80,6 @@ class AnimObject extends BasicObject {
       this.applyTransform();
       if(this.isEnemy==true)  mCtx.filter="invert(1) grayscale(1) contrast(3)";
 
-      if(this.healthBar){
-        mCtx.save();
-        mCtx.translate(0,this.size*-0.8);
-        this.healthBar.display();
-        mCtx.restore();
-      }
-
       if(!this.left) mCtx.scale(-1,1);
       if(this.children!=undefined&&this.children.length>0) this.displayChildren(this.children);
       // display sprite:
@@ -94,6 +87,13 @@ class AnimObject extends BasicObject {
       image(this.img,0,0,this.half,this.size);
 
     },this.bearing);
+
+    if(this.healthBar){
+      transform(xy(x,y),()=>{
+      mCtx.translate(0,this.size*-0.8);
+      this.healthBar.display();
+    },0);
+    }
   }
 
   displayChildren(children){

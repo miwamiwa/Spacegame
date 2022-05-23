@@ -20,10 +20,9 @@ let grampQuest = true;
 let SpeedLimit = speedLimit1;
 
 let teleportHome=()=>{
-  removePlayerFromPlanet();
-  flushEnemies();
-  player.boarded=false;
-  HomePlanet.addFeature(Dude,100)
+  player.resetPos(PlayerStartX,PlayerStartY);
+  nP=HomePlanet;
+  if(!player.boarded)HomePlanet.addFeature(Dude,100)
 }
 
 let removePlayerFromPlanet=()=>{
@@ -33,10 +32,49 @@ let removePlayerFromPlanet=()=>{
   }
 }
 
+let pIsDead=false;
+let dedScreenCounter=0
+
 let handlePlayerDied=()=>{
-  if(Dude.health<=0){
-    teleportHome();
-    Dude.health=100;
+  if(!pIsDead){
+
+    if(Dude.health<=0){
+
+      pIsDead=true;
+      dedScreenCounter=0
+      setTimeout(()=>{
+        pIsDead=false;
+        removePlayerFromPlanet();
+        flushEnemies();
+        teleportHome();
+        Dude.health=100;
+      },1000)
+    }
+
+    if(player.health<=0){
+
+      pIsDead=true;
+      dedScreenCounter=0
+      setTimeout(()=>{
+        pIsDead=false;
+        teleportHome();
+        player.health=100;
+      },1000)
+    }
+  }
+  else {
+    
+    let char = dedScreenCounter
+    if(char>9) char=String.fromCharCode(87+dedScreenCounter)
+
+    mCtx.save();
+    mCtx.font="Arial 50px"
+    mCtx.fillStyle="#000"+char
+    mCtx.fillRect(0,0,canvasSize.x,canvasSize.y)
+    mCtx.fillStyle="white"
+    mCtx.fillText("gg no re", 50, 50)
+    mCtx.restore();
+    dedScreenCounter=Math.min(dedScreenCounter+1,15)
   }
 }
 
@@ -48,6 +86,8 @@ let setupPlayer=()=>{
   // space ship
   player = new Vessel(0,0,PlayerSize,VesselAnimation);
   player.name="my ship";
+  player.health=100;
+  attachHealthBar(player,1.0);
   refreshCharacterPanel();
   // player character
   Dude = new AnimObject(PlayerStartX,PlayerStartY,DudeSize,poses[0]);

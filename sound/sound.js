@@ -83,7 +83,7 @@ let playNote=(num,length,isChord)=>{
       0.05, 0.9*length, 0.3*length, 1.0*length,
       2, constSine1,
       2.4 - length / 4,
-      'lowpass',12000,1
+      'lowpass',3200,1
     );
   }
   else {
@@ -93,7 +93,7 @@ let playNote=(num,length,isChord)=>{
       0.15, 0.9*length, 0.3*length, 1.0*length,
       2, constSine2,
       2.4 - length / 4,
-      'lowpass',12000,1
+      'lowpass',2600,1
     );
   }
 }
@@ -113,8 +113,8 @@ let playBassNote=(num,length)=>{
       nToF(num),
       0.1*length, 0.8*length, 0.3*length, 2.6*length,
       2, noisey2,
-      2.9,
-      'lowpass',4000,1
+      2.2,
+      'lowpass',2000,1
     );
   }
   else {
@@ -122,8 +122,8 @@ let playBassNote=(num,length)=>{
       nToF(num),
       0.1*length, 0.8*length, 0.3*length, 2.6*length,
       2, constSine3,
-      2.9,
-      'lowpass',4000,1
+      2.2,
+      'lowpass',2000,1
     );
   }
 

@@ -17,6 +17,8 @@ class HealthBar {
     this.halfH = this.h/2;
   }
   display(){
+    if(pIsDead) return;
+    
     if(this.target.health<100){
       //console.log(pos)
       //console.log(this.target.x,this.target.y,this.w,this.h)

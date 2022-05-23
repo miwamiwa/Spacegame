@@ -10,7 +10,6 @@ let enemiesCanShoot = false;
 let CrashEnabled = false;
 let SoundEnabled = false;
 
-
 // current game screen
 let gamestate = "startscreen";
 // counter for start screen

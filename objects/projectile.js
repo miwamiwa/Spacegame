@@ -1,10 +1,11 @@
 class Projectile {
-  constructor(pos,targetIsPlayer,direction,initVel){
+  constructor(pos,targetIsPlayer,direction,initVel,source){
     console.log(pos,targetIsPlayer,direction)
     this.visible = true;
     this.going=false;
     this.x = pos.x;
     this.y = pos.y;
+    this.source=source;
 
     this.size=10;
     this.half=5;
@@ -30,6 +31,7 @@ class Projectile {
       if(this.targetIsPlayer){
         if(dist(this,player)<this.half+player.half){
           console.log("hit player!");
+          player.health-=this.source.damage;
           this.destroy();
           return;
         }
