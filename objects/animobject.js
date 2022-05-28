@@ -5,7 +5,7 @@ class AnimObject extends BasicObject {
     super(x,y,size,frames[0],text,func);
     this.bearing =0;
     // animation
-    this.animRate = 5;
+    this.animRate = 12;
     this.setFrames(frames);
     // states
     this.counter =0;

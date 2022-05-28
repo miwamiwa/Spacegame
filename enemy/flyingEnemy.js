@@ -30,7 +30,6 @@ class FlyingEnemy extends Enemy {
     }
     else if(distance>230){
       let acc = dist(zero,this.vel) * distance / 600000;
-      //console.log(acc)
       let n = multV( limit(acc,0.01),subV(player,this));
       this.vel = addV(this.vel,n);
     }
@@ -64,7 +63,6 @@ class FlyingEnemy extends Enemy {
 
     // if on screen
     if(camera.isOnScreen(pos,this.half)){
-      //console.log(this)
       if(this.img==undefined){
         mCtx.fillStyle="tomato";
         mCtx.fillRect(pos.x - this.size/2,pos.y - this.size/2,this.size,this.size);

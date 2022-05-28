@@ -154,6 +154,11 @@ let showTopText=()=>{
 let showInteractionText=()=>{
   // if text available
   if(availableText){
+
+    if(player.boarded&&player.throttle>0){
+      availableText=undefined;
+      return;
+    }
     // display hint
     drawText("press space");
     //console.log("babomm")

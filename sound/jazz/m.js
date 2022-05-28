@@ -249,6 +249,7 @@ class MusicTheory {
     let chord2 = Zik.chord.analyzeSymbol(last);
 
     return chord1.romanNumeral == chord2.romanNumeral
+    || (chord1.romanNumeral=="ii" && (chord2.romanNumeral=="I"||chord2.romanNumeral=="i"))
     || (chord1.romanNumeral=="i" && (chord2.romanNumeral=="bIII"||chord2.romanNumeral=="bVI"))
     || (chord1.romanNumeral=="I" && (chord2.romanNumeral=="iii"||chord2.romanNumeral=="vi"))
   }

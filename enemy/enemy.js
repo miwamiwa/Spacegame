@@ -1,6 +1,11 @@
 let flyingEnemies = [];
 const EnemyCrashAnimLength = 20;
 
+
+// updateEnemies()
+//
+// update and display flying enemies
+
 let updateEnemies=()=>{
   if(!nP && flyingEnemies.length<3){
     if(ch(0.01)){
@@ -12,12 +17,15 @@ let updateEnemies=()=>{
   for(let i=flyingEnemies.length-1; i>=0; i--){
     let enemy = flyingEnemies[i];
     enemy.update();
-    //console.log(enemy.x-player.x,enemy.y-player.y)
-    //console.log(player)
     if(enemy.removeable) flyingEnemies.splice(i,1);
     else if(enemy.crashed&&enemy.crashFrame==EnemyCrashAnimLength) flyingEnemies.splice(i,1);
   }
 }
+
+// Enemy class
+//
+// only used for flying enemies..
+// fix that at some point?
 
 class Enemy {
   constructor(){
@@ -34,7 +42,6 @@ class Enemy {
     this.crashed = true;
     if(!enemiesCanShoot) console.log("enemies can shoot.")
     enemiesCanShoot=true;
-    //crashtext = RandomFromArray(FailTextList);
     this.crashFrame = 0; // time at which crash animation started
     this.setFrames(CrashAnimation);
   }

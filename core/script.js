@@ -8,7 +8,7 @@ let canShoot = false;
 let enemiesCanShoot = false;
 
 let CrashEnabled = false;
-let SoundEnabled = false;
+let SoundEnabled = true
 
 // current game screen
 let gamestate = "startscreen";
