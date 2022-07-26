@@ -44,6 +44,10 @@ class Enemy {
     enemiesCanShoot=true;
     this.crashFrame = 0; // time at which crash animation started
     this.setFrames(CrashAnimation);
+    AddToInventory({name:"coin",type:"coin"}, randi(1,4));
+    AddToInventory({name:"scrap metal",type:"metal0"}, randi(4,12));
+
+    if(ch(0.01)) AddToInventory({name:"small radio",type:"radio"});
   }
 
   // setup animation frames

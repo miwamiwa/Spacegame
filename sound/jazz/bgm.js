@@ -12,11 +12,21 @@ class BGM {
     this.headsPlayed=0;
     this.currentMelodySection=0;
 
+    this.hatType =0;
+    if(MusicRng.ch(0.5)) this.hatType = 1;
+    if(MusicRng.ch(0.4)) this.hatType = 2;
+    if(MusicRng.ch(0.3)) this.hatType = 3;
+
     currentBGM = this;
     Impro.initializeImprov();
     this.setAccompanimentOctave(4);
-
+    Zik.redo = false;
     this.generate(params);
+    if(Zik.redo){
+      Zik.redo = false;
+      console.log("redo!")
+      this.generate(params);
+    }
   }
 
   reset(){
@@ -55,8 +65,33 @@ class BGM {
       // play chord
       this.playChord(chord,0.9,recordingHead,time);
 
-      playHat();
-      if(MusicRng.ch(0.5)) setTimeout(playHat, this.barLength * 0.66)
+
+      switch(this.hatType){
+        case 0:
+        playHat();
+        if(MusicRng.ch(0.5)) setTimeout(playHat, this.barLength * 0.5)
+        if(MusicRng.ch(0.5)) setTimeout(playHat, this.barLength * 0.77)
+        break;
+
+        case 1:
+        playHat();
+        if(MusicRng.ch(0.5)) setTimeout(playHat, this.barLength * 0.66)
+        break;
+
+        case 2:
+        playHat();
+        if(MusicRng.ch(0.5)) setTimeout(playHat, this.barLength * 0.33)
+        if(MusicRng.ch(0.5)) setTimeout(playHat, this.barLength * 0.66)
+        break;
+
+        case 3:
+        playHat();
+        if(MusicRng.ch(0.5)) setTimeout(playHat, this.barLength * 0.25)
+        if(MusicRng.ch(0.5)) setTimeout(playHat, this.barLength * 0.5)
+        break;
+
+      }
+
 
       // play melody
       if(this.headsPlayed%4<2){

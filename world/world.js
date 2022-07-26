@@ -69,6 +69,7 @@ let setupPlanets=()=>{
   planetMode(Mom);
 
   Son2 = HomePlanet.addFeature( new AnimObject(0,0,40,poses[0],Son2Text), 50);
+  Son2.DialogUpdate = UpdateSonIIText;
   Son2.name="Son II (my brother)"
   planetMode(Son2);
 

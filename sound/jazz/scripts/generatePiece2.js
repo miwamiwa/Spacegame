@@ -28,6 +28,7 @@ let generatePiece2=(bgmObject, params)=>{
 
   // generate melodic content
   let phrases = Zik.generateMelodyOverChordList(harmonydata.chordList,params,bgmObject,harmonydata.allNotes);
+  if(phrases="stop") return;
 
   // generate melodic rhythm
   let subdivision = chooseBetween([3,4]);

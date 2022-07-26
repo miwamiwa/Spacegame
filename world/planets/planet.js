@@ -1,6 +1,6 @@
 let visitPlanet =(p)=>{
   p.visited = true;
-  knownPlanets.push(p);
+  if(knownPlanets.indexOf(p)==-1) knownPlanets.push(p);
 }
 
 class Planet {
@@ -28,6 +28,10 @@ class Planet {
     this.totalBobs=0;
     this.prizeAwarded=false;
 
+    this.enemiesDefeated = 0;
+    this.cleared = false;
+    this.enemiesNeededToClear = 10;
+
     // random planet name
     if(!name) name = randomPlanetName();
     this.name = name;
@@ -53,6 +57,14 @@ class Planet {
 
     // all done
     planets.push(this);
+  }
+
+  enemyDefeated(){
+    this.enemiesDefeated ++;
+    if(this.enemiesDefeated==this.enemiesNeededToClear){
+      this.cleared = true;
+      AddToInventory({name:"coin",type:"coin"}, 2*this.enemiesDefeated);
+    }
   }
 
   getMusicSeed(){
@@ -110,15 +122,16 @@ class Planet {
     MusicRng = this.musicRng;
     RitaRng = this.musicRng;
 
-    if(this.isBarren){
+    //if(this.isBarren){
       // barren music for this planet
       // see sound/setupBarrenPlanetMusic.js
-      this.m = setupBarrenPlanetMusic();
-    }
+      //this.m = setupBarrenPlanetMusic();
+    //}
 
     // populated music
     // see sound/setupPopulatedPlanetMusic.js
-    else setupPopulatedPlanetMusic(this);
+    //else
+    setupPopulatedPlanetMusic(this);
 
 
   }
@@ -132,7 +145,7 @@ class Planet {
   populate(){
 
     // populate!
-    if(this.rng.ch(0.57)) this.tribe = new Tribe(this);
+    if(this.rng.ch(0.37)) this.tribe = new Tribe(this);
 
     // setup music accordingly
     if(this.tribe!=undefined) this.setupMusic(false);

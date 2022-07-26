@@ -82,8 +82,8 @@ let playNote=(num,length,isChord)=>{
       nToF(num),
       0.15, 1.4*length, 0.3, .3*length,
       2, constSine1,
-      1.2 - length / 4,
-      'lowpass',2600,1
+      2.2 - length / 2 - Math.pow((num)/48,2),
+      'lowpass',3600,1
     );
   }
   else {
@@ -92,8 +92,8 @@ let playNote=(num,length,isChord)=>{
       nToF(num),
       0.15, 1.4*length, 0.3, .3*length,
       2, siney,
-      3.4 - length / 2,
-      'lowpass',6200,1
+      Math.max(2, 3.9 - length / 2 - Math.pow((num)/48,2)),
+      'lowpass',5200,1
     );
   }
 }
@@ -148,11 +148,12 @@ let playbar = (time) =>{
   // WHILE ON PLANET
   //console.log("play bar.." + nP.bgm.barCounter)
   if(nP){
-    if(nP.isBarren){
-      playBarrenPlanetMusic(time);
+    //if(nP.isBarren){
+      //playBarrenPlanetMusic(time);
       //spaceyRhythm();
-    }
-    else playJazzMusic(time);
+    //}
+    ///else
+    playJazzMusic(time);
   }
 
   // WHILE IN SPACE

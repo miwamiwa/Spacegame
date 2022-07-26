@@ -39,7 +39,8 @@ class Tribe {
       this.sage = bob;
     }
     else {
-      bob.becomeRegularDude();
+      if(ch(0.1)) bob.becomeCartographer();
+      else bob.becomeRegularDude();
       this.planet.totalBobs++;
     }
   }

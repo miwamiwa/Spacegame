@@ -30,11 +30,24 @@ const gpPart="gear #5b8gh9";
 const HomeText = ["This is my home.","Goood oleee hooooome"]
 
 const Son2Text =[
-  "Son II: Hi brother",
-  "Have fun out there",
-  "Me? Fly?",
-  "Pfft"
+  "Son II: Yo brother",
+  "You scared of ghosts?",
+  "Yeah you are",
+  "...",
+  "Me? No I'm not scared",
+  "But you defo are",
+  "What's that? You're not scared?",
+  "lmao",
+  "prove it."
 ];
+
+const Son2Text2 = [
+  "eyyyyyyy",
+  "<3 love you bro",
+  "Jerry knows alot about ghosts",
+  "He might be interested in this stuff too",
+  "He lives on planet Blabouze."
+]
 const GrandpaText2 = ["Hi grandson"];
 const ShopText = ["Welcome to the shop","Need parts?","zzz"];
 
@@ -50,7 +63,7 @@ const Greetings =[
 ];
 
 const NegGreetings =[
-  "pff","mmhmm"
+  "got a muffin for me?", "nope? well then."
 ];
 
 // IMAGE LOAD

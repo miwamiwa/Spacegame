@@ -39,6 +39,36 @@ let UpdateMomText=()=>{
   else Mom.setTandA(MomText);
 }
 
+//
+
+let UpdateSonIIText=()=>{
+  if(haveType(1,"ghost-hair")){
+    inventory["ghost hair"].num -= 1;
+    Son2.DialogUpdate = undefined;
+    Son2.setTandA(Son2Text2a,()=>{
+      availableText = undefined;
+      newPlanetAroundPlayer(30, "jerry");
+      Son2.setTandA(Son2Text2);
+    });
+    return;
+  }
+  else Son2.setTandA(Son2Text);
+}
+
+let Son2Text2a=[
+  "oh that's ghost hair!",
+  "wow, impressive bro.",
+  "you have all my respect.",
+  "can I have it btw?",
+  "oh yeeeeeeaaaaaaaa",
+  "Now that I have this, my friend Jerry\n will think I'm cool",
+
+  "Jerry knows alot about ghosts",
+  "He might be interested in this stuff too",
+  "He lives on planet Blabouze.",
+  "..."
+]
+
 
 // homeObjectText()
 //

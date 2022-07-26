@@ -19,16 +19,16 @@ let displayInventory=()=>{
 //
 //
 
-let AddToInventory =(item)=>{
-
+let AddToInventory =(item, num)=>{
+  if(num==undefined) num=1;
   //console.log(item)
   if(!inventory[item.name])
-  inventory[item.name] = {num:1,type:item.type,name:item.name};
-  else inventory[item.name].num ++;
+  inventory[item.name] = {num:num,type:item.type,name:item.name};
+  else inventory[item.name].num +=num;
 
   RefreshInventory();
 
-
+  new FadingText(item.name, canvasSize.x/2 - 5, canvasSize.y/2 + randi(-80, -40), 0.02, "225,255,225")
 }
 
 let inventoryByIndex = [];

@@ -72,6 +72,39 @@ class Habitant extends AnimObject{
       });
   }
 
+  becomeCartographer(){
+    this.hat=new AnimObject(0,-this.size*0.4,this.size*0.2,Hat);
+    this.sharedKnowledge = false;
+    this.setTandA(["Eh?","Where d'you come from?","..."],this.mapCheck);
+  }
+
+  mapCheck(){
+    availableText=undefined;
+    if(gotMap){
+      if(!this.sharedKnowledge){
+
+        newPlanetAroundPlayer(20,"known");
+
+        availableText2 = [
+          "Oh, show me on that map of yours!",
+          "Cool!",
+          "I love astronomy.",
+          "Here, I'll pin a cool place\nfor you to visit on your map.",
+          "..."
+        ];
+
+
+
+        this.setTandA(["Did you visit that place I told you about?","Cool place I tell ya"], undefined);
+      }
+      this.sharedKnowledge = true;
+
+    }
+    else {
+      this.setTanA(["Eh?","Where d'you come from?","..."],this.mapCheck);
+    }
+  }
+
   becomeRegularDude(){
     this.setTandA(NegGreetings,()=>{
 

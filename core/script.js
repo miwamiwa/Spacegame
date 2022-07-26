@@ -128,11 +128,9 @@ let runGame=()=>{
   updateProjectiles();
 
   updatePlayerUi();
-
-
   showAttackDebug();
-
   handlePlayerDied();
+  updateTexts();
 
 
 
@@ -140,12 +138,8 @@ let runGame=()=>{
   let x = Math.round(player.x/FarRange)
   let y = Math.round(player.y/FarRange)
   let index = x+","+y;
-  if(index!="0,0"&&!genplanets.includes(index)){
-    let p=new Planet(x*FarRange+6*roughly(0),y*FarRange+6*roughly(0),true);
-    //let max = ;
-    p.setLang(allLanguages[Math.min(allLanguages.length,flo(0.3+rand((abs(x)+abs(y))/2.5)))]);
-    p.populate();
-    genplanets.push(index);
+  if(planetDoesntExistYet(index)){
+    newPlanetAt(x,y,index);
   }
 
   if(availableText==undefined){
@@ -155,6 +149,59 @@ let runGame=()=>{
 
   if(autopilotActive) updateAutopilot();
 }
+
+let planetsDiscovered = 0;
+
+let newPlanetAt=(x,y,index,options)=>{
+  let p=new Planet(x*FarRange+6*roughly(0),y*FarRange+6*roughly(0),true);
+  //let max = ;
+  p.setLang(allLanguages[Math.min(allLanguages.length,flo(0.3+rand((abs(x)+abs(y))/2.5)))]);
+  p.populate();
+
+  p.enemiesNeededToClear = 10 + planetsDiscovered;
+  planetsDiscovered ++;
+
+  genplanets.push(index);
+
+  if(options!=undefined){
+    switch(options){
+      case "known":
+      knownPlanets.push(p);
+      break;
+
+      case "jerry":
+      p.isJerrysPlanet=true;
+      p.name = "jerry's place";
+      knownPlanets.push(p);
+      break;
+    }
+
+  }
+}
+
+let newPlanetAroundPlayer=(range,options)=>{
+  let x = randi(-range, range) + Math.round(player.x/FarRange)
+  let y = randi(-range, range) + Math.round(player.y/FarRange)
+  let index = x+","+y;
+
+  let tries = 20;
+
+  while(!planetDoesntExistYet(index)){
+    x = randi(-range, range) + Math.round(player.x/FarRange)
+    y = randi(-range, range) + Math.round(player.y/FarRange)
+    index = x+","+y;
+    tries--;
+
+    if(tries==0){
+      console.log("couldn't find room to generate a planet")
+      break;
+    }
+  }
+
+  newPlanetAt(x,y,index,options);
+}
+
+let planetDoesntExistYet=(index)=> index!="0,0"&&!genplanets.includes(index);
 
 
 // runStartScreen()

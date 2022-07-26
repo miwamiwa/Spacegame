@@ -63,7 +63,7 @@ let handlePlayerDied=()=>{
     }
   }
   else {
-    
+
     let char = dedScreenCounter
     if(char>9) char=String.fromCharCode(87+dedScreenCounter)
 
@@ -162,7 +162,7 @@ let playerLanded=()=>{
     d=dist(player,addV(nP,Dude));
   }
 
-  if(nP.isBarren) trySpawnEnemy();
+  if(nP.isBarren && !nP.cleared) trySpawnEnemy();
 }
 
 

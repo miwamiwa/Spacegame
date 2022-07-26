@@ -72,7 +72,12 @@ class WalkingEnemy extends AnimObject{
   }
 
   died(){
-    trySpawnEnemy();
-    if(ch(0.4)) trySpawnEnemy();
+    if(!this.planet.cleared){
+      trySpawnEnemy();
+      if(ch(0.4)) trySpawnEnemy();
+    }
+    
+    this.planet.enemyDefeated();
+    AddToInventory({name:"ghost hair",type:"ghost-hair"});
   }
 }

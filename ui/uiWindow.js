@@ -2,8 +2,10 @@ let windowIDCounter =0;
 let allWindowsById = [];
 let allWindowsByName = [];
 let disabledWindows = [];
+let gotMap = false;
 
 let receiveMap=()=>{
+  gotMap = true;
   disabledWindows["map"]=undefined;
   let el = document.getElementById("mapButton");
   el.classList.remove("disabled");

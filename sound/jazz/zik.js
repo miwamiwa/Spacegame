@@ -2,6 +2,7 @@ class ZikGenerator {
   constructor(){
     this.chord = new Chord('i',0);
     this.debugMode = false;
+    this.redo = false;
     this.AllChords = {
       uniqueChords:[],
       chordColors:[]
@@ -149,6 +150,17 @@ class ZikGenerator {
         }
         else note.noteLength = 0.2;
       }
+    }
+  }
+
+  determineNoteLengths2(pattern){
+    for(let j=0; j<pattern.length; j++){
+      let note = pattern[j];
+      let nextNote = pattern[j+1];
+      if(nextNote==undefined){
+        note.noteLength = 0.2;
+      }
+      else note.noteLength = nextNote.time - note.time;
     }
   }
 
@@ -326,7 +338,7 @@ class ZikGenerator {
     if(params.minMelodyPerChord==undefined) params.minMelodyPerChord = MusicRng.randi(2, 3);
     MinSentenceLength = params.minMelodyPerChord;
 
-    if(params.maxMelodyPerChord==undefined) params.maxMelodyPerChord = 1+flo(MusicRng.rand(1.5,3.)*MinSentenceLength);
+    if(params.maxMelodyPerChord==undefined) params.maxMelodyPerChord = 1+flo(MusicRng.rand(2.5,5.5)*MinSentenceLength);
     MaxSentenceLength = params.maxMelodyPerChord;
 
     if(params.chanceToDupeSameChord==undefined) params.chanceToDupeSameChord = 0.6;
@@ -378,7 +390,11 @@ class ZikGenerator {
 
         // generate phrase
         let phrase = melodyMarkov.generateSentence();
-        if(phrase==undefined) console.log("undefined at "+chordinpiece + "... not enough notes associated to this chord? min generation length too high?");
+        if(phrase==undefined){
+          this.redo = true;
+          console.log("undefined at "+chordinpiece + "... not enough notes associated to this chord? min generation length too high?");
+          return "stop"
+        }
         else phrase=removeLastChar(phrase);
 
         // remember

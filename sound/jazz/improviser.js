@@ -421,6 +421,20 @@ class Improviser {
   //  currentScale = scale.name;
     //////console.log(scale)
     scale = scale.removeAvoidNotes();
+
+    let subdiv = chooseBetween([4,6,8]);
+    let rhythm = new Rhythm(subdiv, randi(randi(2), subdiv), false);
+    let notes = [];
+    for(let i=0; i<rhythm.beats.length; i++) notes.push(this.getNote(scale));
+    Zik.combineNotesAndBeats(rhythm.beats,notes,4);
+    Zik.determineNoteLengths2(rhythm.beats);
+
+    rhythm.beats.forEach(note=>{
+      console.log(note, this.getNote(scale), Math.abs(note.noteLength * currentBGM.barLength), note.time * currentBGM.barLength);
+      setTimeout(()=>{playNote(this.getNote(scale), Math.abs(note.noteLength * currentBGM.barLength), false)}, note.time * currentBGM.barLength);
+    });
+
+    return;
     //////console.log(scale)
     let playNote1=ch(0.8);
     let playNote2=ch(0.8);
