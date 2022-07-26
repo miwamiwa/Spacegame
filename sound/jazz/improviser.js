@@ -423,7 +423,7 @@ class Improviser {
     scale = scale.removeAvoidNotes();
 
     let subdiv = chooseBetween([4,6,8]);
-    let rhythm = new Rhythm(subdiv, randi(randi(2), subdiv), false);
+    let rhythm = new Rhythm(subdiv, chooseBetween([randi(randi(1), subdiv), 2]), false);
     let notes = [];
     for(let i=0; i<rhythm.beats.length; i++) notes.push(this.getNote(scale));
     Zik.combineNotesAndBeats(rhythm.beats,notes,4);
