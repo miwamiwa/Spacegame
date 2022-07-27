@@ -78,22 +78,22 @@ let playNote=(num,length,isChord)=>{
 
   //console.log(nToF(num))
   if(isChord){
-    play(
-      nToF(num),
-      0.15, 1.4*length, 0.3, .3*length,
+    playOrgan(
+      nToF(24+num),
+      0.05, 1.4*length, 0.3, .5*length,
       2, constSine1,
       2.2 - length / 2 - Math.pow((num)/48,2),
-      'lowpass',3600,1
+      'lowpass',8600,1
     );
   }
   else {
   //  length = 0.2
-    play(
-      nToF(num),
-      0.15, 1.4*length, 0.3, .3*length,
+    playOrgan(
+      nToF(12+num),
+      0.05, 1.4*length, 0.3, .3*length,
       2, siney,
       Math.max(2, 3.9 - length / 2 - Math.pow((num)/48,2)),
-      'lowpass',5200,1
+      'lowpass',12200,1
     );
   }
 }
@@ -226,6 +226,60 @@ let backToTop=()=>{
 //
 //
 
+let organWaveAt=(sampleNumber,transpose)=>{
+
+  let t = sampleNumber/aCtx.sampleRate;
+  let result=0;
+  transpose /= 1024;
+  for(let i=0; i<organ.length; i++){
+    result += organ[i].a * Math.cos( 2*Math.PI*transpose*organ[i].f*t+organ[i].p );
+  }
+  return result;
+}
+
+let playOrgan=(f,a,d,s,r,c,fu,v,ft,ff,fq,sl)=>
+playSound(preloadOrganSound(
+  f,new Envelope(a,d,s,r),c,fu,sl
+),v,ft,ff,fq);
+
+
+let preloadOrganSound=(f,env,cycles,func,sli)=>{
+  //console.log(f)
+  func = organWaveAt;
+  let res = [];
+  let pre = [];
+  let len = samp * ( env.a+env.d+env.r );
+  let per = samp / f;
+  let preL = flo(per)*cycles; // len of prebuffer in samples
+  let div = per / TWO_PI;
+  let i=0;
+  let tone = f;
+  // if this isn't a sliding sound:
+
+  if(!sli){
+    // prebuffer a given number of cycles
+    for(i=0; i<preL; i++)
+    pre[i]= func(i,tone);
+
+    // then repeat those over the full len of the note
+    for (i = 0; i < len; i++)
+    res[i] = 0.4* env.level(i) * pre[i%preL];
+  }
+
+  // if this is a sliding sound:
+
+  // buffer the entire note
+  else{
+    for (i = 0; i < len; i++)
+    res[i] = 0.4* env.level(i) * func(i,tone + i*sli);
+  }
+
+
+  return res;
+}
+
+
+
 // sin of a value at index i in the sample buffer.
 let sine=(i,a,d)=>Math.sin(i/(a+d));
 
@@ -268,6 +322,20 @@ let randomVoicing=()=>randi(-1,1)*12;
 // synth used in wobble bass and noisey synth and noiseysynth og
 let constSine4=(i,d)=>
 constrain(rand(0.1,0.2)+0.3*(sine(i,0,d)+0.3*sine(i,2,d)),0,0.10);
+
+// harmonics for the organ sound (freq,amplitude,phase)
+let organ= [
+  {f:499.98 ,a:0.05024,p:-79.26},
+  {f:989.78, a:0.01608,p:10.89},
+  {f:1489.66,a:0.02179,p:-13.22},
+  {f:1989.55,a:0.03411,p:-30.97},
+  {f:2489.44,a:0.01904,p:156.26},
+  {f:2989.32,a:0.03099,p:-54.57},
+  {f:3469.21,a:0.00796,p:-49.46},
+  {f:3979.10,a:0.01728,p:-129.91},
+];
+
+
 
 
 // chordNote()

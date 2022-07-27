@@ -33,7 +33,7 @@ let getRandomBGM=()=>{
 
 let createType1BGM=()=>{
   let params = {
-    bpm:MusicRng.randi(200,400),
+    bpm:MusicRng.randi(120,400),
     homeKey:MusicRng.randi(12),
     generationType: "generate-piece-1",
     harmonicFidelity: 2
@@ -46,7 +46,7 @@ let createType1BGM=()=>{
 
 let createType2BGM=()=>{
   let params = {
-    bpm:MusicRng.randi(200,400),
+    bpm:MusicRng.randi(120,400),
     homeKey:MusicRng.randi(12),
     generationType: "generate-piece-2",
     harmonicFidelity: 3,
@@ -60,7 +60,7 @@ let createType2BGM=()=>{
 
 let createType3BGM=()=>{
   let params = {
-    bpm:MusicRng.randi(200,500),
+    bpm:MusicRng.randi(120,500),
     homeKey:MusicRng.randi(12),
     generationType:"generate-piece-with-improviser",
     patterns:Impro.InitNotePatterns,
