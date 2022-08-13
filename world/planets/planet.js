@@ -68,7 +68,7 @@ class Planet {
   }
 
   getMusicSeed(){
-    let str = this.name[0] + this.name[1] + this.language[0] + this.language[1];
+    let str = this.randomseed[0] + this.name[0] + this.name[1] + this.language[0] + this.language[1];
     /*
     let trees = [];
     this.trees.forEach(tree=>{

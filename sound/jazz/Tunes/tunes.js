@@ -52,7 +52,7 @@ const Tunes2 = [
 
 
   {
-    name:"Call Me Irrensponsible",
+    name:"Call Me Irresponsible",
     composers:["James Van Heusen"],
     chordList_relative:"I I6 biidim7 ii7 ii6 biiidim7 iii7 vi7 III7 vii7b5 III7b9 VI7sharp5 VI7 ii7 V7 iii7b5 VI7b9 vi7 II7 vi7 II7 ii7 V7 ii7 V7 I I6 biidim7 ii7 ii6 biiidim7 iii7 vi7 III7 iii7 VI7 ii7 V7 iii7b5 VI7 ii7 V7 VII7sus4 III7 iii7b5 VI7 ii7 V7 I6",
     full_piece:[{chord:'I',notes:[-5]},{chord:'I6',notes:[-3]},{chord:'biidim7',notes:[-6,-5,-3,-4,-5]},{chord:'ii7',notes:[-3]},{chord:'ii6',notes:[-1]},{chord:'biiidim7',notes:[-4,-3,-1,-2,-3]},{chord:'iii7',notes:[-1]},{chord:'vi7',notes:[0]},{chord:'III7',notes:[-1,0,2,1,0]},{chord:'vii7b5',notes:[5]},{chord:'III7b9',notes:[5]},{chord:'VI7sharp5',notes:[5]},{chord:'VI7',notes:[-5]},{chord:'ii7',notes:[7,9]},{chord:'V7',notes:[6,7,9,8,7]},{chord:'iii7b5',notes:[2]},{chord:'VI7b9',notes:[1]},{chord:'vi7',notes:[0]},{chord:'II7',notes:[2]},{chord:'vi7',notes:[-1,0,2]},{chord:'II7',notes:[2,1,0]},{chord:'ii7',notes:[-7]},{chord:'V7',notes:[-5]},{chord:'ii7',notes:[-3]},{chord:'V7',notes:[-1]},{chord:'I',notes:[-5]},{chord:'I6',notes:[-3]},{chord:'biidim7',notes:[-6,-5,-3,-4,-5]},{chord:'ii7',notes:[-3]},{chord:'ii6',notes:[-1]},{chord:'biiidim7',notes:[-4,-3,-1,-2,-3]},{chord:'iii7',notes:[-1]},{chord:'vi7',notes:[0]},{chord:'III7',notes:[-1,0,2,1,0]},{chord:'iii7',notes:[9]},{chord:'VI7',notes:[9]},{chord:'ii7',notes:[7,9]},{chord:'V7',notes:[6,7,9,8,7]},{chord:'iii7b5',notes:[7,9]},{chord:'VI7',notes:[6,7,9,8,7]},{chord:'ii7',notes:[7,9]},{chord:'V7',notes:[6,7,9,8,7]},{chord:'VII7sus4',notes:[4]},{chord:'III7',notes:[4]},{chord:'iii7b5',notes:[4]},{chord:'VI7',notes:[4]},{chord:'ii7',notes:[7,6,5,4,3]},{chord:'V7',notes:[2,0]},{chord:'I6',notes:[0]}

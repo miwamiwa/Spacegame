@@ -80,7 +80,7 @@ let playNote=(num,length,isChord)=>{
   if(isChord){
     playOrgan(
       nToF(24+num),
-      0.05, 1.4*length, 0.3, .5*length,
+      0.05, 1.4*length, 0.8, .5*length,
       2, constSine1,
       2.2 - length / 2 - Math.pow((num)/48,2),
       'lowpass',8600,1
@@ -90,7 +90,7 @@ let playNote=(num,length,isChord)=>{
   //  length = 0.2
     playOrgan(
       nToF(12+num),
-      0.05, 1.4*length, 0.3, .3*length,
+      0.05, 1.4*length, 0.7, .5*length,
       2, siney,
       Math.max(2, 3.9 - length / 2 - Math.pow((num)/48,2)),
       'lowpass',12200,1
@@ -404,10 +404,10 @@ playSound(preloadSound(
 ),v,ft,ff,fq);
 
 
-let playHat=()=>{
+let playHat=(intensity)=>{
   play(
-    100,0.01,0.1,0.1,0.5,
-    4,noisey2,1,"highpass",3000,1)
+    100,0.01,0.1,intensity,0.5,
+    4,noisey2,2,"highpass",4000,1)
 }
 
 

@@ -12,10 +12,8 @@ class BGM {
     this.headsPlayed=0;
     this.currentMelodySection=0;
 
-    this.hatType =0;
-    if(MusicRng.ch(0.5)) this.hatType = 1;
-    if(MusicRng.ch(0.4)) this.hatType = 2;
-    if(MusicRng.ch(0.3)) this.hatType = 3;
+    this.hatIntensity = MusicRng.rand(0.05, 0.5);
+    this.hatType = MusicRng.randi(5);
 
     currentBGM = this;
     Impro.initializeImprov();
@@ -49,6 +47,17 @@ class BGM {
     }
   }
 
+  playHat(){
+    //console.log(this.hatIntensity)
+    playHat(this.hatIntensity);
+  }
+
+  hatTimeout(i){
+    setTimeout(()=>{
+      this.playHat();
+    }, this.barLength * i);
+  }
+
   play(time){
     //console.log(this.barCounter)
     let chanceOfShortNote = MusicRng.rand(.2,.9);
@@ -68,26 +77,40 @@ class BGM {
 
       switch(this.hatType){
         case 0:
-        playHat();
-        if(MusicRng.ch(0.5)) setTimeout(playHat, this.barLength * 0.5)
-        if(MusicRng.ch(0.5)) setTimeout(playHat, this.barLength * 0.77)
+        this.playHat();
+        if(MusicRng.ch(0.5)) this.hatTimeout(0.5);
+        if(MusicRng.ch(0.5)) this.hatTimeout(0.77);
         break;
 
         case 1:
-        playHat();
-        if(MusicRng.ch(0.5)) setTimeout(playHat, this.barLength * 0.66)
+        this.playHat();
+        if(MusicRng.ch(0.5)) this.hatTimeout(0.66);
         break;
 
         case 2:
-        playHat();
-        if(MusicRng.ch(0.5)) setTimeout(playHat, this.barLength * 0.33)
-        if(MusicRng.ch(0.5)) setTimeout(playHat, this.barLength * 0.66)
+        this.playHat();
+        if(MusicRng.ch(0.5)) this.hatTimeout(0.33);
+        if(MusicRng.ch(0.5)) this.hatTimeout(0.66);
         break;
 
         case 3:
-        playHat();
-        if(MusicRng.ch(0.5)) setTimeout(playHat, this.barLength * 0.25)
-        if(MusicRng.ch(0.5)) setTimeout(playHat, this.barLength * 0.5)
+        this.playHat();
+        if(MusicRng.ch(0.5)) this.hatTimeout(0.25);
+        if(MusicRng.ch(0.5)) this.hatTimeout(0.5);
+        break;
+
+        case 4:
+        let subdiv = chooseBetween([4,6,8]);
+        let rhythm = new Rhythm(subdiv, chooseBetween([randi(randi(1), subdiv), 2]), false);
+        let notes = [];
+        for(let i=0; i<rhythm.beats.length; i++) notes.push(50);
+        Zik.combineNotesAndBeats(rhythm.beats,notes,4);
+        Zik.determineNoteLengths2(rhythm.beats);
+
+        rhythm.beats.forEach(note=>{
+          //console.log(note, this.getNote(scale), Math.abs(note.noteLength * currentBGM.barLength), note.time * currentBGM.barLength);
+          setTimeout(()=>{this.playHat();}, note.time * this.barLength);
+        });
         break;
 
       }

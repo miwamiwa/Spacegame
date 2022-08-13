@@ -29,6 +29,7 @@ class Improviser {
       [0,3,6],
       [0,2,4],
       [0,2,5],
+      [0,2,1],
       [1,2,0],
       [2,3,0],
       [3,4,0]
@@ -430,7 +431,7 @@ class Improviser {
     Zik.determineNoteLengths2(rhythm.beats);
 
     rhythm.beats.forEach(note=>{
-      console.log(note, this.getNote(scale), Math.abs(note.noteLength * currentBGM.barLength), note.time * currentBGM.barLength);
+      //console.log(note, this.getNote(scale), Math.abs(note.noteLength * currentBGM.barLength), note.time * currentBGM.barLength);
       setTimeout(()=>{playNote(this.getNote(scale), Math.abs(note.noteLength * currentBGM.barLength), false)}, note.time * currentBGM.barLength);
     });
 
