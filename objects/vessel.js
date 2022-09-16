@@ -15,10 +15,12 @@ let reachPlanet=(p)=>{
   if(p.bgm!=undefined){
     startPlanetBGM(p);
 
+    /*
     for(let i=0; i<p.organOrder.length; i++)
       organ[i].f = organInit[p.organOrder[i]].f
 
     console.log(organ)
+    */
 
     // catch up with planet updates
     if(p.lastVisit){
