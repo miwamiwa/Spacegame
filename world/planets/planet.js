@@ -53,7 +53,9 @@ class Planet {
 
     if(isBarren!=undefined) this.setupMusic(isBarren);
 
-
+    this.organOrder = [randi(organInit.length)]
+    for(let i=0; i<organInit.length -1; i++)
+      this.organOrder.splice(randi(organInit.length), 0, i);
 
     // all done
     planets.push(this);

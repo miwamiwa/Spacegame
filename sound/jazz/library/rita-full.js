@@ -2,7 +2,7 @@
 // RiTa Setting (initial value was 35)
 // max harmony length before expanding
 let MaxSentenceLength = 50;
-let MinSentenceLength = 8;
+let MinSentenceLength = 16;
 let RitaRng;
 
 // skip list

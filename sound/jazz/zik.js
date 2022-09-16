@@ -209,7 +209,7 @@ class ZikGenerator {
     let longestPhrase =0;
     let phraselength =0;
 
-    MinSentenceLength = 6;
+    MinSentenceLength = 12;
     MaxSentenceLength = 32;
 
     // generate chords
@@ -290,7 +290,7 @@ class ZikGenerator {
       if(params.minHarmonyLength==undefined) params.minHarmonyLength = 8;
       MinSentenceLength = params.minHarmonyLength;
 
-      if(params.maxHarmonyLength==undefined) params.maxHarmonyLength = params.minHarmonyLength + 8;
+      if(params.maxHarmonyLength==undefined) params.maxHarmonyLength = params.minHarmonyLength + 12;
       MaxSentenceLength = params.maxHarmonyLength;
 
       // create markov object
